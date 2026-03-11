@@ -20,8 +20,8 @@
 - [ ] Configure Alembic
 - [ ] Add database models (initial)
 - [ ] Add session factory and connection pooling
-- [ ] Add Pydantic Settings for configuration
-- [ ] Add structured logging
+- [x] Add Pydantic Settings for configuration
+- [x] Add structured logging
 
 ## Part 3: Authentication & Users
 

@@ -35,3 +35,20 @@ pytest
 ## Project Layout
 
 See [ARCHITECTURE.md](../ARCHITECTURE.md) and [BACKEND_PLAN.md](../BACKEND_PLAN.md).
+
+## Configuration
+
+Configuration is managed using a Pydantic `Settings` class in `app/core/config.py`.
+
+- Defaults are suitable for local development.
+- Values can be overridden using environment variables or a `.env` file.
+- See `.env.example` for all available options.
+
+Key settings:
+
+- `APP_NAME` – application title shown in docs.
+- `APP_ENV` – environment name (e.g. `development`, `production`).
+- `DEBUG` – enables/disables debug mode in FastAPI.
+- `API_V1_PREFIX` – prefix for versioned API routes (default `/api/v1`).
+- `ALLOWED_ORIGINS` – comma-separated list of CORS origins.
+- `LOG_LEVEL` – logging level (e.g. `DEBUG`, `INFO`).

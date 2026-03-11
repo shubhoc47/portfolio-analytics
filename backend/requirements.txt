@@ -1,14 +1,17 @@
-# PortfolioIQ Backend - Part 1
-# Core
+# PortfolioIQ Backend - Core
+
+# Web
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
+
+# Configuration
+python-dotenv>=1.0.0
+pydantic-settings>=2.0.0
 
 # Dev / Test (TestClient uses httpx)
 pytest>=7.4.0
 httpx>=0.25.0
 
-# To be added in Part 2+
+# To be added in later parts
 # sqlalchemy[asyncio]>=2.0.0
 # alembic>=1.13.0
-# python-dotenv>=1.0.0
-# pydantic-settings>=2.0.0
