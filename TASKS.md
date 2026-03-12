@@ -23,6 +23,12 @@
 - [x] Add Pydantic Settings for configuration
 - [x] Add structured logging
 
+## Part 3: Database Connection
+
+- [x] Add SQLAlchemy engine and session factory (PostgreSQL)
+- [x] Add `get_db` dependency for FastAPI endpoints
+- [ ] Add Alembic migrations (later)
+
 ## Part 3: Authentication & Users
 
 - [ ] (To be filled)

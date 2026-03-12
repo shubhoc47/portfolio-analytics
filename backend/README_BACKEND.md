@@ -50,5 +50,6 @@ Key settings:
 - `APP_ENV` – environment name (e.g. `development`, `production`).
 - `DEBUG` – enables/disables debug mode in FastAPI.
 - `API_V1_PREFIX` – prefix for versioned API routes (default `/api/v1`).
-- `ALLOWED_ORIGINS` – comma-separated list of CORS origins.
+- `ALLOWED_ORIGINS` – CORS origins (comma-separated or JSON list).
 - `LOG_LEVEL` – logging level (e.g. `DEBUG`, `INFO`).
+- `DATABASE_URL` – PostgreSQL connection string (async SQLAlchemy).
