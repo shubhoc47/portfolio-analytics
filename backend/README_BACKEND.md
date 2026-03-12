@@ -36,6 +36,8 @@ pytest
 
 See [ARCHITECTURE.md](../ARCHITECTURE.md) and [BACKEND_PLAN.md](../BACKEND_PLAN.md).
 
+ORM models live under `app/models/` and use SQLAlchemy 2.0 style classes inheriting from `app.db.base.Base`.
+
 ## Configuration
 
 Configuration is managed using a Pydantic `Settings` class in `app/core/config.py`.

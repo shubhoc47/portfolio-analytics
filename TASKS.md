@@ -18,7 +18,7 @@
 ## Part 2: Database & Core Setup
 
 - [ ] Configure Alembic
-- [ ] Add database models (initial)
+- [x] Add database models (initial)
 - [ ] Add session factory and connection pooling
 - [x] Add Pydantic Settings for configuration
 - [x] Add structured logging
@@ -33,6 +33,6 @@
 
 - [ ] (To be filled)
 
-## Part 4: Core Domain
+## Part 4: Database Models
 
-- [ ] (To be filled)
+- [x] Add portfolio/holding/market/news/alert/AI/job models
