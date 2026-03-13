@@ -9,3 +9,6 @@ venv/
 *.log
 .DS_Store
 alembic/versions/
+node_modules/
+dist/
+frontend/.env

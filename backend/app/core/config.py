@@ -29,11 +29,8 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = Field(default="/api/v1", description="Base prefix for v1 API routes")
 
     # CORS
-    # This can be configured in two friendly ways:
-    # 1) JSON list:
-    #    ALLOWED_ORIGINS='["http://localhost:3000","http://localhost:8000"]'
-    # 2) Comma-separated:
-    #    ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+    # Configure as JSON list in .env:
+    # ALLOWED_ORIGINS='["http://localhost:3000","http://localhost:5173","http://localhost:8000"]'
     ALLOWED_ORIGINS: List[str] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://localhost:8000"],
         description="List of allowed CORS origins",
@@ -52,6 +49,7 @@ class Settings(BaseSettings):
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def parse_allowed_origins(cls, v):
+        # Keep support for comma-separated values when provided programmatically.
         if isinstance(v, str):
             return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v

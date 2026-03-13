@@ -40,6 +40,27 @@
 - [x] Create initial migration for all tables
 - [x] Document migration workflow in README_BACKEND.md
 
-## Part 6: Authentication & Users
+## Part 6: Portfolio CRUD API
 
-- [ ] (To be filled)
+- [x] Add `PortfolioCreate`, `PortfolioUpdate`, and `PortfolioRead` schemas
+- [x] Add portfolio repository (`create`, `list`, `get`, `update`, `delete`)
+- [x] Add portfolio service with not-found handling
+- [x] Replace portfolio endpoint placeholder with REST CRUD routes
+- [x] Wire portfolio service dependency injection via `app/api/deps.py`
+- [x] Update backend docs with portfolio API usage
+
+## Part 7: Holdings CRUD API
+
+- [ ] Implement holdings schemas
+- [ ] Implement holdings repository/service
+- [ ] Add holdings CRUD endpoints under `/api/v1/holdings`
+
+## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
+
+- [x] Create frontend app scaffold with Vite + TypeScript
+- [x] Configure Tailwind CSS and global app styles
+- [x] Add app layout and navigation with React Router
+- [x] Add portfolio API client with environment-based backend URL
+- [x] Implement portfolio list/create/detail/edit/delete pages
+- [x] Add loading, empty, and error state UI components
+- [x] Add professional placeholders for future holdings/analytics sections
