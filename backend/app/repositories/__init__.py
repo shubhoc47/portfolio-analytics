@@ -1,1 +1,5 @@
-# Repositories package - data access (Part 2+)
+"""Repositories package."""
+
+from .portfolio import PortfolioRepository
+
+__all__ = ["PortfolioRepository"]

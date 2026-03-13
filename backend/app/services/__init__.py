@@ -1,1 +1,5 @@
-# Services package - business logic (Part 4+)
+"""Services package."""
+
+from .portfolio_service import PortfolioService
+
+__all__ = ["PortfolioService"]

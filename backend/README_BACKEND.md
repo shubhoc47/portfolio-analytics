@@ -16,6 +16,27 @@ uvicorn app.main:app --reload
 - Docs: http://localhost:8000/docs
 - Health: http://localhost:8000/health
 
+## Portfolio CRUD API (Part 6)
+
+Versioned portfolio endpoints are available under `/api/v1/portfolios`:
+
+- `POST /api/v1/portfolios` - create a portfolio
+- `GET /api/v1/portfolios` - list portfolios
+- `GET /api/v1/portfolios/{portfolio_id}` - get one portfolio
+- `PUT /api/v1/portfolios/{portfolio_id}` - update a portfolio
+- `DELETE /api/v1/portfolios/{portfolio_id}` - delete a portfolio
+
+Example create request:
+
+```json
+{
+  "name": "Long-Term Portfolio",
+  "description": "Core portfolio for long-term investing",
+  "base_currency": "USD",
+  "owner_name": "Shubham"
+}
+```
+
 ### Docker
 
 ```bash
@@ -28,6 +49,7 @@ docker run -p 8000:8000 portfolioiq-backend
 
 ```bash
 cd backend
+venv\Scripts\activate
 pip install -r requirements.txt
 pytest
 ```
