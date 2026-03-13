@@ -17,9 +17,9 @@
 
 ## Part 2: Database & Core Setup
 
-- [ ] Configure Alembic
+- [x] Configure Alembic
 - [x] Add database models (initial)
-- [ ] Add session factory and connection pooling
+- [x] Add session factory and connection pooling
 - [x] Add Pydantic Settings for configuration
 - [x] Add structured logging
 
@@ -27,12 +27,19 @@
 
 - [x] Add SQLAlchemy engine and session factory (PostgreSQL)
 - [x] Add `get_db` dependency for FastAPI endpoints
-- [ ] Add Alembic migrations (later)
-
-## Part 3: Authentication & Users
-
-- [ ] (To be filled)
+- [x] Add Alembic migrations
 
 ## Part 4: Database Models
 
 - [x] Add portfolio/holding/market/news/alert/AI/job models
+
+## Part 5: Alembic Migrations
+
+- [x] Add alembic.ini configuration
+- [x] Configure alembic/env.py with app settings and model metadata
+- [x] Create initial migration for all tables
+- [x] Document migration workflow in README_BACKEND.md
+
+## Part 6: Authentication & Users
+
+- [ ] (To be filled)
