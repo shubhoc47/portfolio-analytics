@@ -139,3 +139,12 @@ python scripts/seed_portfolios.py
 ```
 
 This seeder is idempotent by portfolio name, so running it multiple times will not duplicate the same sample records.
+
+To insert starter holdings for the sample portfolios:
+
+```bash
+cd backend
+python scripts/seed_holdings.py
+```
+
+This seeder is idempotent by (`portfolio_id`, `ticker`) and will skip existing sample holdings.

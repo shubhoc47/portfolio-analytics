@@ -6,7 +6,7 @@ Represents a single investment portfolio.
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, func
+from sqlalchemy import DateTime, Index, String, func, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -14,6 +14,10 @@ from app.db.base import Base
 
 class Portfolio(Base):
     __tablename__ = "portfolio"
+    __table_args__ = (
+        # Enforce case-insensitive uniqueness for portfolio names.
+        Index("uq_portfolio_name_normalized", text("lower(btrim(name))"), unique=True),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)

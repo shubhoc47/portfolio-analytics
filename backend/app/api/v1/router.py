@@ -8,6 +8,7 @@ from app.api.v1.endpoints import health as health_ep
 from app.api.v1.endpoints import auth as auth_ep
 from app.api.v1.endpoints import portfolios as portfolios_ep
 from app.api.v1.endpoints import holdings as holdings_ep
+from app.api.v1.endpoints import dev as dev_ep
 
 api_router = APIRouter()
 
@@ -16,3 +17,4 @@ api_router.include_router(health_ep.router, prefix="/health", tags=["health"])
 api_router.include_router(auth_ep.router, prefix="/auth", tags=["auth"])
 api_router.include_router(portfolios_ep.router, prefix="/portfolios", tags=["portfolios"])
 api_router.include_router(holdings_ep.router, tags=["holdings"])
+api_router.include_router(dev_ep.router, prefix="/dev", tags=["dev"])

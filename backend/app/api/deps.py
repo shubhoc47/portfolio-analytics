@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.services.holding_service import HoldingService
 from app.services.portfolio_service import PortfolioService
+from app.services.seed_service import SeedService
 
 
 DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
@@ -31,4 +32,12 @@ async def get_holding_service(db: DBSessionDep) -> HoldingService:
 
 
 HoldingServiceDep = Annotated[HoldingService, Depends(get_holding_service)]
+
+
+async def get_seed_service(db: DBSessionDep) -> SeedService:
+    """Dependency that provides a seed service instance per request."""
+    return SeedService(db)
+
+
+SeedServiceDep = Annotated[SeedService, Depends(get_seed_service)]
 

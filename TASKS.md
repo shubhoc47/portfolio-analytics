@@ -48,12 +48,19 @@
 - [x] Replace portfolio endpoint placeholder with REST CRUD routes
 - [x] Wire portfolio service dependency injection via `app/api/deps.py`
 - [x] Update backend docs with portfolio API usage
+- [x] Prevent duplicate portfolio names (service checks + DB unique index)
 
 ## Part 7: Holdings CRUD API
 
 - [x] Implement holdings schemas
 - [x] Implement holdings repository/service
 - [x] Add holdings CRUD endpoints under `/api/v1/portfolios/{portfolio_id}/holdings` and `/api/v1/holdings/{holding_id}`
+
+## Part 8: Seed Demo Data
+
+- [x] Add seed service for demo portfolios and holdings
+- [x] Add development-only seed endpoint `POST /api/v1/dev/seed`
+- [x] Add production safety check to disable seed endpoint
 
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
