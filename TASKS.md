@@ -51,9 +51,9 @@
 
 ## Part 7: Holdings CRUD API
 
-- [ ] Implement holdings schemas
-- [ ] Implement holdings repository/service
-- [ ] Add holdings CRUD endpoints under `/api/v1/holdings`
+- [x] Implement holdings schemas
+- [x] Implement holdings repository/service
+- [x] Add holdings CRUD endpoints under `/api/v1/portfolios/{portfolio_id}/holdings` and `/api/v1/holdings/{holding_id}`
 
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 

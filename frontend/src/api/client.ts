@@ -16,6 +16,31 @@ interface RequestOptions extends RequestInit {
   jsonBody?: unknown;
 }
 
+interface ValidationDetail {
+  msg?: string;
+}
+
+function extractErrorMessage(payload: unknown): string {
+  if (!payload || typeof payload !== "object") {
+    return "Something went wrong. Please try again.";
+  }
+
+  const detail = (payload as { detail?: unknown }).detail;
+
+  if (typeof detail === "string") {
+    return detail;
+  }
+
+  if (Array.isArray(detail)) {
+    const firstMessage = (detail[0] as ValidationDetail | undefined)?.msg;
+    if (firstMessage) {
+      return firstMessage;
+    }
+  }
+
+  return "Something went wrong. Please try again.";
+}
+
 export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
@@ -43,15 +68,10 @@ export async function apiRequest<T>(
     return undefined as T;
   }
 
-  const json = (await response.json().catch(() => null)) as
-    | { detail?: string }
-    | null;
+  const json = (await response.json().catch(() => null)) as unknown;
 
   if (!response.ok) {
-    throw new ApiError(
-      response.status,
-      json?.detail || "Something went wrong. Please try again.",
-    );
+    throw new ApiError(response.status, extractErrorMessage(json));
   }
 
   return json as T;

@@ -7,6 +7,7 @@ import { LoadingState } from "../components/common/LoadingState";
 import { PageHeader } from "../components/common/PageHeader";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { HoldingsSection } from "../features/holdings/components/HoldingsSection";
 import type { Portfolio } from "../types/portfolio";
 import { formatDate } from "../utils/format";
 
@@ -129,13 +130,7 @@ export function PortfolioDetailPage() {
             </div>
           </Card>
 
-          <Card>
-            <h2 className="text-lg font-semibold text-slate-900">Holdings (Coming Next)</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Holdings CRUD will be implemented in backend Part 7 and then connected to this
-              portfolio detail page.
-            </p>
-          </Card>
+          <HoldingsSection portfolioId={portfolio.id} />
 
           <Card>
             <h2 className="text-lg font-semibold text-slate-900">Analytics (Planned)</h2>
