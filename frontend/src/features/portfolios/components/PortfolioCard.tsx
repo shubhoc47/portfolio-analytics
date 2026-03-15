@@ -25,7 +25,14 @@ export function PortfolioCard({ portfolio, onDelete }: PortfolioCardProps) {
     <Card className="flex h-full flex-col justify-between">
       <div>
         <div className="mb-2 flex items-start justify-between gap-3">
-          <h3 className="text-lg font-semibold text-slate-900">{portfolio.name}</h3>
+          <h3 className="text-lg font-semibold">
+            <Link
+              to={`/portfolios/${portfolio.id}`}
+              className="cursor-pointer text-slate-900 transition-colors hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded"
+            >
+              {portfolio.name}
+            </Link>
+          </h3>
           <span className="rounded-full bg-brand-50 px-2 py-1 text-xs font-medium text-brand-700">
             {portfolio.base_currency}
           </span>
