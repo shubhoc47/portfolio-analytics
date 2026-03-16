@@ -1,6 +1,13 @@
 """Pydantic schemas package."""
 
 from .holding import HoldingCreate, HoldingRead, HoldingUpdate
+from .analytics import (
+    AnalyticsSummaryRead,
+    DiversificationScoreRead,
+    HealthScoreRead,
+    RiskScoreRead,
+    SectorExposureRead,
+)
 from .portfolio import PortfolioCreate, PortfolioRead, PortfolioUpdate
 from .seed import SeedResultRead
 
@@ -11,5 +18,10 @@ __all__ = [
     "HoldingCreate",
     "HoldingRead",
     "HoldingUpdate",
+    "SectorExposureRead",
+    "DiversificationScoreRead",
+    "RiskScoreRead",
+    "HealthScoreRead",
+    "AnalyticsSummaryRead",
     "SeedResultRead",
 ]

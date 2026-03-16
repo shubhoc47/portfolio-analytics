@@ -62,6 +62,12 @@
 - [x] Add development-only seed endpoint `POST /api/v1/dev/seed`
 - [x] Add production safety check to disable seed endpoint
 
+## Part 9: Core Analytics Engine
+
+- [x] Add analytics schemas for sector exposure, diversification, risk, health, and summary
+- [x] Add analytics service with deterministic scoring formulas and factor breakdowns
+- [x] Add analytics endpoints under `/api/v1/analytics/portfolios/{portfolio_id}/...`
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

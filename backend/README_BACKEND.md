@@ -37,6 +37,22 @@ Example create request:
 }
 ```
 
+## Core Analytics API (Part 9)
+
+Portfolio analytics endpoints are available under `/api/v1/analytics`:
+
+- `GET /api/v1/analytics/portfolios/{portfolio_id}/sector-exposure`
+- `GET /api/v1/analytics/portfolios/{portfolio_id}/diversification-score`
+- `GET /api/v1/analytics/portfolios/{portfolio_id}/risk-score`
+- `GET /api/v1/analytics/portfolios/{portfolio_id}/health-score`
+- `GET /api/v1/analytics/portfolios/{portfolio_id}/summary`
+
+Notes:
+
+- Current analytics are deterministic demo heuristics for development/testing.
+- Sector classification uses holding `sector` when available, with a ticker fallback map for seeded/demo holdings.
+- Higher `risk_score` means higher risk. Higher `health_score` means healthier portfolio composition.
+
 ### Docker
 
 ```bash

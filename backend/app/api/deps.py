@@ -10,6 +10,7 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
+from app.services.analytics_service import AnalyticsService
 from app.services.holding_service import HoldingService
 from app.services.portfolio_service import PortfolioService
 from app.services.seed_service import SeedService
@@ -40,4 +41,12 @@ async def get_seed_service(db: DBSessionDep) -> SeedService:
 
 
 SeedServiceDep = Annotated[SeedService, Depends(get_seed_service)]
+
+
+async def get_analytics_service(db: DBSessionDep) -> AnalyticsService:
+    """Dependency that provides an analytics service instance per request."""
+    return AnalyticsService(db)
+
+
+AnalyticsServiceDep = Annotated[AnalyticsService, Depends(get_analytics_service)]
 
