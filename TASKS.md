@@ -68,6 +68,15 @@
 - [x] Add analytics service with deterministic scoring formulas and factor breakdowns
 - [x] Add analytics endpoints under `/api/v1/analytics/portfolios/{portfolio_id}/...`
 
+## Part 10: Benchmark Comparison
+
+- [x] Add benchmark schemas for portfolio/benchmark/comparison response blocks
+- [x] Add benchmark provider abstraction with mock S&P 500 and mock ticker prices
+- [x] Add benchmark comparison service with transparent return formulas
+- [x] Add benchmark comparison endpoint under `/api/v1/benchmark/portfolios/{portfolio_id}/compare`
+- [x] Handle benchmark edge cases (portfolio not found, no holdings, missing mock prices)
+- [x] Document benchmark API behavior and demo-data limitations
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

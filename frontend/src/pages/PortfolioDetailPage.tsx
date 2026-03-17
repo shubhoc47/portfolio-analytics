@@ -7,6 +7,7 @@ import { LoadingState } from "../components/common/LoadingState";
 import { PageHeader } from "../components/common/PageHeader";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
+import { PortfolioAnalyticsSection } from "../features/analytics/components/PortfolioAnalyticsSection";
 import { HoldingsSection } from "../features/holdings/components/HoldingsSection";
 import type { Portfolio } from "../types/portfolio";
 import { formatDate } from "../utils/format";
@@ -94,6 +95,13 @@ export function PortfolioDetailPage() {
 
       {!isLoading && !error && portfolio ? (
         <div className="space-y-4">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Portfolio Overview</h2>
+            <p className="text-sm text-slate-600">
+              Core profile details and metadata for this portfolio.
+            </p>
+          </div>
+
           <Card>
             <dl className="grid gap-4 text-sm md:grid-cols-2">
               <div>
@@ -132,13 +140,7 @@ export function PortfolioDetailPage() {
 
           <HoldingsSection portfolioId={portfolio.id} />
 
-          <Card>
-            <h2 className="text-lg font-semibold text-slate-900">Analytics (Planned)</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Portfolio analytics, benchmark comparison, and insights are planned for later
-              milestones.
-            </p>
-          </Card>
+          <PortfolioAnalyticsSection portfolioId={portfolio.id} />
         </div>
       ) : null}
     </section>

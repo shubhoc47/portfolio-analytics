@@ -11,6 +11,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
 from app.services.analytics_service import AnalyticsService
+from app.providers.benchmark.base import BenchmarkProvider
+from app.providers.benchmark.mock import MockBenchmarkProvider
+from app.services.benchmark_service import BenchmarkService
 from app.services.holding_service import HoldingService
 from app.services.portfolio_service import PortfolioService
 from app.services.seed_service import SeedService
@@ -49,4 +52,23 @@ async def get_analytics_service(db: DBSessionDep) -> AnalyticsService:
 
 
 AnalyticsServiceDep = Annotated[AnalyticsService, Depends(get_analytics_service)]
+
+
+def get_benchmark_provider() -> BenchmarkProvider:
+    """Dependency that provides benchmark and mock price data source."""
+    return MockBenchmarkProvider()
+
+
+BenchmarkProviderDep = Annotated[BenchmarkProvider, Depends(get_benchmark_provider)]
+
+
+async def get_benchmark_service(
+    db: DBSessionDep,
+    benchmark_provider: BenchmarkProviderDep,
+) -> BenchmarkService:
+    """Dependency that provides a benchmark comparison service instance."""
+    return BenchmarkService(db, benchmark_provider)
+
+
+BenchmarkServiceDep = Annotated[BenchmarkService, Depends(get_benchmark_service)]
 

@@ -10,6 +10,7 @@ from app.api.v1.endpoints import portfolios as portfolios_ep
 from app.api.v1.endpoints import holdings as holdings_ep
 from app.api.v1.endpoints import dev as dev_ep
 from app.api.v1.endpoints import analytics as analytics_ep
+from app.api.v1.endpoints import benchmark as benchmark_ep
 
 api_router = APIRouter()
 
@@ -20,3 +21,4 @@ api_router.include_router(portfolios_ep.router, prefix="/portfolios", tags=["por
 api_router.include_router(holdings_ep.router, tags=["holdings"])
 api_router.include_router(dev_ep.router, prefix="/dev", tags=["dev"])
 api_router.include_router(analytics_ep.router, prefix="/analytics", tags=["analytics"])
+api_router.include_router(benchmark_ep.router, prefix="/benchmark", tags=["benchmark"])

@@ -53,6 +53,25 @@ Notes:
 - Sector classification uses holding `sector` when available, with a ticker fallback map for seeded/demo holdings.
 - Higher `risk_score` means higher risk. Higher `health_score` means healthier portfolio composition.
 
+## Benchmark Comparison API (Part 10)
+
+Benchmark comparison endpoint is available under `/api/v1/benchmark`:
+
+- `GET /api/v1/benchmark/portfolios/{portfolio_id}/compare`
+
+What it returns:
+
+- Portfolio return block (`invested_value`, `current_value`, `absolute_return`, `return_percent`)
+- Benchmark block (`S&P 500`, symbol `SPY`, demo return percent)
+- Comparison block (`outperformed`, `underperformed`, or `matched`) with summary text
+- Optional holding-level return breakdown and notes
+
+Notes:
+
+- This part uses deterministic mock benchmark data and mock current prices for development/testing.
+- Holding return formula is: `((quantity * current_price) - (quantity * average_cost)) / (quantity * average_cost) * 100`.
+- If a holding has no stored/current mock price, service falls back to `average_cost` (neutral return) and reports this in notes.
+
 ### Docker
 
 ```bash

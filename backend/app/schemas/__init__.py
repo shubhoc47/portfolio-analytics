@@ -8,6 +8,13 @@ from .analytics import (
     RiskScoreRead,
     SectorExposureRead,
 )
+from .benchmark import (
+    BenchmarkComparisonRead,
+    BenchmarkComparisonSummaryRead,
+    BenchmarkRead,
+    HoldingReturnBreakdownRead,
+    PortfolioReturnRead,
+)
 from .portfolio import PortfolioCreate, PortfolioRead, PortfolioUpdate
 from .seed import SeedResultRead
 
@@ -23,5 +30,10 @@ __all__ = [
     "RiskScoreRead",
     "HealthScoreRead",
     "AnalyticsSummaryRead",
+    "HoldingReturnBreakdownRead",
+    "PortfolioReturnRead",
+    "BenchmarkRead",
+    "BenchmarkComparisonSummaryRead",
+    "BenchmarkComparisonRead",
     "SeedResultRead",
 ]
