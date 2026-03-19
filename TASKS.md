@@ -77,6 +77,29 @@
 - [x] Handle benchmark edge cases (portfolio not found, no holdings, missing mock prices)
 - [x] Document benchmark API behavior and demo-data limitations
 
+## Part 11A: News Ingestion Foundation
+
+- [x] Add lightweight news provider abstraction with ticker-based fetch contract
+- [x] Add deterministic mock news provider for seeded/demo holdings
+- [x] Add portfolio-aware news refresh service flow (portfolio -> holdings -> tickers -> provider)
+- [x] Normalize raw provider articles into a consistent internal shape before persistence
+- [x] Add idempotent deduplication across provider batch and existing database rows
+- [x] Persist normalized local news metadata as source-of-truth for future enrichment
+- [x] Add news refresh endpoint `POST /api/v1/news/portfolios/{portfolio_id}/refresh`
+- [x] Add portfolio news listing endpoint `GET /api/v1/news/portfolios/{portfolio_id}`
+- [x] Handle key edge cases (portfolio not found, empty holdings, empty provider results, duplicate refreshes)
+
+## Part 11B: Sentiment Analysis and Aggregation
+
+- [x] Add sentiment provider abstraction for local article analysis
+- [x] Add rule-based sentiment provider fallback with transparent keyword rules
+- [x] Add idempotent sentiment upsert behavior (unique by article + provider)
+- [x] Persist article sentiment metadata for later dashboard/briefing features
+- [x] Aggregate article sentiment into holding-level sentiment summaries
+- [x] Aggregate article sentiment into portfolio-level sentiment summary
+- [x] Add sentiment analyze endpoint `POST /api/v1/sentiment/portfolios/{portfolio_id}/analyze`
+- [x] Handle sentiment edge cases (portfolio not found, no holdings, no stored news, repeated analysis)
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

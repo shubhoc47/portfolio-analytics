@@ -72,6 +72,46 @@ Notes:
 - Holding return formula is: `((quantity * current_price) - (quantity * average_cost)) / (quantity * average_cost) * 100`.
 - If a holding has no stored/current mock price, service falls back to `average_cost` (neutral return) and reports this in notes.
 
+## News Ingestion API (Part 11A)
+
+Portfolio-aware news ingestion endpoints are available under `/api/v1/news`:
+
+- `POST /api/v1/news/portfolios/{portfolio_id}/refresh`
+- `GET /api/v1/news/portfolios/{portfolio_id}`
+
+What refresh does:
+
+- loads portfolio holdings and extracts distinct tickers
+- fetches raw mock-provider news for those tickers
+- normalizes provider output into a consistent internal article shape
+- deduplicates by `external_id` (when present), canonical URL, and fallback hash
+- persists only new normalized rows in `news_article`
+
+Notes:
+
+- Part 11A uses only deterministic mock/demo provider data.
+- Repeated refresh calls are idempotent with respect to duplicate inserts.
+- Stored local article metadata is intended as the source-of-truth input for future enrichment (sentiment, summaries, alerts, ratings context).
+
+## Sentiment Analysis API (Part 11B)
+
+Portfolio sentiment analysis endpoint is available under `/api/v1/sentiment`:
+
+- `POST /api/v1/sentiment/portfolios/{portfolio_id}/analyze`
+
+What it does:
+
+- loads local stored portfolio news articles from Part 11A
+- applies a rule-based sentiment provider to each article (`positive`, `neutral`, `negative`)
+- upserts one sentiment row per (`article_id`, `provider_name`)
+- returns article-level results and holding/portfolio aggregate summaries
+
+Notes:
+
+- Part 11B sentiment is derived from local article data only; it does not fetch external news.
+- Current classifier is a deterministic keyword/rule fallback for development.
+- Repeated analyze calls update existing rows for the same provider instead of creating duplicates.
+
 ### Docker
 
 ```bash

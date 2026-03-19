@@ -11,6 +11,8 @@ from app.api.v1.endpoints import holdings as holdings_ep
 from app.api.v1.endpoints import dev as dev_ep
 from app.api.v1.endpoints import analytics as analytics_ep
 from app.api.v1.endpoints import benchmark as benchmark_ep
+from app.api.v1.endpoints import news as news_ep
+from app.api.v1.endpoints import sentiment as sentiment_ep
 
 api_router = APIRouter()
 
@@ -22,3 +24,5 @@ api_router.include_router(holdings_ep.router, tags=["holdings"])
 api_router.include_router(dev_ep.router, prefix="/dev", tags=["dev"])
 api_router.include_router(analytics_ep.router, prefix="/analytics", tags=["analytics"])
 api_router.include_router(benchmark_ep.router, prefix="/benchmark", tags=["benchmark"])
+api_router.include_router(news_ep.router, prefix="/news", tags=["news"])
+api_router.include_router(sentiment_ep.router, prefix="/sentiment", tags=["sentiment"])

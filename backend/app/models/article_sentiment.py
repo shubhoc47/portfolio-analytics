@@ -7,7 +7,7 @@ Represents a sentiment analysis result for a news article.
 from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import DateTime, ForeignKey, Numeric, String, func
+from sqlalchemy import DateTime, ForeignKey, Numeric, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -15,6 +15,9 @@ from app.db.base import Base
 
 class ArticleSentiment(Base):
     __tablename__ = "article_sentiment"
+    __table_args__ = (
+        UniqueConstraint("article_id", "provider_name", name="uq_article_sentiment_article_provider"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -28,6 +31,7 @@ class ArticleSentiment(Base):
     sentiment_score: Mapped[Decimal] = mapped_column(Numeric(5, 4), nullable=False)
     confidence: Mapped[Decimal | None] = mapped_column(Numeric(5, 4), nullable=True)
     provider_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    rule_key: Mapped[str | None] = mapped_column(String(120), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

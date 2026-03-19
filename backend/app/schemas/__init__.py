@@ -15,6 +15,12 @@ from .benchmark import (
     HoldingReturnBreakdownRead,
     PortfolioReturnRead,
 )
+from .sentiment import (
+    ArticleSentimentRead,
+    HoldingSentimentSummaryRead,
+    PortfolioSentimentSummaryRead,
+    SentimentAnalyzeResponse,
+)
 from .portfolio import PortfolioCreate, PortfolioRead, PortfolioUpdate
 from .seed import SeedResultRead
 
@@ -35,5 +41,9 @@ __all__ = [
     "BenchmarkRead",
     "BenchmarkComparisonSummaryRead",
     "BenchmarkComparisonRead",
+    "ArticleSentimentRead",
+    "HoldingSentimentSummaryRead",
+    "PortfolioSentimentSummaryRead",
+    "SentimentAnalyzeResponse",
     "SeedResultRead",
 ]

@@ -25,6 +25,7 @@ class NewsArticle(Base):
 
     ticker: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
 
+    external_id: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     source: Mapped[str] = mapped_column(String(200), nullable=False)
     url: Mapped[str] = mapped_column(String(1000), nullable=False, unique=True)

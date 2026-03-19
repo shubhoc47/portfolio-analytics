@@ -10,13 +10,19 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
+from app.providers.news.base import NewsProvider
+from app.providers.news.mock import MockNewsProvider
+from app.providers.sentiment.base import SentimentProvider
+from app.providers.sentiment.rule_based import RuleBasedSentimentProvider
 from app.services.analytics_service import AnalyticsService
 from app.providers.benchmark.base import BenchmarkProvider
 from app.providers.benchmark.mock import MockBenchmarkProvider
 from app.services.benchmark_service import BenchmarkService
 from app.services.holding_service import HoldingService
+from app.services.news_service import NewsService
 from app.services.portfolio_service import PortfolioService
 from app.services.seed_service import SeedService
+from app.services.sentiment_service import SentimentService
 
 
 DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
@@ -71,4 +77,42 @@ async def get_benchmark_service(
 
 
 BenchmarkServiceDep = Annotated[BenchmarkService, Depends(get_benchmark_service)]
+
+
+def get_news_provider() -> NewsProvider:
+    """Dependency that provides a mock news data source."""
+    return MockNewsProvider()
+
+
+NewsProviderDep = Annotated[NewsProvider, Depends(get_news_provider)]
+
+
+async def get_news_service(
+    db: DBSessionDep,
+    news_provider: NewsProviderDep,
+) -> NewsService:
+    """Dependency that provides a portfolio-aware news service instance."""
+    return NewsService(db, news_provider)
+
+
+NewsServiceDep = Annotated[NewsService, Depends(get_news_service)]
+
+
+def get_sentiment_provider() -> SentimentProvider:
+    """Dependency that provides a rule-based sentiment analyzer."""
+    return RuleBasedSentimentProvider()
+
+
+SentimentProviderDep = Annotated[SentimentProvider, Depends(get_sentiment_provider)]
+
+
+async def get_sentiment_service(
+    db: DBSessionDep,
+    sentiment_provider: SentimentProviderDep,
+) -> SentimentService:
+    """Dependency that provides a portfolio sentiment analysis service."""
+    return SentimentService(db, sentiment_provider)
+
+
+SentimentServiceDep = Annotated[SentimentService, Depends(get_sentiment_service)]
 
