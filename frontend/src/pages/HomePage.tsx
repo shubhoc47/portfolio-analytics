@@ -1,26 +1,19 @@
-import { Link } from "react-router-dom";
-
-import { Card } from "../components/ui/Card";
-import { Button } from "../components/ui/Button";
+import { FeatureHighlights } from "../features/home/components/FeatureHighlights";
+import { FinalCtaSection } from "../features/home/components/FinalCtaSection";
+import { HeroSection } from "../features/home/components/HeroSection";
+import { ProductPreview } from "../features/home/components/ProductPreview";
+import { TrustSection } from "../features/home/components/TrustSection";
+import { ValueSection } from "../features/home/components/ValueSection";
 
 export function HomePage() {
   return (
-    <div className="space-y-6">
-      <Card className="bg-gradient-to-br from-white to-brand-50">
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
-          PortfolioIQ Frontend
-        </h1>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Professional portfolio management interface connected to your FastAPI backend.
-          This milestone includes complete portfolio CRUD with polished UX and clean
-          architecture.
-        </p>
-        <div className="mt-6">
-          <Link to="/portfolios">
-            <Button>Go to Portfolios</Button>
-          </Link>
-        </div>
-      </Card>
+    <div className="space-y-8 pb-4 sm:space-y-10">
+      <HeroSection />
+      <ProductPreview />
+      <FeatureHighlights />
+      <ValueSection />
+      <TrustSection />
+      <FinalCtaSection />
     </div>
   );
 }
