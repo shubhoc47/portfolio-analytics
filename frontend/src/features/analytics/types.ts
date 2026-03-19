@@ -76,3 +76,46 @@ export interface AnalyticsSummary {
   risk: RiskScore;
   health: HealthScore;
 }
+
+export type BenchmarkComparisonStatus = "outperformed" | "underperformed" | "matched";
+export type PriceSource = "holding_current_price" | "mock_price" | "average_cost_fallback";
+
+export interface HoldingReturnBreakdown {
+  ticker: string;
+  invested_value: number;
+  current_value: number;
+  absolute_return: number;
+  return_percent: number;
+  price_used: number;
+  price_source: PriceSource;
+  notes: string[];
+}
+
+export interface PortfolioReturn {
+  invested_value: number;
+  current_value: number;
+  absolute_return: number;
+  return_percent: number;
+}
+
+export interface BenchmarkMetrics {
+  name: string;
+  symbol: string;
+  return_percent: number;
+}
+
+export interface BenchmarkComparisonSummary {
+  status: BenchmarkComparisonStatus;
+  relative_performance_percent: number;
+  summary: string;
+}
+
+export interface BenchmarkComparison {
+  portfolio_id: number;
+  portfolio_name: string;
+  portfolio: PortfolioReturn;
+  benchmark: BenchmarkMetrics;
+  comparison: BenchmarkComparisonSummary;
+  holdings: HoldingReturnBreakdown[];
+  notes: string[];
+}

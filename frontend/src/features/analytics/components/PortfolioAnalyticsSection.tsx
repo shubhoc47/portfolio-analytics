@@ -8,6 +8,7 @@ import type { AnalyticsSummary } from "../types";
 import { AnalyticsSummaryCards } from "./AnalyticsSummaryCards";
 import { ScoreBreakdownCard } from "./ScoreBreakdownCard";
 import { SectorExposureCard } from "./SectorExposureCard";
+import { BenchmarkSection } from "../../benchmark/components/BenchmarkSection";
 
 interface PortfolioAnalyticsSectionProps {
   portfolioId: number;
@@ -60,19 +61,12 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
           <div>
             <h2 className="text-xl font-semibold tracking-tight text-slate-900">Analytics</h2>
             <p className="mt-1 text-sm text-slate-600">
-              Part 9 portfolio analytics with explainable scores and breakdown factors.
+              Understand portfolio diversification, risk, and overall health at a glance.
             </p>
           </div>
           <Button variant="ghost" onClick={() => void loadAnalytics()}>
             Refresh Analytics
           </Button>
-        </div>
-        <div>
-          <div className="mt-4 grid gap-2 text-xs text-slate-500 sm:grid-cols-3">
-            <div className="rounded-md bg-white px-3 py-2">Diversification and concentration</div>
-            <div className="rounded-md bg-white px-3 py-2">Risk profile and penalties</div>
-            <div className="rounded-md bg-white px-3 py-2">Overall portfolio health</div>
-          </div>
         </div>
       </div>
 
@@ -123,6 +117,8 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
           />
 
           <SectorExposureCard sectorExposure={analytics.sector_exposure} />
+
+          <BenchmarkSection portfolioId={portfolioId} />
 
           <div className="grid gap-4 xl:grid-cols-3">
             <ScoreBreakdownCard
@@ -232,9 +228,6 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
               Future modules will be added in upcoming milestones.
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs">
-              <span className="rounded-full border border-slate-300 bg-white px-2 py-1 text-slate-700">
-                Benchmark Comparison
-              </span>
               <span className="rounded-full border border-slate-300 bg-white px-2 py-1 text-slate-700">
                 Market News & Sentiment
               </span>
