@@ -100,6 +100,38 @@
 - [x] Add sentiment analyze endpoint `POST /api/v1/sentiment/portfolios/{portfolio_id}/analyze`
 - [x] Handle sentiment edge cases (portfolio not found, no holdings, no stored news, repeated analysis)
 
+## Part 11C: Daily Holding Briefs and Portfolio Summaries
+
+- [x] Add summary provider abstraction (local inputs only; no news retrieval)
+- [x] Add template-based deterministic summary fallback with approximate word limits
+- [x] Extend `ai_summary` persistence for daily/weekly/portfolio layers with upsert natural keys
+- [x] Generate daily holding briefs from locally stored articles per holding/date
+- [x] Generate weekly holding summaries from stored daily briefs (rolling 7-day window)
+- [x] Generate portfolio-wide summary from weekly holding summaries or daily brief fallbacks
+- [x] Add summary endpoints under `/api/v1/summaries/portfolios/{portfolio_id}/...`
+- [x] Handle empty holdings, missing articles/briefs, and repeated generation safely
+
+## Part 11D: Alerts Engine
+
+- [x] Add deterministic rule-based alert detector for local stored content
+- [x] Add severity assignment rules (`low`, `medium`, `high`, `critical`)
+- [x] Extend alert persistence with source metadata for traceability and dedupe
+- [x] Add idempotent active-alert upsert behavior for repeated refresh runs
+- [x] Add alerts refresh endpoint `POST /api/v1/alerts/portfolios/{portfolio_id}/refresh`
+- [x] Add active alerts listing endpoint `GET /api/v1/alerts/portfolios/{portfolio_id}`
+- [x] Handle edge cases (portfolio not found, empty holdings, no local news, no matches)
+
+## Part 11E: Analyst Ratings Enrichment
+
+- [x] Add ratings provider abstraction with batch ticker fetch contract
+- [x] Add deterministic mock ratings provider with messy external recommendation labels
+- [x] Add explicit normalization mapping from provider labels to `buy` / `hold` / `sell`
+- [x] Extend analyst rating persistence with provider metadata and idempotent upsert keys
+- [x] Add portfolio-aware ratings refresh flow (portfolio -> holdings -> tickers -> provider -> normalize -> upsert)
+- [x] Add ratings refresh endpoint `POST /api/v1/ratings/portfolios/{portfolio_id}/refresh`
+- [x] Add ratings listing endpoint `GET /api/v1/ratings/portfolios/{portfolio_id}`
+- [x] Handle ratings edge cases (portfolio not found, empty holdings, empty provider results, repeated refresh)
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

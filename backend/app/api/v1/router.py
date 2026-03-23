@@ -13,6 +13,9 @@ from app.api.v1.endpoints import analytics as analytics_ep
 from app.api.v1.endpoints import benchmark as benchmark_ep
 from app.api.v1.endpoints import news as news_ep
 from app.api.v1.endpoints import sentiment as sentiment_ep
+from app.api.v1.endpoints import summaries as summaries_ep
+from app.api.v1.endpoints import alerts as alerts_ep
+from app.api.v1.endpoints import ratings as ratings_ep
 
 api_router = APIRouter()
 
@@ -26,3 +29,6 @@ api_router.include_router(analytics_ep.router, prefix="/analytics", tags=["analy
 api_router.include_router(benchmark_ep.router, prefix="/benchmark", tags=["benchmark"])
 api_router.include_router(news_ep.router, prefix="/news", tags=["news"])
 api_router.include_router(sentiment_ep.router, prefix="/sentiment", tags=["sentiment"])
+api_router.include_router(summaries_ep.router, prefix="/summaries", tags=["summaries"])
+api_router.include_router(alerts_ep.router, prefix="/alerts", tags=["alerts"])
+api_router.include_router(ratings_ep.router, prefix="/ratings", tags=["ratings"])

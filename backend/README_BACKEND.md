@@ -112,6 +112,64 @@ Notes:
 - Current classifier is a deterministic keyword/rule fallback for development.
 - Repeated analyze calls update existing rows for the same provider instead of creating duplicates.
 
+## Summaries API (Part 11C)
+
+Hierarchical summary endpoints are under `/api/v1/summaries`:
+
+- `POST /api/v1/summaries/portfolios/{portfolio_id}/daily-briefs` — optional body `{ "summary_date": "YYYY-MM-DD" }` (defaults to today UTC)
+- `POST /api/v1/summaries/portfolios/{portfolio_id}/weekly-holding-summaries` — optional body `{ "window_end_date": "YYYY-MM-DD" }` (7-day window ending on that date)
+- `POST /api/v1/summaries/portfolios/{portfolio_id}/portfolio-summary` — optional body `{ "anchor_date": "YYYY-MM-DD" }`
+
+Behavior:
+
+- **Daily briefs** use only **local `news_article` rows** for each holding on the chosen calendar day (UTC), optionally enriched with Part 11B sentiment labels when present.
+- **Weekly holding summaries** summarize **stored daily briefs** for the rolling 7-day window (not raw articles).
+- **Portfolio summary** prefers **stored weekly holding summaries** for that anchor; if none exist, it rolls up **stored daily briefs** in the window.
+- Summaries are persisted in `ai_summary` with upsert semantics per `(portfolio_id, summary_type, provider_name, summary_date, holding_id)`.
+- The template provider does **not** fetch news; it only formats text passed in from the service layer.
+
+## Alerts API (Part 11D)
+
+Portfolio alerts endpoints are available under `/api/v1/alerts`:
+
+- `POST /api/v1/alerts/portfolios/{portfolio_id}/refresh`
+- `GET /api/v1/alerts/portfolios/{portfolio_id}`
+
+What refresh does:
+
+- validates that the portfolio exists and has holdings
+- reads **local stored articles** (Part 11A) and optional local sentiment context (Part 11B)
+- runs a deterministic keyword/rule detector to classify events into alert categories
+- assigns deterministic severity (`low`, `medium`, `high`, `critical`)
+- upserts active alerts to avoid duplicate rows on repeated refresh
+
+Notes:
+
+- Part 11D is fully deterministic and local-data driven (no fresh retrieval during alert refresh).
+- Current dedupe behavior keeps one active alert per source + alert type (for article-backed alerts).
+- Stored alert rows include source metadata (`source_kind`, `source_article_id`, `source_summary_id`) for explainability and future workflows.
+
+## Analyst Ratings API (Part 11E)
+
+Portfolio analyst ratings endpoints are available under `/api/v1/ratings`:
+
+- `POST /api/v1/ratings/portfolios/{portfolio_id}/refresh`
+- `GET /api/v1/ratings/portfolios/{portfolio_id}`
+
+What refresh does:
+
+- validates that the portfolio exists and has holdings
+- extracts distinct holding tickers for the selected portfolio
+- fetches raw mock analyst recommendations (intentionally messy external labels)
+- normalizes provider labels into internal `buy` / `hold` / `sell`
+- upserts ratings so repeated refresh calls update existing rows instead of duplicating them
+
+Notes:
+
+- Part 11E currently uses only deterministic mock/demo ratings.
+- Raw external labels are preserved in storage (`rating_raw`) while APIs can depend on normalized categories (`rating_normalized`).
+- Ratings persistence includes provider metadata (`provider_name`) and refresh timestamp updates (`updated_at`) for traceability.
+
 ### Docker
 
 ```bash

@@ -4,6 +4,8 @@ News repository.
 Contains only data-access logic for news article entities.
 """
 
+from datetime import date, datetime, time, timezone
+
 from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -76,6 +78,30 @@ class NewsRepository:
             .where(Holding.portfolio_id == portfolio_id)
             .order_by(NewsArticle.published_at.desc(), NewsArticle.id.desc())
             .limit(limit)
+        )
+        result = await self.db.execute(stmt)
+        return list(result.scalars().all())
+
+    async def list_for_holding_on_calendar_date(
+        self,
+        portfolio_id: int,
+        holding_id: int,
+        day: date,
+    ) -> list[NewsArticle]:
+        """Local articles for one holding whose published_at falls on `day` (UTC calendar day)."""
+        start = datetime.combine(day, time.min, tzinfo=timezone.utc)
+        end = datetime.combine(day, time.max, tzinfo=timezone.utc)
+
+        stmt: Select[tuple[NewsArticle]] = (
+            select(NewsArticle)
+            .join(Holding, NewsArticle.holding_id == Holding.id)
+            .where(
+                Holding.portfolio_id == portfolio_id,
+                Holding.id == holding_id,
+                NewsArticle.published_at >= start,
+                NewsArticle.published_at <= end,
+            )
+            .order_by(NewsArticle.published_at.desc(), NewsArticle.id.desc())
         )
         result = await self.db.execute(stmt)
         return list(result.scalars().all())

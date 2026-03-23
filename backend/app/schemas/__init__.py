@@ -1,6 +1,7 @@
 """Pydantic schemas package."""
 
 from .holding import HoldingCreate, HoldingRead, HoldingUpdate
+from .alert import AlertRead, AlertRefreshResponse, PortfolioAlertsListResponse
 from .analytics import (
     AnalyticsSummaryRead,
     DiversificationScoreRead,
@@ -21,16 +22,32 @@ from .sentiment import (
     PortfolioSentimentSummaryRead,
     SentimentAnalyzeResponse,
 )
+from .summary import (
+    DailyBriefsResponse,
+    PortfolioSummaryResponse,
+    WeeklyHoldingSummariesResponse,
+)
 from .portfolio import PortfolioCreate, PortfolioRead, PortfolioUpdate
+from .ratings import (
+    AnalystRatingRead,
+    PortfolioRatingsListResponse,
+    RatingsRefreshResponse,
+)
 from .seed import SeedResultRead
 
 __all__ = [
     "PortfolioCreate",
     "PortfolioRead",
     "PortfolioUpdate",
+    "AnalystRatingRead",
+    "RatingsRefreshResponse",
+    "PortfolioRatingsListResponse",
     "HoldingCreate",
     "HoldingRead",
     "HoldingUpdate",
+    "AlertRead",
+    "AlertRefreshResponse",
+    "PortfolioAlertsListResponse",
     "SectorExposureRead",
     "DiversificationScoreRead",
     "RiskScoreRead",
@@ -45,5 +62,8 @@ __all__ = [
     "HoldingSentimentSummaryRead",
     "PortfolioSentimentSummaryRead",
     "SentimentAnalyzeResponse",
+    "DailyBriefsResponse",
+    "WeeklyHoldingSummariesResponse",
+    "PortfolioSummaryResponse",
     "SeedResultRead",
 ]

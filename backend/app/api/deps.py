@@ -10,10 +10,17 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
+from app.providers.alert.base import AlertDetector
+from app.providers.alert.rule_based import RuleBasedAlertDetector
 from app.providers.news.base import NewsProvider
 from app.providers.news.mock import MockNewsProvider
+from app.providers.ratings.base import RatingsProvider
+from app.providers.ratings.mock import MockRatingsProvider
 from app.providers.sentiment.base import SentimentProvider
 from app.providers.sentiment.rule_based import RuleBasedSentimentProvider
+from app.providers.summary.base import SummaryProvider
+from app.providers.summary.template import TemplateSummaryProvider
+from app.services.alert_service import AlertService
 from app.services.analytics_service import AnalyticsService
 from app.providers.benchmark.base import BenchmarkProvider
 from app.providers.benchmark.mock import MockBenchmarkProvider
@@ -21,8 +28,10 @@ from app.services.benchmark_service import BenchmarkService
 from app.services.holding_service import HoldingService
 from app.services.news_service import NewsService
 from app.services.portfolio_service import PortfolioService
+from app.services.ratings_service import RatingsService
 from app.services.seed_service import SeedService
 from app.services.sentiment_service import SentimentService
+from app.services.summary_service import SummaryService
 
 
 DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
@@ -98,6 +107,25 @@ async def get_news_service(
 NewsServiceDep = Annotated[NewsService, Depends(get_news_service)]
 
 
+def get_ratings_provider() -> RatingsProvider:
+    """Dependency that provides a mock analyst ratings source."""
+    return MockRatingsProvider()
+
+
+RatingsProviderDep = Annotated[RatingsProvider, Depends(get_ratings_provider)]
+
+
+async def get_ratings_service(
+    db: DBSessionDep,
+    ratings_provider: RatingsProviderDep,
+) -> RatingsService:
+    """Dependency that provides a portfolio-aware ratings enrichment service."""
+    return RatingsService(db, ratings_provider)
+
+
+RatingsServiceDep = Annotated[RatingsService, Depends(get_ratings_service)]
+
+
 def get_sentiment_provider() -> SentimentProvider:
     """Dependency that provides a rule-based sentiment analyzer."""
     return RuleBasedSentimentProvider()
@@ -115,4 +143,42 @@ async def get_sentiment_service(
 
 
 SentimentServiceDep = Annotated[SentimentService, Depends(get_sentiment_service)]
+
+
+def get_summary_provider() -> SummaryProvider:
+    """Dependency that provides a template-based summary generator (no external news fetch)."""
+    return TemplateSummaryProvider()
+
+
+SummaryProviderDep = Annotated[SummaryProvider, Depends(get_summary_provider)]
+
+
+async def get_summary_service(
+    db: DBSessionDep,
+    summary_provider: SummaryProviderDep,
+) -> SummaryService:
+    """Dependency that provides hierarchical summary generation."""
+    return SummaryService(db, summary_provider)
+
+
+SummaryServiceDep = Annotated[SummaryService, Depends(get_summary_service)]
+
+
+def get_alert_detector() -> AlertDetector:
+    """Dependency that provides a deterministic keyword/rule alerts detector."""
+    return RuleBasedAlertDetector()
+
+
+AlertDetectorDep = Annotated[AlertDetector, Depends(get_alert_detector)]
+
+
+async def get_alert_service(
+    db: DBSessionDep,
+    alert_detector: AlertDetectorDep,
+) -> AlertService:
+    """Dependency that provides a portfolio-aware alerts engine service."""
+    return AlertService(db, alert_detector)
+
+
+AlertServiceDep = Annotated[AlertService, Depends(get_alert_service)]
 

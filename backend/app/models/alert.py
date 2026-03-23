@@ -27,6 +27,19 @@ class Alert(Base):
         nullable=True,
         index=True,
     )
+    ticker: Mapped[str | None] = mapped_column(String(32), nullable=True, index=True)
+    source_kind: Mapped[str | None] = mapped_column(String(50), nullable=True, index=True)
+    source_article_id: Mapped[int | None] = mapped_column(
+        ForeignKey("news_article.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
+    source_summary_id: Mapped[int | None] = mapped_column(
+        ForeignKey("ai_summary.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
+    detector_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     alert_type: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     severity: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
@@ -43,4 +56,6 @@ class Alert(Base):
 
     portfolio: Mapped["Portfolio"] = relationship(back_populates="alerts")
     holding: Mapped["Holding | None"] = relationship()
+    source_article: Mapped["NewsArticle | None"] = relationship()
+    source_summary: Mapped["AISummary | None"] = relationship()
 
