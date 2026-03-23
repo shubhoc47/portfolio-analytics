@@ -37,20 +37,18 @@ export function HoldingsList({
   onDelete,
 }: HoldingsListProps) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-slate-200">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">
-        <thead className="bg-slate-50">
+    <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-soft">
+      <table className="min-w-full divide-y divide-gray-200 text-sm">
+        <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
           <tr>
-            <th className="px-4 py-3 text-left font-semibold text-slate-700">Ticker</th>
-            <th className="px-4 py-3 text-right font-semibold text-slate-700">Quantity</th>
-            <th className="px-4 py-3 text-right font-semibold text-slate-700">Average Cost</th>
-            <th className="px-4 py-3 text-right font-semibold text-slate-700">
-              Market Value (Placeholder)
-            </th>
-            <th className="px-4 py-3 text-right font-semibold text-slate-700">Actions</th>
+            <th className="px-4 py-3 text-left font-semibold">Ticker</th>
+            <th className="px-4 py-3 text-right font-semibold">Quantity</th>
+            <th className="px-4 py-3 text-right font-semibold">Average Cost</th>
+            <th className="px-4 py-3 text-right font-semibold">Estimated Market Value</th>
+            <th className="px-4 py-3 text-right font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
+        <tbody className="divide-y divide-gray-100 bg-white">
           {holdings.map((holding) => {
             const marketValue =
               holding.current_price === null
@@ -58,15 +56,15 @@ export function HoldingsList({
                 : Number(holding.quantity) * Number(holding.current_price);
 
             return (
-              <tr key={holding.id}>
-                <td className="px-4 py-3 font-medium text-slate-900">{holding.ticker}</td>
-                <td className="px-4 py-3 text-right text-slate-700">
+              <tr key={holding.id} className="hover:bg-gray-50/70">
+                <td className="px-4 py-3 font-medium text-gray-900">{holding.ticker}</td>
+                <td className="px-4 py-3 text-right text-gray-700">
                   {formatQuantity(Number(holding.quantity))}
                 </td>
-                <td className="px-4 py-3 text-right text-slate-700">
+                <td className="px-4 py-3 text-right text-gray-700">
                   {formatCurrency(Number(holding.average_cost), holding.currency)}
                 </td>
-                <td className="px-4 py-3 text-right text-slate-700">
+                <td className="px-4 py-3 text-right text-gray-700">
                   {marketValue === null
                     ? "Price unavailable"
                     : formatCurrency(marketValue, holding.currency)}

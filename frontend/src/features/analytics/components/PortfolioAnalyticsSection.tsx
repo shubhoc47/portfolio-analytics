@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { getPortfolioAnalytics } from "../../../api/analytics";
 import { LoadingState } from "../../../components/common/LoadingState";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type { AnalyticsSummary } from "../types";
@@ -55,20 +56,19 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
   const isEmpty = !isLoading && !error && analytics && totalHoldings === 0 && !hasExposureRows;
 
   return (
-    <section className="space-y-5">
-      <div className="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-5 shadow-soft">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight text-slate-900">Analytics</h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Understand portfolio diversification, risk, and overall health at a glance.
-            </p>
-          </div>
-          <Button variant="ghost" onClick={() => void loadAnalytics()}>
-            Refresh Analytics
-          </Button>
-        </div>
-      </div>
+    <section className="space-y-4">
+      <Card>
+        <SectionHeader
+          title="Analytics"
+          description="Understand diversification, risk, and health at a glance."
+          compact
+          actions={
+            <Button variant="ghost" onClick={() => void loadAnalytics()}>
+              Refresh Analytics
+            </Button>
+          }
+        />
+      </Card>
 
       {isLoading ? (
         <div className="space-y-4">
@@ -109,7 +109,7 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
       ) : null}
 
       {!isLoading && !error && analytics && !isEmpty ? (
-        <div className="space-y-5">
+        <div className="space-y-4">
           <AnalyticsSummaryCards
             diversification={analytics.diversification}
             risk={analytics.risk}
@@ -120,107 +120,129 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
           <BenchmarkSection portfolioId={portfolioId} />
 
-          <div className="grid gap-4 xl:grid-cols-3">
-            <ScoreBreakdownCard
-              title="Diversification Breakdown"
-              subtitle="Higher diversification score indicates broader and less concentrated exposure."
-              items={[
-                {
-                  label: "Sector Count",
-                  value: formatNumber(analytics.diversification.breakdown.sector_count),
-                },
-                {
-                  label: "Max Sector Concentration",
-                  value: formatPercent(
-                    analytics.diversification.breakdown.max_sector_concentration_percent,
-                  ),
-                },
-                {
-                  label: "Holding Count",
-                  value: formatNumber(analytics.diversification.breakdown.holding_count),
-                },
-                {
-                  label: "Sector Breadth Points",
-                  value: formatNumber(analytics.diversification.breakdown.sector_breadth_points),
-                },
-                {
-                  label: "Concentration Points",
-                  value: formatNumber(analytics.diversification.breakdown.concentration_points),
-                },
-                {
-                  label: "Holding Count Points",
-                  value: formatNumber(analytics.diversification.breakdown.holding_count_points),
-                },
-              ]}
-              notes={analytics.diversification.breakdown.notes}
-            />
+          <Card className="p-0">
+            <details className="group">
+              <summary className="cursor-pointer list-none border-b border-gray-200 px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+                      Advanced Breakdown
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Expand for detailed scoring factors and underlying calculations.
+                    </p>
+                  </div>
+                  <span className="text-xs font-medium text-blue-700 group-open:hidden">
+                    Show Details
+                  </span>
+                  <span className="hidden text-xs font-medium text-blue-700 group-open:inline">
+                    Hide Details
+                  </span>
+                </div>
+              </summary>
+              <div className="grid gap-4 p-4 xl:grid-cols-3">
+                <ScoreBreakdownCard
+                  title="Diversification Breakdown"
+                  subtitle="Higher diversification score indicates broader and less concentrated exposure."
+                  items={[
+                    {
+                      label: "Sector Count",
+                      value: formatNumber(analytics.diversification.breakdown.sector_count),
+                    },
+                    {
+                      label: "Max Sector Concentration",
+                      value: formatPercent(
+                        analytics.diversification.breakdown.max_sector_concentration_percent,
+                      ),
+                    },
+                    {
+                      label: "Holding Count",
+                      value: formatNumber(analytics.diversification.breakdown.holding_count),
+                    },
+                    {
+                      label: "Sector Breadth Points",
+                      value: formatNumber(analytics.diversification.breakdown.sector_breadth_points),
+                    },
+                    {
+                      label: "Concentration Points",
+                      value: formatNumber(analytics.diversification.breakdown.concentration_points),
+                    },
+                    {
+                      label: "Holding Count Points",
+                      value: formatNumber(analytics.diversification.breakdown.holding_count_points),
+                    },
+                  ]}
+                  notes={analytics.diversification.breakdown.notes}
+                />
 
-            <ScoreBreakdownCard
-              title="Risk Breakdown"
-              subtitle="Risk score is directional: higher score means higher risk."
-              items={[
-                {
-                  label: "Max Sector Concentration",
-                  value: formatPercent(analytics.risk.breakdown.max_sector_concentration_percent),
-                },
-                {
-                  label: "Sector Count",
-                  value: formatNumber(analytics.risk.breakdown.sector_count),
-                },
-                {
-                  label: "Holding Count",
-                  value: formatNumber(analytics.risk.breakdown.holding_count),
-                },
-                {
-                  label: "ETF Holding Percent",
-                  value: formatPercent(analytics.risk.breakdown.etf_holding_percent),
-                },
-                {
-                  label: "Concentration Points",
-                  value: formatNumber(analytics.risk.breakdown.concentration_points),
-                },
-                {
-                  label: "Single-Sector Penalty",
-                  value: formatNumber(analytics.risk.breakdown.single_sector_penalty),
-                },
-                {
-                  label: "Holding Count Penalty",
-                  value: formatNumber(analytics.risk.breakdown.holding_count_penalty),
-                },
-                {
-                  label: "ETF Mix Adjustment",
-                  value: formatNumber(analytics.risk.breakdown.etf_mix_adjustment),
-                },
-              ]}
-              notes={analytics.risk.breakdown.notes}
-            />
+                <ScoreBreakdownCard
+                  title="Risk Breakdown"
+                  subtitle="Risk score is directional: higher score means higher risk."
+                  items={[
+                    {
+                      label: "Max Sector Concentration",
+                      value: formatPercent(analytics.risk.breakdown.max_sector_concentration_percent),
+                    },
+                    {
+                      label: "Sector Count",
+                      value: formatNumber(analytics.risk.breakdown.sector_count),
+                    },
+                    {
+                      label: "Holding Count",
+                      value: formatNumber(analytics.risk.breakdown.holding_count),
+                    },
+                    {
+                      label: "ETF Holding Percent",
+                      value: formatPercent(analytics.risk.breakdown.etf_holding_percent),
+                    },
+                    {
+                      label: "Concentration Points",
+                      value: formatNumber(analytics.risk.breakdown.concentration_points),
+                    },
+                    {
+                      label: "Single-Sector Penalty",
+                      value: formatNumber(analytics.risk.breakdown.single_sector_penalty),
+                    },
+                    {
+                      label: "Holding Count Penalty",
+                      value: formatNumber(analytics.risk.breakdown.holding_count_penalty),
+                    },
+                    {
+                      label: "ETF Mix Adjustment",
+                      value: formatNumber(analytics.risk.breakdown.etf_mix_adjustment),
+                    },
+                  ]}
+                  notes={analytics.risk.breakdown.notes}
+                />
 
-            <ScoreBreakdownCard
-              title="Health Breakdown"
-              subtitle="Health combines diversification strength with inverse risk contribution."
-              items={[
-                {
-                  label: "Diversification Score",
-                  value: formatNumber(analytics.health.breakdown.diversification_score),
-                },
-                {
-                  label: "Risk Score",
-                  value: formatNumber(analytics.health.breakdown.risk_score),
-                },
-                {
-                  label: "Diversification Contribution",
-                  value: formatNumber(
-                    analytics.health.breakdown.diversification_contribution,
-                  ),
-                },
-                {
-                  label: "Inverse Risk Contribution",
-                  value: formatNumber(analytics.health.breakdown.inverse_risk_contribution),
-                },
-              ]}
-              notes={analytics.health.breakdown.notes}
-            />
-          </div>
+                <ScoreBreakdownCard
+                  title="Health Breakdown"
+                  subtitle="Health combines diversification strength with inverse risk contribution."
+                  items={[
+                    {
+                      label: "Diversification Score",
+                      value: formatNumber(analytics.health.breakdown.diversification_score),
+                    },
+                    {
+                      label: "Risk Score",
+                      value: formatNumber(analytics.health.breakdown.risk_score),
+                    },
+                    {
+                      label: "Diversification Contribution",
+                      value: formatNumber(
+                        analytics.health.breakdown.diversification_contribution,
+                      ),
+                    },
+                    {
+                      label: "Inverse Risk Contribution",
+                      value: formatNumber(analytics.health.breakdown.inverse_risk_contribution),
+                    },
+                  ]}
+                  notes={analytics.health.breakdown.notes}
+                />
+              </div>
+            </details>
+          </Card>
 
         </div>
       ) : null}

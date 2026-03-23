@@ -9,6 +9,7 @@ import {
 import { EmptyState } from "../../../components/common/EmptyState";
 import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type { Holding, HoldingUpdateInput } from "../types";
@@ -34,6 +35,7 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
 
   const [deletingHoldingId, setDeletingHoldingId] = useState<number | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const loadHoldings = useCallback(async () => {
     setIsLoading(true);
@@ -61,6 +63,7 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
     try {
       await createHolding(portfolioId, payload);
       setCreateFormVersion((prev) => prev + 1);
+      setIsCreateOpen(false);
       setActionMessage("Holding added successfully.");
       await loadHoldings();
     } catch (err) {
@@ -128,25 +131,31 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
   };
 
   return (
-    <Card>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900">Holdings</h2>
-          <p className="text-sm text-slate-600">
-            Manage positions for this portfolio (create, edit, and delete).
-          </p>
-        </div>
-      </div>
+    <Card className="space-y-4">
+      <SectionHeader
+        title="Holdings"
+        description="Track positions and manage holdings with focused actions."
+        actions={
+          <>
+            <Button variant="ghost" onClick={() => void loadHoldings()}>
+              Refresh
+            </Button>
+            <Button variant="secondary" onClick={() => setIsCreateOpen((prev) => !prev)}>
+              {isCreateOpen ? "Close Add Form" : "Add Holding"}
+            </Button>
+          </>
+        }
+      />
 
       {actionMessage ? (
-        <p className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+        <p className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
           {actionMessage}
         </p>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
-        <div>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-600">
+      {isCreateOpen ? (
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
             Add Holding
           </h3>
           <HoldingForm
@@ -155,47 +164,42 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
             isSubmitting={isCreating}
             submitError={createError}
             onSubmit={handleCreate}
+            onCancel={() => setIsCreateOpen(false)}
           />
         </div>
+      ) : null}
 
-        <div>
-          <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
-              Current Holdings
-            </h3>
-            <Button variant="ghost" onClick={() => void loadHoldings()}>
-              Refresh
+      {isLoading ? <LoadingState message="Loading holdings..." /> : null}
+      {!isLoading && error ? (
+        <ErrorState
+          title="Unable to load holdings"
+          message={error}
+          onRetry={() => void loadHoldings()}
+        />
+      ) : null}
+      {!isLoading && !error && holdings.length === 0 ? (
+        <EmptyState
+          title="No holdings yet"
+          description="Add your first holding to start tracking this portfolio."
+          action={
+            <Button variant="secondary" onClick={() => setIsCreateOpen(true)}>
+              Add First Holding
             </Button>
-          </div>
-
-          {isLoading ? <LoadingState message="Loading holdings..." /> : null}
-          {!isLoading && error ? (
-            <ErrorState
-              title="Unable to load holdings"
-              message={error}
-              onRetry={() => void loadHoldings()}
-            />
-          ) : null}
-          {!isLoading && !error && holdings.length === 0 ? (
-            <EmptyState
-              title="No holdings yet"
-              description="Add your first holding to start tracking this portfolio."
-            />
-          ) : null}
-          {!isLoading && !error && holdings.length > 0 ? (
-            <HoldingsList
-              holdings={holdings}
-              deletingHoldingId={deletingHoldingId}
-              onEdit={handleStartEdit}
-              onDelete={handleDelete}
-            />
-          ) : null}
-        </div>
-      </div>
+          }
+        />
+      ) : null}
+      {!isLoading && !error && holdings.length > 0 ? (
+        <HoldingsList
+          holdings={holdings}
+          deletingHoldingId={deletingHoldingId}
+          onEdit={handleStartEdit}
+          onDelete={handleDelete}
+        />
+      ) : null}
 
       {editingHolding ? (
-        <div className="mt-6 border-t border-slate-200 pt-6">
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-600">
+        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
             Edit Holding: {editingHolding.ticker}
           </h3>
           <HoldingForm

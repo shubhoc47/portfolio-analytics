@@ -1,10 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { deletePortfolio, getPortfolio } from "../api/portfolios";
 import { ErrorState } from "../components/common/ErrorState";
 import { LoadingState } from "../components/common/LoadingState";
-import { PageHeader } from "../components/common/PageHeader";
+import { MetricStatGrid } from "../components/common/MetricStatGrid";
+import { SubNavTabs, type SubNavTabItem } from "../components/common/SubNavTabs";
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { PortfolioAnalyticsSection } from "../features/analytics/components/PortfolioAnalyticsSection";
@@ -12,6 +13,8 @@ import { HoldingsSection } from "../features/holdings/components/HoldingsSection
 import { PortfolioIntelligenceSection } from "../features/intelligence/components/PortfolioIntelligenceSection";
 import type { Portfolio } from "../types/portfolio";
 import { formatDate } from "../utils/format";
+
+type PortfolioDetailTab = "overview" | "holdings" | "analytics" | "intelligence";
 
 export function PortfolioDetailPage() {
   const { id } = useParams();
@@ -21,6 +24,7 @@ export function PortfolioDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [activeTab, setActiveTab] = useState<PortfolioDetailTab>("overview");
 
   useEffect(() => {
     const portfolioId = Number(id);
@@ -70,80 +74,119 @@ export function PortfolioDetailPage() {
     }
   };
 
+  const tabs = useMemo<SubNavTabItem<PortfolioDetailTab>[]>(
+    () => [
+      { key: "overview", label: "Overview" },
+      { key: "holdings", label: "Holdings" },
+      { key: "analytics", label: "Analytics" },
+      { key: "intelligence", label: "Intelligence" },
+    ],
+    [],
+  );
+
   return (
     <section>
-      <PageHeader
-        title={portfolio?.name || "Portfolio details"}
-        subtitle="Portfolio profile with prepared placeholders for future modules."
-        actions={
-          <div className="flex gap-2">
-            {portfolio ? (
-              <Link to={`/portfolios/${portfolio.id}/edit`}>
-                <Button variant="secondary">Edit</Button>
-              </Link>
-            ) : null}
-            <Link to="/portfolios">
-              <Button variant="ghost">Back</Button>
-            </Link>
-          </div>
-        }
-      />
-
       {isLoading ? <LoadingState message="Loading portfolio details..." /> : null}
       {!isLoading && error ? (
         <ErrorState message={error} onRetry={() => window.location.reload()} />
       ) : null}
 
       {!isLoading && !error && portfolio ? (
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">Portfolio Overview</h2>
-            <p className="text-sm text-slate-600">
-              Core profile details and metadata for this portfolio.
-            </p>
-          </div>
-
-          <Card>
-            <dl className="grid gap-4 text-sm md:grid-cols-2">
-              <div>
-                <dt className="text-slate-500">Name</dt>
-                <dd className="font-medium text-slate-900">{portfolio.name}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Base currency</dt>
-                <dd className="font-medium text-slate-900">{portfolio.base_currency}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Owner</dt>
-                <dd className="font-medium text-slate-900">
-                  {portfolio.owner_name || "Not set"}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Created</dt>
-                <dd className="font-medium text-slate-900">
+        <div className="space-y-5">
+          <Card className="bg-gradient-to-br from-white to-gray-50">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="space-y-1">
+                <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+                  {portfolio.name}
+                </h1>
+                <p className="text-sm text-gray-600">
+                  Explore portfolio structure, risk, benchmark context, and intelligence signals.
+                </p>
+                <p className="text-xs text-gray-500">
+                  Last updated: {formatDate(portfolio.updated_at)} | Created:{" "}
                   {formatDate(portfolio.created_at)}
-                </dd>
+                </p>
               </div>
-              <div className="md:col-span-2">
-                <dt className="text-slate-500">Description</dt>
-                <dd className="font-medium text-slate-900">
-                  {portfolio.description || "No description provided."}
-                </dd>
+              <div className="flex flex-wrap gap-2">
+                <Link to={`/portfolios/${portfolio.id}/edit`}>
+                  <Button variant="secondary">Edit Portfolio</Button>
+                </Link>
+                <Button variant="ghost" onClick={() => setActiveTab("intelligence")}>
+                  View Intelligence
+                </Button>
+                <Link to="/portfolios">
+                  <Button variant="ghost">Back</Button>
+                </Link>
               </div>
-            </dl>
-            <div className="mt-6">
-              <Button variant="danger" loading={isDeleting} onClick={() => void handleDelete()}>
-                Delete Portfolio
-              </Button>
             </div>
           </Card>
 
-          <HoldingsSection portfolioId={portfolio.id} />
+          <MetricStatGrid
+            columns={4}
+            items={[
+              { label: "Base Currency", value: portfolio.base_currency, tone: "accent" },
+              { label: "Owner", value: portfolio.owner_name || "Not set", tone: "default" },
+              { label: "Portfolio ID", value: String(portfolio.id), tone: "default" },
+              {
+                label: "Description",
+                value: portfolio.description ? "Available" : "Not provided",
+                tone: portfolio.description ? "positive" : "default",
+              },
+            ]}
+          />
 
-          <PortfolioAnalyticsSection portfolioId={portfolio.id} />
+          <SubNavTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-          <PortfolioIntelligenceSection portfolioId={portfolio.id} />
+          {activeTab === "overview" ? (
+            <Card>
+              <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Core profile details and governance metadata for this portfolio.
+              </p>
+              <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
+                <div>
+                  <dt className="text-gray-500">Name</dt>
+                  <dd className="font-medium text-gray-900">{portfolio.name}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Base currency</dt>
+                  <dd className="font-medium text-gray-900">{portfolio.base_currency}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Owner</dt>
+                  <dd className="font-medium text-gray-900">{portfolio.owner_name || "Not set"}</dd>
+                </div>
+                <div>
+                  <dt className="text-gray-500">Created</dt>
+                  <dd className="font-medium text-gray-900">{formatDate(portfolio.created_at)}</dd>
+                </div>
+                <div className="md:col-span-2">
+                  <dt className="text-gray-500">Description</dt>
+                  <dd className="font-medium text-gray-900">
+                    {portfolio.description || "No description provided."}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-6">
+                <Button
+                  variant="danger"
+                  loading={isDeleting}
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-red-300"
+                  onClick={() => void handleDelete()}
+                >
+                  Delete Portfolio
+                </Button>
+              </div>
+            </Card>
+          ) : null}
+
+          {activeTab === "holdings" ? <HoldingsSection portfolioId={portfolio.id} /> : null}
+
+          {activeTab === "analytics" ? <PortfolioAnalyticsSection portfolioId={portfolio.id} /> : null}
+
+          {activeTab === "intelligence" ? (
+            <PortfolioIntelligenceSection portfolioId={portfolio.id} />
+          ) : null}
         </div>
       ) : null}
     </section>

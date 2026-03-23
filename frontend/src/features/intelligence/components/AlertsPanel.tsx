@@ -4,6 +4,9 @@ import { listPortfolioAlerts, refreshPortfolioAlerts } from "../../../api/alerts
 import { EmptyState } from "../../../components/common/EmptyState";
 import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
+import { MetricStatGrid } from "../../../components/common/MetricStatGrid";
+import { NotesBlock } from "../../../components/common/NotesBlock";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type { AlertRead, AlertRefreshResponse, PortfolioAlertsListResponse } from "../types";
@@ -69,56 +72,40 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
   return (
     <section className="space-y-4">
       <Card>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">Alerts</h3>
-            <p className="mt-1 text-sm text-slate-600">
-              Refresh and monitor active alert signals for this portfolio.
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => void loadAlerts()}>
-              Reload
-            </Button>
-            <Button loading={isRefreshing} onClick={() => void handleRefresh()}>
-              Refresh Alerts
-            </Button>
-          </div>
-        </div>
+        <SectionHeader
+          title="Alerts"
+          description="Refresh and monitor active alert signals for this portfolio."
+          compact
+          actions={
+            <>
+              <Button variant="ghost" onClick={() => void loadAlerts()}>
+                Reload
+              </Button>
+              <Button loading={isRefreshing} onClick={() => void handleRefresh()}>
+                Refresh Alerts
+              </Button>
+            </>
+          }
+        />
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-slate-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+        <Card className="bg-gray-50">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Last Refresh Result
           </h4>
-          <div className="mt-3 grid gap-3 sm:grid-cols-4">
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Detected</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.detected_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Created</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.created_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Updated</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.updated_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Active</p>
-              <p className="text-lg font-semibold text-slate-900">
-                {lastRefresh.active_alert_count}
-              </p>
-            </div>
+          <div className="mt-3">
+            <MetricStatGrid
+              columns={4}
+              items={[
+                { label: "Detected", value: String(lastRefresh.detected_count), tone: "accent" },
+                { label: "Created", value: String(lastRefresh.created_count), tone: "positive" },
+                { label: "Updated", value: String(lastRefresh.updated_count) },
+                { label: "Active", value: String(lastRefresh.active_alert_count), tone: "negative" },
+              ]}
+            />
           </div>
-          {lastRefresh.notes.length > 0 ? (
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-slate-600">
-              {lastRefresh.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          ) : null}
+          <NotesBlock notes={lastRefresh.notes} className="mt-3" />
         </Card>
       ) : null}
 
@@ -145,25 +132,25 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
               key={alert.id}
               className={
                 alert.severity === "critical"
-                  ? "border-rose-300 bg-rose-50"
+                  ? "border-red-300 bg-red-50"
                   : alert.severity === "high"
                     ? "border-orange-200 bg-orange-50"
                     : ""
               }
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-slate-900">
+                <span className="text-sm font-semibold text-gray-900">
                   {alert.ticker || "Portfolio"}
                 </span>
                 <SeverityBadge severity={alert.severity} />
-                <span className="rounded-full border border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-700">
+                <span className="rounded-full border border-gray-300 bg-white px-2 py-0.5 text-xs text-gray-700">
                   {alert.source_kind}
                 </span>
-                <span className="text-xs text-slate-500">{formatDate(alert.detected_at)}</span>
+                <span className="text-xs text-gray-500">{formatDate(alert.detected_at)}</span>
               </div>
-              <p className="mt-2 text-sm font-semibold text-slate-900">{alert.title}</p>
-              <p className="mt-1 text-sm text-slate-700">{alert.message}</p>
-              <p className="mt-2 text-xs text-slate-500">type: {alert.alert_type}</p>
+              <p className="mt-2 text-sm font-semibold text-gray-900">{alert.title}</p>
+              <p className="mt-1 text-sm text-gray-700">{alert.message}</p>
+              <p className="mt-2 text-xs text-gray-500">type: {alert.alert_type}</p>
             </Card>
           ))}
         </div>

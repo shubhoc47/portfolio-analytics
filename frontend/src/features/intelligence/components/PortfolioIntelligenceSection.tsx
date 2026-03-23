@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Card } from "../../../components/ui/Card";
 import { AlertsPanel } from "./AlertsPanel";
 import {
@@ -32,14 +33,13 @@ export function PortfolioIntelligenceSection({ portfolioId }: PortfolioIntellige
 
   return (
     <section className="space-y-4">
-      <Card className="bg-gradient-to-br from-white to-slate-50">
+      <Card>
         <div className="space-y-3">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight text-slate-900">Intelligence</h2>
-            <p className="mt-1 text-sm text-slate-600">
-              Portfolio enrichment tools for news, sentiment, summaries, alerts, and ratings.
-            </p>
-          </div>
+          <SectionHeader
+            title="Intelligence"
+            description="Portfolio enrichment tools for news, sentiment, summaries, alerts, and ratings."
+            compact
+          />
           <IntelligenceTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
       </Card>

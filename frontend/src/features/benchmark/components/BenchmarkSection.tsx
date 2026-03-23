@@ -4,7 +4,9 @@ import { getBenchmarkComparison } from "../../../api/benchmark";
 import { EmptyState } from "../../../components/common/EmptyState";
 import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
+import { Card } from "../../../components/ui/Card";
 import type { BenchmarkComparison } from "../../analytics/types";
 import { BenchmarkComparisonCard } from "./BenchmarkComparisonCard";
 
@@ -46,17 +48,18 @@ export function BenchmarkSection({ portfolioId }: BenchmarkSectionProps) {
 
   return (
     <section className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900">Benchmark Comparison</h2>
-          <p className="text-sm text-slate-600">
-            Compare this portfolio against the S&P 500 benchmark.
-          </p>
-        </div>
-        <Button variant="ghost" onClick={() => void loadBenchmarkComparison()}>
-          Refresh Benchmark
-        </Button>
-      </div>
+      <Card>
+        <SectionHeader
+          title="Benchmark Comparison"
+          description="Compare this portfolio against the S&P 500 benchmark."
+          compact
+          actions={
+            <Button variant="ghost" onClick={() => void loadBenchmarkComparison()}>
+              Refresh Benchmark
+            </Button>
+          }
+        />
+      </Card>
 
       {isLoading ? <LoadingState message="Loading benchmark comparison..." /> : null}
       {!isLoading && error ? (

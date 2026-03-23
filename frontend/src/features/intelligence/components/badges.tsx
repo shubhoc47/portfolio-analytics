@@ -2,9 +2,9 @@ import type { AlertSeverity, NormalizedRating, SentimentLabel } from "../types";
 
 export function SentimentBadge({ sentiment }: { sentiment: SentimentLabel }) {
   const styles: Record<SentimentLabel, string> = {
-    positive: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    neutral: "border-slate-300 bg-slate-100 text-slate-700",
-    negative: "border-rose-200 bg-rose-50 text-rose-700",
+    positive: "border-green-200 bg-green-50 text-green-700",
+    neutral: "border-gray-300 bg-gray-100 text-gray-700",
+    negative: "border-red-200 bg-red-50 text-red-700",
   };
 
   return (
@@ -16,10 +16,10 @@ export function SentimentBadge({ sentiment }: { sentiment: SentimentLabel }) {
 
 export function SeverityBadge({ severity }: { severity: AlertSeverity }) {
   const styles: Record<AlertSeverity, string> = {
-    low: "border-slate-300 bg-slate-100 text-slate-700",
+    low: "border-gray-300 bg-gray-100 text-gray-700",
     medium: "border-amber-200 bg-amber-50 text-amber-700",
     high: "border-orange-200 bg-orange-50 text-orange-700",
-    critical: "border-rose-200 bg-rose-50 text-rose-700",
+    critical: "border-red-200 bg-red-50 text-red-700",
   };
 
   return (
@@ -31,9 +31,9 @@ export function SeverityBadge({ severity }: { severity: AlertSeverity }) {
 
 export function RatingBadge({ rating }: { rating: NormalizedRating }) {
   const styles: Record<NormalizedRating, string> = {
-    buy: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    hold: "border-slate-300 bg-slate-100 text-slate-700",
-    sell: "border-rose-200 bg-rose-50 text-rose-700",
+    buy: "border-green-200 bg-green-50 text-green-700",
+    hold: "border-gray-300 bg-gray-100 text-gray-700",
+    sell: "border-red-200 bg-red-50 text-red-700",
   };
 
   return (

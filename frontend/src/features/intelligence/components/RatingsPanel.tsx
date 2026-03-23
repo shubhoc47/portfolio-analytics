@@ -4,6 +4,9 @@ import { listPortfolioRatings, refreshPortfolioRatings } from "../../../api/rati
 import { EmptyState } from "../../../components/common/EmptyState";
 import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
+import { MetricStatGrid } from "../../../components/common/MetricStatGrid";
+import { NotesBlock } from "../../../components/common/NotesBlock";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type {
@@ -74,75 +77,57 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
   return (
     <section className="space-y-4">
       <Card>
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h3 className="text-base font-semibold text-slate-900">Ratings</h3>
-            <p className="mt-1 text-sm text-slate-600">
-              Refresh and review normalized analyst rating signals.
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => void loadRatings()}>
-              Reload
-            </Button>
-            <Button loading={isRefreshing} onClick={() => void handleRefresh()}>
-              Refresh Ratings
-            </Button>
-          </div>
-        </div>
+        <SectionHeader
+          title="Ratings"
+          description="Refresh and review normalized analyst rating signals."
+          compact
+          actions={
+            <>
+              <Button variant="ghost" onClick={() => void loadRatings()}>
+                Reload
+              </Button>
+              <Button loading={isRefreshing} onClick={() => void handleRefresh()}>
+                Refresh Ratings
+              </Button>
+            </>
+          }
+        />
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-slate-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+        <Card className="bg-gray-50">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Last Refresh Result
           </h4>
-          <div className="mt-3 grid gap-3 sm:grid-cols-4">
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Fetched</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.fetched_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Stored</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.stored_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Created</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.created_count}</p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-3">
-              <p className="text-xs text-slate-500">Updated</p>
-              <p className="text-lg font-semibold text-slate-900">{lastRefresh.updated_count}</p>
-            </div>
+          <div className="mt-3">
+            <MetricStatGrid
+              columns={4}
+              items={[
+                { label: "Fetched", value: String(lastRefresh.fetched_count), tone: "accent" },
+                { label: "Stored", value: String(lastRefresh.stored_count) },
+                { label: "Created", value: String(lastRefresh.created_count), tone: "positive" },
+                { label: "Updated", value: String(lastRefresh.updated_count) },
+              ]}
+            />
           </div>
-          {lastRefresh.notes.length > 0 ? (
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-slate-600">
-              {lastRefresh.notes.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          ) : null}
+          <NotesBlock notes={lastRefresh.notes} className="mt-3" />
         </Card>
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card className="bg-slate-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+        <Card className="bg-gray-50">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Normalized Rating Mix
           </h4>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-              <p className="text-xs text-emerald-700">Buy</p>
-              <p className="text-xl font-semibold text-emerald-900">{groupedCounts.buy}</p>
-            </div>
-            <div className="rounded-lg border border-slate-300 bg-slate-100 p-3">
-              <p className="text-xs text-slate-700">Hold</p>
-              <p className="text-xl font-semibold text-slate-900">{groupedCounts.hold}</p>
-            </div>
-            <div className="rounded-lg border border-rose-200 bg-rose-50 p-3">
-              <p className="text-xs text-rose-700">Sell</p>
-              <p className="text-xl font-semibold text-rose-900">{groupedCounts.sell}</p>
-            </div>
+          <div className="mt-3">
+            <MetricStatGrid
+              columns={3}
+              items={[
+                { label: "Buy", value: String(groupedCounts.buy), tone: "positive" },
+                { label: "Hold", value: String(groupedCounts.hold) },
+                { label: "Sell", value: String(groupedCounts.sell), tone: "negative" },
+              ]}
+            />
           </div>
         </Card>
       ) : null}
@@ -170,8 +155,8 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       {!isLoading && !error && ratings.length > 0 ? (
         <Card className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm">
-              <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+            <table className="min-w-full divide-y divide-gray-200 text-sm">
+              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                   <th className="px-4 py-3">Ticker</th>
                   <th className="px-4 py-3">Provider</th>
@@ -182,20 +167,20 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
                   <th className="px-4 py-3">Price Target</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-gray-100 bg-white">
                 {ratings.map((rating) => (
-                  <tr key={rating.id}>
-                    <td className="px-4 py-3 font-medium text-slate-900">{rating.ticker}</td>
-                    <td className="px-4 py-3 text-slate-700">{rating.provider_name}</td>
-                    <td className="px-4 py-3 text-slate-700">
+                  <tr key={rating.id} className="hover:bg-gray-50/70">
+                    <td className="px-4 py-3 font-medium text-gray-900">{rating.ticker}</td>
+                    <td className="px-4 py-3 text-gray-700">{rating.provider_name}</td>
+                    <td className="px-4 py-3 text-gray-700">
                       {rating.analyst_name || rating.firm_name}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">{rating.raw_rating}</td>
+                    <td className="px-4 py-3 text-gray-700">{rating.raw_rating}</td>
                     <td className="px-4 py-3">
                       <RatingBadge rating={rating.normalized_rating} />
                     </td>
-                    <td className="px-4 py-3 text-slate-700">{rating.as_of_date}</td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-gray-700">{rating.as_of_date}</td>
+                    <td className="px-4 py-3 text-gray-700">
                       {rating.price_target == null ? "—" : rating.price_target}
                     </td>
                   </tr>

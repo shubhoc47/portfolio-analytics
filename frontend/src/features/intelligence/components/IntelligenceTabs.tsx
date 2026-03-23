@@ -1,5 +1,3 @@
-import { Button } from "../../../components/ui/Button";
-
 export type IntelligenceTabKey = "news" | "sentiment" | "summaries" | "alerts" | "ratings";
 
 export interface IntelligenceTabItem {
@@ -15,17 +13,22 @@ interface IntelligenceTabsProps {
 
 export function IntelligenceTabs({ tabs, activeTab, onChange }: IntelligenceTabsProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 rounded-xl border border-gray-200 bg-white p-2">
       {tabs.map((tab) => {
         const isActive = tab.key === activeTab;
         return (
-          <Button
+          <button
             key={tab.key}
-            variant={isActive ? "primary" : "secondary"}
+            type="button"
             onClick={() => onChange(tab.key)}
+            className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+              isActive
+                ? "bg-blue-600 text-white shadow"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            }`}
           >
             {tab.label}
-          </Button>
+          </button>
         );
       })}
     </div>

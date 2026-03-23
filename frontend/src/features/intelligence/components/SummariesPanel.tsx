@@ -6,6 +6,8 @@ import {
   generateWeeklyHoldingSummaries,
 } from "../../../api/summaries";
 import { ErrorState } from "../../../components/common/ErrorState";
+import { NotesBlock } from "../../../components/common/NotesBlock";
+import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type {
@@ -88,10 +90,11 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
   return (
     <section className="space-y-4">
       <Card>
-        <h3 className="text-base font-semibold text-slate-900">Summaries</h3>
-        <p className="mt-1 text-sm text-slate-600">
-          Generate daily briefs, weekly rollups, and portfolio-wide summary narratives.
-        </p>
+        <SectionHeader
+          title="Summaries"
+          description="Generate daily briefs, weekly rollups, and portfolio-wide summary narratives."
+          compact
+        />
       </Card>
 
       {error ? (
@@ -158,80 +161,87 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {dailyResult ? (
         <Card className="p-0">
-          <div className="border-b border-slate-200 px-4 py-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          <div className="border-b border-gray-200 px-4 py-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
               Daily Holding Briefs
             </h4>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-gray-500">
               Date: {dailyResult.summary_date} | created {dailyResult.created_count} | updated{" "}
               {dailyResult.updated_count}
             </p>
           </div>
           {dailyResult.briefs.length === 0 ? (
-            <div className="px-4 py-5 text-sm text-slate-600">No daily briefs were returned.</div>
+            <div className="px-4 py-5 text-sm text-gray-600">No daily briefs were returned.</div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-gray-100">
               {dailyResult.briefs.map((brief, index) => (
                 <div key={`${brief.ticker}-${index}`} className="px-4 py-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                    <span className="font-semibold text-slate-900">{brief.ticker}</span>
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                    <span className="font-semibold text-gray-900">{brief.ticker}</span>
                     <span>words: {brief.word_count ?? "n/a"}</span>
                     <span>source articles: {brief.source_article_count ?? "n/a"}</span>
                     <span>generated: {formatDate(brief.generated_at)}</span>
                   </div>
-                  <p className="text-sm leading-relaxed text-slate-800">{brief.content}</p>
+                  <p className="text-sm leading-relaxed text-gray-800">{brief.content}</p>
                 </div>
               ))}
             </div>
           )}
+          <div className="p-4 pt-0">
+            <NotesBlock notes={dailyResult.notes} className="mt-3" />
+          </div>
         </Card>
       ) : null}
 
       {weeklyResult ? (
         <Card className="p-0">
-          <div className="border-b border-slate-200 px-4 py-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          <div className="border-b border-gray-200 px-4 py-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
               Weekly Holding Summaries
             </h4>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-gray-500">
               Window: {weeklyResult.window_start_date} to {weeklyResult.window_end_date} | created{" "}
               {weeklyResult.created_count} | updated {weeklyResult.updated_count}
             </p>
           </div>
           {weeklyResult.weekly_summaries.length === 0 ? (
-            <div className="px-4 py-5 text-sm text-slate-600">
+            <div className="px-4 py-5 text-sm text-gray-600">
               No weekly holding summaries were returned.
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-gray-100">
               {weeklyResult.weekly_summaries.map((summary, index) => (
                 <div key={`${summary.ticker}-${index}`} className="px-4 py-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                    <span className="font-semibold text-slate-900">{summary.ticker}</span>
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-gray-600">
+                    <span className="font-semibold text-gray-900">{summary.ticker}</span>
                     <span>words: {summary.word_count ?? "n/a"}</span>
                     <span>source briefs: {summary.source_brief_count ?? "n/a"}</span>
                     <span>generated: {formatDate(summary.generated_at)}</span>
                   </div>
-                  <p className="text-sm leading-relaxed text-slate-800">{summary.content}</p>
+                  <p className="text-sm leading-relaxed text-gray-800">{summary.content}</p>
                 </div>
               ))}
             </div>
           )}
+          <div className="p-4 pt-0">
+            <NotesBlock notes={weeklyResult.notes} className="mt-3" />
+          </div>
         </Card>
       ) : null}
 
       {portfolioResult ? (
         <Card>
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Portfolio Summary
           </h4>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-600">
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-600">
             <span>Anchor: {portfolioResult.anchor_date}</span>
             <span>words: {portfolioResult.word_count ?? "n/a"}</span>
             <span>source summaries: {portfolioResult.source_summary_count ?? "n/a"}</span>
             <span>generated: {formatDate(portfolioResult.generated_at)}</span>
           </div>
-          <p className="mt-3 text-sm leading-relaxed text-slate-800">{portfolioResult.content}</p>
+          <p className="mt-3 text-sm leading-relaxed text-gray-800">{portfolioResult.content}</p>
+          <NotesBlock notes={portfolioResult.notes} className="mt-3" />
         </Card>
       ) : null}
     </section>
