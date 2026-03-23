@@ -9,6 +9,7 @@ import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { PortfolioAnalyticsSection } from "../features/analytics/components/PortfolioAnalyticsSection";
 import { HoldingsSection } from "../features/holdings/components/HoldingsSection";
+import { PortfolioIntelligenceSection } from "../features/intelligence/components/PortfolioIntelligenceSection";
 import type { Portfolio } from "../types/portfolio";
 import { formatDate } from "../utils/format";
 
@@ -141,6 +142,8 @@ export function PortfolioDetailPage() {
           <HoldingsSection portfolioId={portfolio.id} />
 
           <PortfolioAnalyticsSection portfolioId={portfolio.id} />
+
+          <PortfolioIntelligenceSection portfolioId={portfolio.id} />
         </div>
       ) : null}
     </section>
