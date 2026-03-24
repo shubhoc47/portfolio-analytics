@@ -93,16 +93,16 @@ export function PortfolioDetailPage() {
 
       {!isLoading && !error && portfolio ? (
         <div className="space-y-5">
-          <Card className="bg-gradient-to-br from-white to-gray-50">
+          <Card className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900/90 dark:to-slate-950">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
                   {portfolio.name}
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-slate-600 dark:text-slate-300">
                   Explore portfolio structure, risk, benchmark context, and intelligence signals.
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Last updated: {formatDate(portfolio.updated_at)} | Created:{" "}
                   {formatDate(portfolio.created_at)}
                 </p>
@@ -139,30 +139,30 @@ export function PortfolioDetailPage() {
 
           {activeTab === "overview" ? (
             <Card>
-              <h2 className="text-lg font-semibold text-gray-900">Overview</h2>
-              <p className="mt-1 text-sm text-gray-600">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Overview</h2>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                 Core profile details and governance metadata for this portfolio.
               </p>
               <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
                 <div>
-                  <dt className="text-gray-500">Name</dt>
-                  <dd className="font-medium text-gray-900">{portfolio.name}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Name</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.name}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">Base currency</dt>
-                  <dd className="font-medium text-gray-900">{portfolio.base_currency}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Base currency</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.base_currency}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">Owner</dt>
-                  <dd className="font-medium text-gray-900">{portfolio.owner_name || "Not set"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Owner</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.owner_name || "Not set"}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">Created</dt>
-                  <dd className="font-medium text-gray-900">{formatDate(portfolio.created_at)}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Created</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">{formatDate(portfolio.created_at)}</dd>
                 </div>
                 <div className="md:col-span-2">
-                  <dt className="text-gray-500">Description</dt>
-                  <dd className="font-medium text-gray-900">
+                  <dt className="text-slate-500 dark:text-slate-400">Description</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">
                     {portfolio.description || "No description provided."}
                   </dd>
                 </div>
@@ -171,7 +171,7 @@ export function PortfolioDetailPage() {
                 <Button
                   variant="danger"
                   loading={isDeleting}
-                  className="bg-red-600 hover:bg-red-700 disabled:bg-red-300"
+                  className="dark:bg-red-600 dark:hover:bg-red-700 dark:disabled:bg-red-300 dark:disabled:text-white"
                   onClick={() => void handleDelete()}
                 >
                   Delete Portfolio

@@ -79,8 +79,8 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-gray-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+        <Card className="bg-slate-900/70">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
@@ -124,8 +124,8 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       {!isLoading && !error && articles.length > 0 ? (
         <Card className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+            <table className="min-w-full divide-y divide-slate-700 text-sm">
+              <thead className="bg-slate-950 text-left text-xs uppercase tracking-wide text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Ticker</th>
                   <th className="px-4 py-3">Title</th>
@@ -133,25 +133,25 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
                   <th className="px-4 py-3">Published</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
+              <tbody className="divide-y divide-slate-800 bg-slate-900">
                 {articles.map((article) => (
-                  <tr key={article.id} className="align-top hover:bg-gray-50/70">
-                    <td className="px-4 py-3 font-medium text-gray-900">{article.ticker}</td>
+                  <tr key={article.id} className="align-top hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-medium text-slate-100">{article.ticker}</td>
                     <td className="px-4 py-3">
                       <a
                         href={article.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-medium text-brand-700 hover:text-brand-800"
+                        className="font-medium text-brand-300 hover:text-brand-200"
                       >
                         {article.title}
                       </a>
-                      <p className="mt-1 line-clamp-2 text-xs text-gray-600">
+                      <p className="mt-1 line-clamp-2 text-xs text-slate-400">
                         {article.summary || article.content || "No summary available."}
                       </p>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{article.source}</td>
-                    <td className="px-4 py-3 text-gray-700">{formatDate(article.published_at)}</td>
+                    <td className="px-4 py-3 text-slate-300">{article.source}</td>
+                    <td className="px-4 py-3 text-slate-300">{formatDate(article.published_at)}</td>
                   </tr>
                 ))}
               </tbody>

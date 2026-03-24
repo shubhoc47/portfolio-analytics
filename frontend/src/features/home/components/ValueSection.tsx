@@ -16,16 +16,16 @@ export function ValueSection() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
       variants={sectionReveal}
-      className="grid gap-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-soft lg:grid-cols-2 lg:p-8"
+      className="grid gap-6 rounded-2xl border border-marketing-800 bg-slate-900/80 p-6 shadow-soft lg:grid-cols-2 lg:p-8"
     >
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+        <p className="text-xs font-semibold uppercase tracking-wide text-marketing-300">
           Why PortfolioIQ
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-100 sm:text-3xl">
           Turn holdings data into confident investment decisions.
         </h2>
-        <p className="mt-4 text-sm leading-relaxed text-slate-600">
+        <p className="mt-4 text-sm leading-relaxed text-slate-300">
           PortfolioIQ is designed to surface what matters: risk concentration, diversification
           strength, portfolio health, and benchmark-relative performance in one coherent workflow.
         </p>
@@ -33,9 +33,9 @@ export function ValueSection() {
 
       <ul className="space-y-3">
         {valuePoints.map((point) => (
-          <li key={point} className="flex gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <span className="mt-1 inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-brand-600" />
-            <p className="text-sm text-slate-700">{point}</p>
+          <li key={point} className="flex gap-3 rounded-lg border border-slate-700 bg-slate-900 p-3">
+            <span className="mt-1 inline-block h-2.5 w-2.5 shrink-0 rounded-full bg-brand-500" />
+            <p className="text-sm text-slate-300">{point}</p>
           </li>
         ))}
       </ul>

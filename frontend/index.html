@@ -4,8 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PortfolioIQ</title>
+    <script>
+      (function() {
+        var storageKey = "portfolioiq-theme";
+        var root = document.documentElement;
+        var saved = localStorage.getItem(storageKey);
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var resolvedDark = saved === "dark" || ((saved === "system" || !saved) && prefersDark);
+
+        if (resolvedDark) {
+          root.classList.add("dark");
+        } else {
+          root.classList.remove("dark");
+        }
+      })();
+    </script>
   </head>
-  <body class="bg-slate-50">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

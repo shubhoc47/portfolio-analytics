@@ -73,16 +73,16 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
 
       {!error && result && portfolioSummary ? (
         <div className="space-y-4">
-          <Card className="bg-gray-50">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+          <Card className="bg-slate-900/70">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
               Portfolio Sentiment
             </h4>
             <div className="mt-3 flex flex-wrap items-center gap-3">
               <SentimentBadge sentiment={portfolioSummary.overall_sentiment} />
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-slate-300">
                 Average score: <strong>{portfolioSummary.average_score.toFixed(4)}</strong>
               </span>
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-slate-300">
                 Articles: <strong>{portfolioSummary.article_count}</strong>
               </span>
             </div>
@@ -107,19 +107,19 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
           </Card>
 
           <Card className="p-0">
-            <div className="border-b border-gray-200 px-4 py-3">
-              <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            <div className="border-b border-slate-700 px-4 py-3">
+              <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
                 Holding Sentiment
               </h4>
             </div>
             {result.holding_sentiments.length === 0 ? (
-              <div className="px-4 py-6 text-sm text-gray-600">
+              <div className="px-4 py-6 text-sm text-slate-300">
                 No holding-level sentiment rows were returned.
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 text-sm">
-                  <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+                <table className="min-w-full divide-y divide-slate-700 text-sm">
+                  <thead className="bg-slate-950 text-left text-xs uppercase tracking-wide text-slate-400">
                     <tr>
                       <th className="px-4 py-3">Ticker</th>
                       <th className="px-4 py-3">Articles</th>
@@ -130,15 +130,15 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
                       <th className="px-4 py-3">Overall</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100 bg-white">
+                  <tbody className="divide-y divide-slate-800 bg-slate-900">
                     {result.holding_sentiments.map((row) => (
-                      <tr key={row.ticker} className="hover:bg-gray-50/70">
-                        <td className="px-4 py-3 font-medium text-gray-900">{row.ticker}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.article_count}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.positive_count}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.neutral_count}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.negative_count}</td>
-                        <td className="px-4 py-3 text-gray-700">{row.average_score.toFixed(4)}</td>
+                      <tr key={row.ticker} className="hover:bg-slate-800/50">
+                        <td className="px-4 py-3 font-medium text-slate-100">{row.ticker}</td>
+                        <td className="px-4 py-3 text-slate-300">{row.article_count}</td>
+                        <td className="px-4 py-3 text-slate-300">{row.positive_count}</td>
+                        <td className="px-4 py-3 text-slate-300">{row.neutral_count}</td>
+                        <td className="px-4 py-3 text-slate-300">{row.negative_count}</td>
+                        <td className="px-4 py-3 text-slate-300">{row.average_score.toFixed(4)}</td>
                         <td className="px-4 py-3">
                           <SentimentBadge sentiment={row.overall_sentiment} />
                         </td>
@@ -152,26 +152,26 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
 
           <Card>
             <details className="group">
-              <summary className="cursor-pointer text-sm font-semibold text-gray-800">
+              <summary className="cursor-pointer text-sm font-semibold text-slate-100">
                 Show Article-Level Sentiment ({result.article_sentiments.length})
               </summary>
               <div className="mt-3 space-y-2">
                 {result.article_sentiments.length === 0 ? (
-                  <p className="text-sm text-gray-600">No article-level rows were returned.</p>
+                  <p className="text-sm text-slate-300">No article-level rows were returned.</p>
                 ) : (
                   result.article_sentiments.map((row) => (
                     <div
                       key={row.article_id}
-                      className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+                      className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2"
                     >
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-xs font-semibold text-gray-700">{row.ticker}</span>
+                        <span className="text-xs font-semibold text-slate-300">{row.ticker}</span>
                         <SentimentBadge sentiment={row.sentiment_label} />
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-slate-400">
                           score {row.sentiment_score.toFixed(4)}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm text-gray-800">{row.title}</p>
+                      <p className="mt-1 text-sm text-slate-200">{row.title}</p>
                     </div>
                   ))
                 )}

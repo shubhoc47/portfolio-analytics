@@ -28,28 +28,28 @@ export function PortfolioCard({ portfolio, onDelete }: PortfolioCardProps) {
           <h3 className="text-lg font-semibold">
             <Link
               to={`/portfolios/${portfolio.id}`}
-              className="cursor-pointer text-slate-900 transition-colors hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 rounded"
+              className="cursor-pointer rounded text-slate-900 transition-colors hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 focus:ring-offset-white dark:text-slate-100 dark:hover:text-brand-300 dark:focus:ring-offset-slate-950"
             >
               {portfolio.name}
             </Link>
           </h3>
-          <span className="rounded-full bg-brand-50 px-2 py-1 text-xs font-medium text-brand-700">
+          <span className="rounded-full border border-brand-200 bg-brand-50 px-2 py-1 text-xs font-medium text-brand-700 dark:border-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
             {portfolio.base_currency}
           </span>
         </div>
-        <p className="mb-4 min-h-12 text-sm text-slate-600">
+        <p className="mb-4 min-h-12 text-sm text-slate-600 dark:text-slate-300">
           {portfolio.description || "No description provided."}
         </p>
-        <dl className="space-y-1 text-xs text-slate-500">
+        <dl className="space-y-1 text-xs text-slate-500 dark:text-slate-400">
           <div className="flex justify-between gap-4">
             <dt>Owner</dt>
-            <dd className="font-medium text-slate-700">
+            <dd className="font-medium text-slate-700 dark:text-slate-200">
               {portfolio.owner_name || "Not set"}
             </dd>
           </div>
           <div className="flex justify-between gap-4">
             <dt>Created</dt>
-            <dd className="font-medium text-slate-700">{formatDate(portfolio.created_at)}</dd>
+            <dd className="font-medium text-slate-700 dark:text-slate-200">{formatDate(portfolio.created_at)}</dd>
           </div>
         </dl>
       </div>

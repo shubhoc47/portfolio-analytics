@@ -90,8 +90,8 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-gray-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+        <Card className="bg-slate-900/70">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
@@ -132,25 +132,25 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
               key={alert.id}
               className={
                 alert.severity === "critical"
-                  ? "border-red-300 bg-red-50"
+                  ? "border-rose-700 bg-rose-950/40"
                   : alert.severity === "high"
-                    ? "border-orange-200 bg-orange-50"
+                    ? "border-orange-700 bg-orange-950/40"
                     : ""
               }
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-slate-100">
                   {alert.ticker || "Portfolio"}
                 </span>
                 <SeverityBadge severity={alert.severity} />
-                <span className="rounded-full border border-gray-300 bg-white px-2 py-0.5 text-xs text-gray-700">
+                <span className="rounded-full border border-slate-600 bg-slate-900 px-2 py-0.5 text-xs text-slate-300">
                   {alert.source_kind}
                 </span>
-                <span className="text-xs text-gray-500">{formatDate(alert.detected_at)}</span>
+                <span className="text-xs text-slate-400">{formatDate(alert.detected_at)}</span>
               </div>
-              <p className="mt-2 text-sm font-semibold text-gray-900">{alert.title}</p>
-              <p className="mt-1 text-sm text-gray-700">{alert.message}</p>
-              <p className="mt-2 text-xs text-gray-500">type: {alert.alert_type}</p>
+              <p className="mt-2 text-sm font-semibold text-slate-100">{alert.title}</p>
+              <p className="mt-1 text-sm text-slate-300">{alert.message}</p>
+              <p className="mt-2 text-xs text-slate-400">type: {alert.alert_type}</p>
             </Card>
           ))}
         </div>

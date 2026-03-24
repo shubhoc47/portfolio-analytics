@@ -95,8 +95,8 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-gray-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+        <Card className="bg-slate-900/70">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
@@ -115,8 +115,8 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card className="bg-gray-50">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+        <Card className="bg-slate-900/70">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Normalized Rating Mix
           </h4>
           <div className="mt-3">
@@ -155,8 +155,8 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       {!isLoading && !error && ratings.length > 0 ? (
         <Card className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+            <table className="min-w-full divide-y divide-slate-700 text-sm">
+              <thead className="bg-slate-950 text-left text-xs uppercase tracking-wide text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Ticker</th>
                   <th className="px-4 py-3">Provider</th>
@@ -167,20 +167,20 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
                   <th className="px-4 py-3">Price Target</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
+              <tbody className="divide-y divide-slate-800 bg-slate-900">
                 {ratings.map((rating) => (
-                  <tr key={rating.id} className="hover:bg-gray-50/70">
-                    <td className="px-4 py-3 font-medium text-gray-900">{rating.ticker}</td>
-                    <td className="px-4 py-3 text-gray-700">{rating.provider_name}</td>
-                    <td className="px-4 py-3 text-gray-700">
+                  <tr key={rating.id} className="hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-medium text-slate-100">{rating.ticker}</td>
+                    <td className="px-4 py-3 text-slate-300">{rating.provider_name}</td>
+                    <td className="px-4 py-3 text-slate-300">
                       {rating.analyst_name || rating.firm_name}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{rating.raw_rating}</td>
+                    <td className="px-4 py-3 text-slate-300">{rating.raw_rating}</td>
                     <td className="px-4 py-3">
                       <RatingBadge rating={rating.normalized_rating} />
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{rating.as_of_date}</td>
-                    <td className="px-4 py-3 text-gray-700">
+                    <td className="px-4 py-3 text-slate-300">{rating.as_of_date}</td>
+                    <td className="px-4 py-3 text-slate-300">
                       {rating.price_target == null ? "—" : rating.price_target}
                     </td>
                   </tr>

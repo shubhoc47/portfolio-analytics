@@ -110,13 +110,13 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
       <Card>
         <div className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700" htmlFor="daily-date">
+            <label className="block text-sm font-medium text-slate-300" htmlFor="daily-date">
               Daily Brief Date (optional)
             </label>
             <input
               id="daily-date"
               type="date"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
               value={summaryDate}
               onChange={(event) => setSummaryDate(event.target.value)}
             />
@@ -126,13 +126,13 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700" htmlFor="weekly-date">
+            <label className="block text-sm font-medium text-slate-300" htmlFor="weekly-date">
               Weekly Window End Date (optional)
             </label>
             <input
               id="weekly-date"
               type="date"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
               value={windowEndDate}
               onChange={(event) => setWindowEndDate(event.target.value)}
             />
@@ -142,13 +142,13 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-700" htmlFor="portfolio-date">
+            <label className="block text-sm font-medium text-slate-300" htmlFor="portfolio-date">
               Portfolio Anchor Date (optional)
             </label>
             <input
               id="portfolio-date"
               type="date"
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
               value={anchorDate}
               onChange={(event) => setAnchorDate(event.target.value)}
             />
@@ -161,28 +161,28 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {dailyResult ? (
         <Card className="p-0">
-          <div className="border-b border-gray-200 px-4 py-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+          <div className="border-b border-slate-700 px-4 py-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
               Daily Holding Briefs
             </h4>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-slate-400">
               Date: {dailyResult.summary_date} | created {dailyResult.created_count} | updated{" "}
               {dailyResult.updated_count}
             </p>
           </div>
           {dailyResult.briefs.length === 0 ? (
-            <div className="px-4 py-5 text-sm text-gray-600">No daily briefs were returned.</div>
+            <div className="px-4 py-5 text-sm text-slate-300">No daily briefs were returned.</div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-slate-800">
               {dailyResult.briefs.map((brief, index) => (
                 <div key={`${brief.ticker}-${index}`} className="px-4 py-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                    <span className="font-semibold text-gray-900">{brief.ticker}</span>
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                    <span className="font-semibold text-slate-100">{brief.ticker}</span>
                     <span>words: {brief.word_count ?? "n/a"}</span>
                     <span>source articles: {brief.source_article_count ?? "n/a"}</span>
                     <span>generated: {formatDate(brief.generated_at)}</span>
                   </div>
-                  <p className="text-sm leading-relaxed text-gray-800">{brief.content}</p>
+                  <p className="text-sm leading-relaxed text-slate-200">{brief.content}</p>
                 </div>
               ))}
             </div>
@@ -195,30 +195,30 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {weeklyResult ? (
         <Card className="p-0">
-          <div className="border-b border-gray-200 px-4 py-3">
-            <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+          <div className="border-b border-slate-700 px-4 py-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
               Weekly Holding Summaries
             </h4>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-slate-400">
               Window: {weeklyResult.window_start_date} to {weeklyResult.window_end_date} | created{" "}
               {weeklyResult.created_count} | updated {weeklyResult.updated_count}
             </p>
           </div>
           {weeklyResult.weekly_summaries.length === 0 ? (
-            <div className="px-4 py-5 text-sm text-gray-600">
+            <div className="px-4 py-5 text-sm text-slate-300">
               No weekly holding summaries were returned.
             </div>
           ) : (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-slate-800">
               {weeklyResult.weekly_summaries.map((summary, index) => (
                 <div key={`${summary.ticker}-${index}`} className="px-4 py-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-gray-600">
-                    <span className="font-semibold text-gray-900">{summary.ticker}</span>
+                  <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                    <span className="font-semibold text-slate-100">{summary.ticker}</span>
                     <span>words: {summary.word_count ?? "n/a"}</span>
                     <span>source briefs: {summary.source_brief_count ?? "n/a"}</span>
                     <span>generated: {formatDate(summary.generated_at)}</span>
                   </div>
-                  <p className="text-sm leading-relaxed text-gray-800">{summary.content}</p>
+                  <p className="text-sm leading-relaxed text-slate-200">{summary.content}</p>
                 </div>
               ))}
             </div>
@@ -231,16 +231,16 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {portfolioResult ? (
         <Card>
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Portfolio Summary
           </h4>
-          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-600">
+          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-400">
             <span>Anchor: {portfolioResult.anchor_date}</span>
             <span>words: {portfolioResult.word_count ?? "n/a"}</span>
             <span>source summaries: {portfolioResult.source_summary_count ?? "n/a"}</span>
             <span>generated: {formatDate(portfolioResult.generated_at)}</span>
           </div>
-          <p className="mt-3 text-sm leading-relaxed text-gray-800">{portfolioResult.content}</p>
+          <p className="mt-3 text-sm leading-relaxed text-slate-200">{portfolioResult.content}</p>
           <NotesBlock notes={portfolioResult.notes} className="mt-3" />
         </Card>
       ) : null}

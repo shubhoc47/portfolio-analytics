@@ -74,29 +74,33 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
         <div className="space-y-4">
           <LoadingState message="Calculating analytics..." />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100" />
-            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100" />
-            <div className="hidden h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 xl:block" />
+            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900" />
+            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900" />
+            <div className="hidden h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900 xl:block" />
           </div>
         </div>
       ) : null}
       {!isLoading && error ? (
-        <Card className="border-rose-200 bg-rose-50">
-          <h3 className="text-base font-semibold text-rose-900">Unable to load analytics</h3>
-          <p className="mt-1 text-sm text-rose-700">{error}</p>
+        <Card className="border-rose-200 bg-rose-50 dark:border-rose-700 dark:bg-rose-950/50">
+          <h3 className="text-base font-semibold text-rose-800 dark:text-rose-300">Unable to load analytics</h3>
+          <p className="mt-1 text-sm text-rose-700 dark:text-rose-200">{error}</p>
           <div className="mt-4">
-            <Button variant="secondary" onClick={() => void loadAnalytics()}>
+            <Button
+              variant="secondary"
+              className="dark:border-marketing-400/40 dark:bg-marketing-900/60 dark:text-slate-100 dark:hover:bg-marketing-800/70"
+              onClick={() => void loadAnalytics()}
+            >
               Retry
             </Button>
           </div>
         </Card>
       ) : null}
       {isEmpty ? (
-        <Card className="bg-slate-50">
-          <h3 className="text-base font-semibold text-slate-900">
+        <Card className="bg-slate-50 dark:bg-slate-900/80">
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
             Analytics unavailable for this portfolio
           </h3>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
             Add holdings to this portfolio first. Analytics scores and sector exposure are
             computed only after holdings exist.
           </p>
@@ -122,20 +126,20 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
           <Card className="p-0">
             <details className="group">
-              <summary className="cursor-pointer list-none border-b border-gray-200 px-4 py-3">
+              <summary className="cursor-pointer list-none border-b border-slate-200 px-4 py-3 dark:border-slate-700">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
                       Advanced Breakdown
                     </h3>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Expand for detailed scoring factors and underlying calculations.
                     </p>
                   </div>
-                  <span className="text-xs font-medium text-blue-700 group-open:hidden">
+                  <span className="text-xs font-medium text-brand-700 dark:text-brand-300 group-open:hidden">
                     Show Details
                   </span>
-                  <span className="hidden text-xs font-medium text-blue-700 group-open:inline">
+                  <span className="hidden text-xs font-medium text-brand-700 dark:text-brand-300 group-open:inline">
                     Hide Details
                   </span>
                 </div>

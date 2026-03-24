@@ -10,10 +10,14 @@ interface MetricStatGridProps {
 }
 
 const toneClasses: Record<NonNullable<MetricStatItem["tone"]>, string> = {
-  default: "border-gray-200 bg-white text-gray-900",
-  positive: "border-green-200 bg-green-50 text-green-800",
-  negative: "border-red-200 bg-red-50 text-red-800",
-  accent: "border-blue-200 bg-blue-50 text-blue-800",
+  default:
+    "border-slate-200 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100",
+  positive:
+    "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
+  negative:
+    "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-700 dark:bg-rose-950/50 dark:text-rose-300",
+  accent:
+    "border-brand-200 bg-brand-50 text-brand-800 dark:border-brand-700 dark:bg-brand-950/50 dark:text-brand-300",
 };
 
 const columnClasses: Record<NonNullable<MetricStatGridProps["columns"]>, string> = {
@@ -29,7 +33,7 @@ export function MetricStatGrid({ items, columns = 4 }: MetricStatGridProps) {
         const tone = item.tone || "default";
         return (
           <div key={`${item.label}-${item.value}`} className={`rounded-xl border p-4 ${toneClasses[tone]}`}>
-            <p className="text-xs uppercase tracking-wide text-gray-500">{item.label}</p>
+            <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{item.label}</p>
             <p className="mt-1 text-lg font-semibold">{item.value}</p>
           </div>
         );

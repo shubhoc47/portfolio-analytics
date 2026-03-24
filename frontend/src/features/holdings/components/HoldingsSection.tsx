@@ -148,14 +148,14 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
       />
 
       {actionMessage ? (
-        <p className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700">
+        <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200">
           {actionMessage}
         </p>
       ) : null}
 
       {isCreateOpen ? (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/70">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
             Add Holding
           </h3>
           <HoldingForm
@@ -198,8 +198,8 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
       ) : null}
 
       {editingHolding ? (
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/70">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
             Edit Holding: {editingHolding.ticker}
           </h3>
           <HoldingForm

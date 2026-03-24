@@ -20,12 +20,12 @@ function formatPercent(value: number): string {
 
 function statusBadgeClass(status: BenchmarkComparisonStatus): string {
   if (status === "outperformed") {
-    return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    return "bg-emerald-950/50 text-emerald-300 border-emerald-700";
   }
   if (status === "underperformed") {
-    return "bg-rose-50 text-rose-700 border-rose-200";
+    return "bg-rose-950/50 text-rose-300 border-rose-700";
   }
-  return "bg-slate-100 text-slate-700 border-slate-200";
+  return "bg-slate-900 text-slate-300 border-slate-700";
 }
 
 function statusLabel(status: BenchmarkComparisonStatus): string {
@@ -56,8 +56,8 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
     <Card className="space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">Benchmark Comparison</h3>
-          <p className="mt-1 text-sm text-slate-600">
+          <h3 className="text-lg font-semibold text-slate-100">Benchmark Comparison</h3>
+          <p className="mt-1 text-sm text-slate-300">
             Portfolio performance compared against {comparison.benchmark.name} (
             {comparison.benchmark.symbol}).
           </p>
@@ -70,39 +70,39 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Invested Value</p>
-          <p className="mt-1 text-base font-semibold text-slate-900">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Invested Value</p>
+          <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.invested_value)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Current Value</p>
-          <p className="mt-1 text-base font-semibold text-slate-900">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Current Value</p>
+          <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.current_value)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Absolute Return</p>
-          <p className="mt-1 text-base font-semibold text-slate-900">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Absolute Return</p>
+          <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.absolute_return)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Portfolio Return</p>
-          <p className="mt-1 text-lg font-semibold text-slate-900">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Portfolio Return</p>
+          <p className="mt-1 text-lg font-semibold text-slate-100">
             {formatPercent(comparison.portfolio.return_percent)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Benchmark Return</p>
-          <p className="mt-1 text-lg font-semibold text-slate-900">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Benchmark Return</p>
+          <p className="mt-1 text-lg font-semibold text-slate-100">
             {formatPercent(comparison.benchmark.return_percent)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-200 bg-white p-3">
-          <p className="text-xs uppercase tracking-wide text-slate-500">Relative Performance</p>
-          <p className={`mt-1 text-lg font-semibold ${relative >= 0 ? "text-emerald-700" : "text-rose-700"}`}>
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+          <p className="text-xs uppercase tracking-wide text-slate-400">Relative Performance</p>
+          <p className={`mt-1 text-lg font-semibold ${relative >= 0 ? "text-emerald-300" : "text-rose-300"}`}>
             {formatPercent(relative)}
           </p>
         </div>
@@ -114,27 +114,27 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
         benchmarkLabel={`${comparison.benchmark.name} (${comparison.benchmark.symbol})`}
       />
 
-      <div className="rounded-lg border border-slate-200 bg-white p-3">
-        <p className="text-xs uppercase tracking-wide text-slate-500">Summary</p>
-        <p className="mt-1 text-sm text-slate-700">{comparison.comparison.summary}</p>
+      <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <p className="text-xs uppercase tracking-wide text-slate-400">Summary</p>
+        <p className="mt-1 text-sm text-slate-200">{comparison.comparison.summary}</p>
       </div>
 
       {comparison.holdings.length > 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-          <h4 className="text-sm font-semibold text-slate-900">Holding Breakdown</h4>
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-4">
+          <h4 className="text-sm font-semibold text-slate-100">Holding Breakdown</h4>
           <div className="mt-3 space-y-2">
             {comparison.holdings.map((holding) => (
               <div
                 key={holding.ticker}
-                className="grid gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm sm:grid-cols-[100px_1fr_auto]"
+                className="grid gap-2 rounded-md border border-slate-700 bg-slate-950 p-3 text-sm sm:grid-cols-[100px_1fr_auto]"
               >
-                <p className="font-semibold text-slate-900">{holding.ticker}</p>
-                <p className="text-slate-600">
+                <p className="font-semibold text-slate-100">{holding.ticker}</p>
+                <p className="text-slate-300">
                   Price source: {priceSourceLabel(holding.price_source)} | Price used:{" "}
                   {formatCurrency(holding.price_used)}
                 </p>
                 <p
-                  className={`font-semibold ${holding.return_percent >= 0 ? "text-emerald-700" : "text-rose-700"}`}
+                  className={`font-semibold ${holding.return_percent >= 0 ? "text-emerald-300" : "text-rose-300"}`}
                 >
                   {formatPercent(holding.return_percent)}
                 </p>
@@ -145,9 +145,9 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
       ) : null}
 
       {comparison.notes.length > 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Notes</p>
-          <ul className="mt-2 space-y-1 text-sm text-slate-600">
+        <div className="rounded-lg border border-slate-700 bg-slate-900 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Notes</p>
+          <ul className="mt-2 space-y-1 text-sm text-slate-300">
             {comparison.notes.map((note) => (
               <li key={note}>- {note}</li>
             ))}
