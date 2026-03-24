@@ -14,14 +14,14 @@ export function AppLayout({ children }: AppLayoutProps) {
       className={
         isHome
           ? "min-h-screen bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.14),transparent_42%),linear-gradient(180deg,#f8fbff_0%,#eef4ff_34%,#dfe9fb_62%,#d4e1f8_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.2),transparent_45%),linear-gradient(180deg,#060a17_0%,#0b142a_38%,#0f1a33_70%,#111f38_100%)]"
-          : "min-h-screen bg-gradient-to-b from-slate-100 via-brand-50 to-white dark:from-slate-950 dark:via-marketing-950 dark:to-slate-900"
+          : "min-h-screen bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.1),transparent_44%),linear-gradient(180deg,#f8fbff_0%,#edf3ff_42%,#e7eefb_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.15),transparent_48%),linear-gradient(180deg,#070d1e_0%,#0c162c_48%,#111b33_100%)]"
       }
     >
       <header
         className={
           isHome
             ? "sticky top-0 z-20 border-b border-slate-200/70 bg-slate-50/75 backdrop-blur-xl dark:border-slate-700/50 dark:bg-[#070d1f]/70"
-            : "sticky top-0 z-10 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-marketing-800 dark:bg-slate-950/80"
+            : "sticky top-0 z-20 border-b border-slate-200/70 bg-slate-50/80 backdrop-blur-xl dark:border-slate-700/60 dark:bg-[#070d1f]/72"
         }
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
@@ -58,12 +58,6 @@ export function AppLayout({ children }: AppLayoutProps) {
                 Portfolios
               </NavLink>
             </nav>
-            <Link
-              to="/portfolios"
-              className="hidden rounded-lg border border-brand-300/70 bg-white/85 px-3.5 py-1.5 text-xs font-semibold tracking-wide text-brand-800 transition hover:border-brand-400 hover:bg-white dark:border-brand-500/40 dark:bg-brand-950/60 dark:text-brand-100 dark:hover:border-brand-400/70 sm:inline-flex"
-            >
-              Launch App
-            </Link>
           </div>
         </div>
       </header>

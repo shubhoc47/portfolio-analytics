@@ -85,21 +85,24 @@ export function PortfolioDetailPage() {
   );
 
   return (
-    <section>
+    <section className="space-y-5">
       {isLoading ? <LoadingState message="Loading portfolio details..." /> : null}
       {!isLoading && error ? (
         <ErrorState message={error} onRetry={() => window.location.reload()} />
       ) : null}
 
       {!isLoading && !error && portfolio ? (
-        <div className="space-y-5">
-          <Card className="bg-gradient-to-br from-white to-slate-50 dark:from-slate-900/90 dark:to-slate-950">
+        <div className="space-y-5 sm:space-y-6">
+          <Card
+            variant="elevated"
+            className="bg-[radial-gradient(circle_at_90%_0%,rgba(96,165,250,0.1),transparent_40%),linear-gradient(160deg,#ffffff_0%,#f6f9ff_60%,#eef4ff_100%)] dark:bg-[radial-gradient(circle_at_90%_0%,rgba(59,130,246,0.15),transparent_40%),linear-gradient(160deg,rgba(15,23,42,0.88)_0%,rgba(15,23,42,0.96)_100%)]"
+          >
             <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
+              <div className="space-y-1.5">
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[1.7rem]">
                   {portfolio.name}
                 </h1>
-                <p className="text-sm text-slate-600 dark:text-slate-300">
+                <p className="max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   Explore portfolio structure, risk, benchmark context, and intelligence signals.
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -138,29 +141,37 @@ export function PortfolioDetailPage() {
           <SubNavTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
           {activeTab === "overview" ? (
-            <Card>
+            <Card variant="elevated">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Overview</h2>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                 Core profile details and governance metadata for this portfolio.
               </p>
-              <dl className="mt-4 grid gap-4 text-sm md:grid-cols-2">
-                <div>
+              <dl className="mt-4 grid gap-3 text-sm md:grid-cols-2">
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
                   <dt className="text-slate-500 dark:text-slate-400">Name</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.name}</dd>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">
+                    {portfolio.name}
+                  </dd>
                 </div>
-                <div>
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
                   <dt className="text-slate-500 dark:text-slate-400">Base currency</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.base_currency}</dd>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">
+                    {portfolio.base_currency}
+                  </dd>
                 </div>
-                <div>
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
                   <dt className="text-slate-500 dark:text-slate-400">Owner</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">{portfolio.owner_name || "Not set"}</dd>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">
+                    {portfolio.owner_name || "Not set"}
+                  </dd>
                 </div>
-                <div>
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
                   <dt className="text-slate-500 dark:text-slate-400">Created</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">{formatDate(portfolio.created_at)}</dd>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100">
+                    {formatDate(portfolio.created_at)}
+                  </dd>
                 </div>
-                <div className="md:col-span-2">
+                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65 md:col-span-2">
                   <dt className="text-slate-500 dark:text-slate-400">Description</dt>
                   <dd className="font-medium text-slate-900 dark:text-slate-100">
                     {portfolio.description || "No description provided."}
@@ -171,7 +182,6 @@ export function PortfolioDetailPage() {
                 <Button
                   variant="danger"
                   loading={isDeleting}
-                  className="dark:bg-red-600 dark:hover:bg-red-700 dark:disabled:bg-red-300 dark:disabled:text-white"
                   onClick={() => void handleDelete()}
                 >
                   Delete Portfolio

@@ -37,9 +37,9 @@ export function HoldingsList({
   onDelete,
 }: HoldingsListProps) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-soft dark:border-slate-700 dark:bg-slate-900">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white/90 shadow-soft dark:border-slate-700 dark:bg-slate-900/90">
       <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-        <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+        <thead className="bg-slate-100/90 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
           <tr>
             <th className="px-4 py-3 text-left font-semibold">Ticker</th>
             <th className="px-4 py-3 text-right font-semibold">Quantity</th>
@@ -48,7 +48,7 @@ export function HoldingsList({
             <th className="px-4 py-3 text-right font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-200 bg-white dark:divide-slate-800 dark:bg-slate-900">
+        <tbody className="divide-y divide-slate-200 bg-white/90 dark:divide-slate-800 dark:bg-slate-900/80">
           {holdings.map((holding) => {
             const marketValue =
               holding.current_price === null
@@ -56,8 +56,8 @@ export function HoldingsList({
                 : Number(holding.quantity) * Number(holding.current_price);
 
             return (
-              <tr key={holding.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-100">{holding.ticker}</td>
+              <tr key={holding.id} className="hover:bg-slate-50/85 dark:hover:bg-slate-800/50">
+                <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{holding.ticker}</td>
                 <td className="px-4 py-3 text-right text-slate-700 dark:text-slate-300">
                   {formatQuantity(Number(holding.quantity))}
                 </td>
@@ -71,7 +71,7 @@ export function HoldingsList({
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-2">
-                    <Button variant="ghost" onClick={() => onEdit(holding)}>
+                    <Button variant="secondary" onClick={() => onEdit(holding)}>
                       Edit
                     </Button>
                     <Button

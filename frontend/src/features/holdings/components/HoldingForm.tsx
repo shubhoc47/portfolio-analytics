@@ -87,7 +87,7 @@ export function HoldingForm({
   };
 
   return (
-    <form className="space-y-4" onSubmit={(event) => void handleSubmit(event)}>
+    <form className="space-y-4 sm:space-y-5" onSubmit={(event) => void handleSubmit(event)}>
       <Input
         label="Ticker"
         name="ticker"
@@ -122,7 +122,7 @@ export function HoldingForm({
       />
 
       {submitError ? (
-        <p className="rounded-lg border border-rose-700 bg-rose-950/50 px-3 py-2 text-sm text-rose-200">
+        <p className="rounded-xl border border-rose-200/90 bg-rose-50/95 px-3 py-2 text-sm text-rose-700 dark:border-rose-700 dark:bg-rose-950/50 dark:text-rose-200">
           {submitError}
         </p>
       ) : null}

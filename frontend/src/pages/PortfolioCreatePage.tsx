@@ -30,17 +30,17 @@ export function PortfolioCreatePage() {
   };
 
   return (
-    <section>
+    <section className="space-y-5">
       <PageHeader
         title="Create Portfolio"
-        subtitle="Add a new investment portfolio with basic metadata."
+        subtitle="Create a new portfolio workspace with core metadata and ownership details."
         actions={
           <Link to="/portfolios">
             <Button variant="secondary">Back to list</Button>
           </Link>
         }
       />
-      <Card>
+      <Card variant="elevated">
         <PortfolioForm
           submitLabel="Create Portfolio"
           isSubmitting={isSubmitting}

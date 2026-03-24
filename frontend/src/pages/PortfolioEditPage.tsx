@@ -68,10 +68,10 @@ export function PortfolioEditPage() {
   };
 
   return (
-    <section>
+    <section className="space-y-5">
       <PageHeader
         title="Edit Portfolio"
-        subtitle="Update portfolio metadata and settings."
+        subtitle="Update portfolio metadata while preserving portfolio-level analytics and intelligence history."
         actions={
           <div className="flex gap-2">
             {portfolio ? (
@@ -90,7 +90,7 @@ export function PortfolioEditPage() {
       {!isLoading && loadError ? <ErrorState message={loadError} /> : null}
 
       {!isLoading && !loadError && portfolio ? (
-        <Card>
+        <Card variant="elevated">
           <PortfolioForm
             initialValues={{
               name: portfolio.name,

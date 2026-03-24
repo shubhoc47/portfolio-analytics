@@ -26,10 +26,10 @@ export function PortfoliosPage() {
   };
 
   return (
-    <section>
+    <section className="space-y-5">
       <PageHeader
         title="Portfolios"
-        subtitle="Manage investment portfolios and prepare for holdings and analytics in next phases."
+        subtitle="Manage portfolio entities, review ownership metadata, and open each portfolio workspace."
         actions={
           <Link to="/portfolios/new">
             <Button>Create Portfolio</Button>
@@ -73,7 +73,7 @@ export function PortfoliosPage() {
       ) : null}
 
       {!isLoading && !error && portfolios.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 lg:gap-5 md:grid-cols-2 xl:grid-cols-3">
           {portfolios.map((portfolio) => (
             <PortfolioCard
               key={portfolio.id}

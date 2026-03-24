@@ -60,7 +60,7 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card>
+      <Card variant="elevated">
         <SectionHeader
           title="News"
           description="Refresh and review locally stored portfolio news articles."
@@ -79,13 +79,14 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-slate-900/70">
+        <Card variant="darkSurface">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
             <MetricStatGrid
               columns={3}
+              context="darkSurface"
               items={[
                 { label: "Fetched", value: String(lastRefresh.fetched_count) },
                 { label: "Inserted", value: String(lastRefresh.inserted_count), tone: "positive" },
@@ -122,10 +123,10 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       ) : null}
 
       {!isLoading && !error && articles.length > 0 ? (
-        <Card className="p-0">
+        <Card variant="elevated" className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-700 text-sm">
-              <thead className="bg-slate-950 text-left text-xs uppercase tracking-wide text-slate-400">
+            <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+              <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Ticker</th>
                   <th className="px-4 py-3">Title</th>
@@ -133,25 +134,25 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
                   <th className="px-4 py-3">Published</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 bg-slate-900">
+              <tbody className="divide-y divide-slate-200 bg-white/80 dark:divide-slate-800 dark:bg-slate-900/80">
                 {articles.map((article) => (
-                  <tr key={article.id} className="align-top hover:bg-slate-800/50">
-                    <td className="px-4 py-3 font-medium text-slate-100">{article.ticker}</td>
+                  <tr key={article.id} className="align-top hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{article.ticker}</td>
                     <td className="px-4 py-3">
                       <a
                         href={article.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="font-medium text-brand-300 hover:text-brand-200"
+                        className="font-medium text-brand-700 hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200"
                       >
                         {article.title}
                       </a>
-                      <p className="mt-1 line-clamp-2 text-xs text-slate-400">
+                      <p className="mt-1 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
                         {article.summary || article.content || "No summary available."}
                       </p>
                     </td>
-                    <td className="px-4 py-3 text-slate-300">{article.source}</td>
-                    <td className="px-4 py-3 text-slate-300">{formatDate(article.published_at)}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{article.source}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{formatDate(article.published_at)}</td>
                   </tr>
                 ))}
               </tbody>

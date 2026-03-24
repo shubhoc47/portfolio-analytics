@@ -71,7 +71,7 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card>
+      <Card variant="elevated">
         <SectionHeader
           title="Alerts"
           description="Refresh and monitor active alert signals for this portfolio."
@@ -90,13 +90,14 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-slate-900/70">
+        <Card variant="darkSurface">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
             <MetricStatGrid
               columns={4}
+              context="darkSurface"
               items={[
                 { label: "Detected", value: String(lastRefresh.detected_count), tone: "accent" },
                 { label: "Created", value: String(lastRefresh.created_count), tone: "positive" },
@@ -129,28 +130,29 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
         <div className="space-y-3">
           {alerts.map((alert) => (
             <Card
+              variant="elevated"
               key={alert.id}
               className={
                 alert.severity === "critical"
-                  ? "border-rose-700 bg-rose-950/40"
+                  ? "border-rose-300/90 bg-rose-50/90 dark:border-rose-700 dark:bg-rose-950/35"
                   : alert.severity === "high"
-                    ? "border-orange-700 bg-orange-950/40"
+                    ? "border-orange-300/90 bg-orange-50/90 dark:border-orange-700 dark:bg-orange-950/35"
                     : ""
               }
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-slate-100">
+                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   {alert.ticker || "Portfolio"}
                 </span>
                 <SeverityBadge severity={alert.severity} />
-                <span className="rounded-full border border-slate-600 bg-slate-900 px-2 py-0.5 text-xs text-slate-300">
+                <span className="rounded-full border border-slate-300 bg-slate-100 px-2 py-0.5 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300">
                   {alert.source_kind}
                 </span>
-                <span className="text-xs text-slate-400">{formatDate(alert.detected_at)}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">{formatDate(alert.detected_at)}</span>
               </div>
-              <p className="mt-2 text-sm font-semibold text-slate-100">{alert.title}</p>
-              <p className="mt-1 text-sm text-slate-300">{alert.message}</p>
-              <p className="mt-2 text-xs text-slate-400">type: {alert.alert_type}</p>
+              <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">{alert.title}</p>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{alert.message}</p>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">type: {alert.alert_type}</p>
             </Card>
           ))}
         </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { getPortfolioAnalytics } from "../../../api/analytics";
+import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
 import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
@@ -57,7 +58,7 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
   return (
     <section className="space-y-4">
-      <Card>
+      <Card variant="elevated">
         <SectionHeader
           title="Analytics"
           description="Understand diversification, risk, and health at a glance."
@@ -74,29 +75,21 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
         <div className="space-y-4">
           <LoadingState message="Calculating analytics..." />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900" />
-            <div className="h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900" />
-            <div className="hidden h-40 animate-pulse rounded-xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-900 xl:block" />
+            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70" />
+            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70" />
+            <div className="hidden h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70 xl:block" />
           </div>
         </div>
       ) : null}
       {!isLoading && error ? (
-        <Card className="border-rose-200 bg-rose-50 dark:border-rose-700 dark:bg-rose-950/50">
-          <h3 className="text-base font-semibold text-rose-800 dark:text-rose-300">Unable to load analytics</h3>
-          <p className="mt-1 text-sm text-rose-700 dark:text-rose-200">{error}</p>
-          <div className="mt-4">
-            <Button
-              variant="secondary"
-              className="dark:border-marketing-400/40 dark:bg-marketing-900/60 dark:text-slate-100 dark:hover:bg-marketing-800/70"
-              onClick={() => void loadAnalytics()}
-            >
-              Retry
-            </Button>
-          </div>
-        </Card>
+        <ErrorState
+          title="Unable to load analytics"
+          message={error}
+          onRetry={() => void loadAnalytics()}
+        />
       ) : null}
       {isEmpty ? (
-        <Card className="bg-slate-50 dark:bg-slate-900/80">
+        <Card variant="inset">
           <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
             Analytics unavailable for this portfolio
           </h3>
@@ -124,7 +117,7 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
           <BenchmarkSection portfolioId={portfolioId} />
 
-          <Card className="p-0">
+          <Card variant="elevated" className="p-0">
             <details className="group">
               <summary className="cursor-pointer list-none border-b border-slate-200 px-4 py-3 dark:border-slate-700">
                 <div className="flex items-center justify-between">

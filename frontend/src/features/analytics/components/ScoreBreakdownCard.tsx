@@ -19,7 +19,7 @@ export function ScoreBreakdownCard({
   notes = [],
 }: ScoreBreakdownCardProps) {
   return (
-    <Card className="h-full">
+    <Card variant="darkSurface" className="h-full">
       <h3 className="text-base font-semibold text-slate-100">{title}</h3>
       <p className="mt-1 text-sm leading-relaxed text-slate-300">{subtitle}</p>
 

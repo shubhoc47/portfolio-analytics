@@ -33,7 +33,7 @@ export function PortfolioIntelligenceSection({ portfolioId }: PortfolioIntellige
 
   return (
     <section className="space-y-4">
-      <Card>
+      <Card variant="elevated">
         <div className="space-y-3">
           <SectionHeader
             title="Intelligence"

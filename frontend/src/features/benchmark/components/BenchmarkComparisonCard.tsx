@@ -53,7 +53,7 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
   const relative = comparison.comparison.relative_performance_percent;
 
   return (
-    <Card className="space-y-4">
+    <Card variant="darkSurface" className="space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-slate-100">Benchmark Comparison</h3>
@@ -70,37 +70,37 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Invested Value</p>
           <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.invested_value)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Current Value</p>
           <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.current_value)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Absolute Return</p>
           <p className="mt-1 text-base font-semibold text-slate-100">
             {formatCurrency(comparison.portfolio.absolute_return)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Portfolio Return</p>
           <p className="mt-1 text-lg font-semibold text-slate-100">
             {formatPercent(comparison.portfolio.return_percent)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Benchmark Return</p>
           <p className="mt-1 text-lg font-semibold text-slate-100">
             {formatPercent(comparison.benchmark.return_percent)}
           </p>
         </div>
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
           <p className="text-xs uppercase tracking-wide text-slate-400">Relative Performance</p>
           <p className={`mt-1 text-lg font-semibold ${relative >= 0 ? "text-emerald-300" : "text-rose-300"}`}>
             {formatPercent(relative)}
@@ -114,13 +114,13 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
         benchmarkLabel={`${comparison.benchmark.name} (${comparison.benchmark.symbol})`}
       />
 
-      <div className="rounded-lg border border-slate-700 bg-slate-900 p-3">
+      <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-3">
         <p className="text-xs uppercase tracking-wide text-slate-400">Summary</p>
         <p className="mt-1 text-sm text-slate-200">{comparison.comparison.summary}</p>
       </div>
 
       {comparison.holdings.length > 0 ? (
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-4">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-4">
           <h4 className="text-sm font-semibold text-slate-100">Holding Breakdown</h4>
           <div className="mt-3 space-y-2">
             {comparison.holdings.map((holding) => (
@@ -145,7 +145,7 @@ export function BenchmarkComparisonCard({ comparison }: BenchmarkComparisonCardP
       ) : null}
 
       {comparison.notes.length > 0 ? (
-        <div className="rounded-lg border border-slate-700 bg-slate-900 p-4">
+        <div className="rounded-lg border border-slate-700/80 bg-slate-900/80 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Notes</p>
           <ul className="mt-2 space-y-1 text-sm text-slate-300">
             {comparison.notes.map((note) => (

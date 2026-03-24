@@ -60,12 +60,12 @@ function ScoreCard({
 }: ScoreCardProps) {
   const normalizedVisual = Math.max(0, Math.min(100, scoreVisualValue ?? score));
   return (
-    <Card className="relative overflow-hidden border-slate-700 p-0">
-      <div className="h-1.5 w-full bg-slate-800">
+    <Card variant="darkSurface" className="relative overflow-hidden p-0">
+      <div className="h-1.5 w-full bg-slate-800/90">
         <div className={`h-1.5 ${scoreBandColor(normalizedVisual)}`} style={{ width: `${normalizedVisual}%` }} />
       </div>
       <div className="p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{title}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">{title}</p>
         <p className={`mt-3 text-3xl font-semibold tracking-tight ${scoreTone(normalizedVisual)}`}>
           {formatScore(score)}
         </p>

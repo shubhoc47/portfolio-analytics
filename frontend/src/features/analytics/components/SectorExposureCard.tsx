@@ -23,7 +23,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
   );
 
   return (
-    <Card>
+    <Card variant="darkSurface">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold text-slate-100">Sector Exposure</h3>
@@ -31,7 +31,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
             Allocation by sector using holding cost-basis weights.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-300">
+        <div className="grid grid-cols-2 gap-3 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3 py-2 text-xs text-slate-300">
           <p>
             Holdings:{" "}
             <span className="font-semibold text-slate-100">{sectorExposure.total_holdings}</span>
@@ -53,7 +53,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
           return (
             <div
               key={row.sector}
-              className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 shadow-sm"
+              className="rounded-xl border border-slate-700/80 bg-slate-900/75 px-4 py-3 shadow-sm"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
                 <p className="font-medium text-slate-100">{row.sector}</p>
@@ -66,10 +66,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
               </div>
 
               <div className="mt-2 h-2 rounded-full bg-slate-700">
-                <div
-                  className="h-2 rounded-full bg-brand-500 transition-all"
-                  style={{ width: `${Math.min(100, Math.max(0, visualWidth))}%` }}
-                />
+                <div className="h-2 rounded-full bg-brand-500 transition-all" style={{ width: `${Math.min(100, Math.max(0, visualWidth))}%` }} />
               </div>
               <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
                 <span>#{index + 1} by allocation</span>

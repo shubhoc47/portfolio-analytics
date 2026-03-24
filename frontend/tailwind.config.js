@@ -6,6 +6,7 @@ export default {
     extend: {
       boxShadow: {
         soft: "0 10px 25px -12px rgba(15, 23, 42, 0.25)",
+        panel: "0 16px 30px -22px rgba(15, 23, 42, 0.45)",
       },
       colors: {
         brand: {

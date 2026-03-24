@@ -7,6 +7,7 @@ interface MetricStatItem {
 interface MetricStatGridProps {
   items: MetricStatItem[];
   columns?: 2 | 3 | 4;
+  context?: "default" | "darkSurface";
 }
 
 const toneClasses: Record<NonNullable<MetricStatItem["tone"]>, string> = {
@@ -26,14 +27,23 @@ const columnClasses: Record<NonNullable<MetricStatGridProps["columns"]>, string>
   4: "sm:grid-cols-2 lg:grid-cols-4",
 };
 
-export function MetricStatGrid({ items, columns = 4 }: MetricStatGridProps) {
+export function MetricStatGrid({ items, columns = 4, context = "default" }: MetricStatGridProps) {
   return (
     <div className={`grid gap-3 ${columnClasses[columns]}`}>
       {items.map((item) => {
         const tone = item.tone || "default";
+        const baseToneClasses =
+          tone === "default" && context === "darkSurface"
+            ? "border-slate-300/20 bg-slate-950/45 text-slate-100 dark:border-slate-700/70 dark:bg-slate-900/70"
+            : toneClasses[tone];
+        const labelClasses =
+          tone === "default" && context === "darkSurface"
+            ? "text-xs uppercase tracking-wide text-slate-300 dark:text-slate-400"
+            : "text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400";
+
         return (
-          <div key={`${item.label}-${item.value}`} className={`rounded-xl border p-4 ${toneClasses[tone]}`}>
-            <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">{item.label}</p>
+          <div key={`${item.label}-${item.value}`} className={`rounded-xl border p-4 ${baseToneClasses}`}>
+            <p className={labelClasses}>{item.label}</p>
             <p className="mt-1 text-lg font-semibold">{item.value}</p>
           </div>
         );

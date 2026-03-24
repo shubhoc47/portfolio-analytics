@@ -76,7 +76,7 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card>
+      <Card variant="elevated">
         <SectionHeader
           title="Ratings"
           description="Refresh and review normalized analyst rating signals."
@@ -95,13 +95,14 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card className="bg-slate-900/70">
+        <Card variant="darkSurface">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
           <div className="mt-3">
             <MetricStatGrid
               columns={4}
+              context="darkSurface"
               items={[
                 { label: "Fetched", value: String(lastRefresh.fetched_count), tone: "accent" },
                 { label: "Stored", value: String(lastRefresh.stored_count) },
@@ -115,13 +116,14 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card className="bg-slate-900/70">
+        <Card variant="darkSurface">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Normalized Rating Mix
           </h4>
           <div className="mt-3">
             <MetricStatGrid
               columns={3}
+              context="darkSurface"
               items={[
                 { label: "Buy", value: String(groupedCounts.buy), tone: "positive" },
                 { label: "Hold", value: String(groupedCounts.hold) },
@@ -153,10 +155,10 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card className="p-0">
+        <Card variant="elevated" className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-700 text-sm">
-              <thead className="bg-slate-950 text-left text-xs uppercase tracking-wide text-slate-400">
+            <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
+              <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
                 <tr>
                   <th className="px-4 py-3">Ticker</th>
                   <th className="px-4 py-3">Provider</th>
@@ -167,20 +169,20 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
                   <th className="px-4 py-3">Price Target</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 bg-slate-900">
+              <tbody className="divide-y divide-slate-200 bg-white/80 dark:divide-slate-800 dark:bg-slate-900/80">
                 {ratings.map((rating) => (
-                  <tr key={rating.id} className="hover:bg-slate-800/50">
-                    <td className="px-4 py-3 font-medium text-slate-100">{rating.ticker}</td>
-                    <td className="px-4 py-3 text-slate-300">{rating.provider_name}</td>
-                    <td className="px-4 py-3 text-slate-300">
+                  <tr key={rating.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{rating.ticker}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.provider_name}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                       {rating.analyst_name || rating.firm_name}
                     </td>
-                    <td className="px-4 py-3 text-slate-300">{rating.raw_rating}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.raw_rating}</td>
                     <td className="px-4 py-3">
                       <RatingBadge rating={rating.normalized_rating} />
                     </td>
-                    <td className="px-4 py-3 text-slate-300">{rating.as_of_date}</td>
-                    <td className="px-4 py-3 text-slate-300">
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.as_of_date}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                       {rating.price_target == null ? "—" : rating.price_target}
                     </td>
                   </tr>

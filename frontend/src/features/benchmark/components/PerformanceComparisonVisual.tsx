@@ -31,7 +31,7 @@ export function PerformanceComparisonVisual({
   const benchmarkPositive = benchmarkReturnPercent >= 0;
 
   return (
-    <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+    <div className="rounded-xl border border-slate-700/80 bg-slate-900/80 p-4">
       <h4 className="text-sm font-semibold text-slate-100">Performance Visual</h4>
       <p className="mt-1 text-xs text-slate-300">
         Relative magnitude of portfolio return versus {benchmarkLabel}.
