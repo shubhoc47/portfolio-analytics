@@ -75,9 +75,9 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
         <div className="space-y-4">
           <LoadingState message="Calculating analytics..." />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70" />
-            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70" />
-            <div className="hidden h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/70 dark:border-slate-700 dark:bg-slate-900/70 xl:block" />
+            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60" />
+            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60" />
+            <div className="hidden h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60 xl:block" />
           </div>
         </div>
       ) : null}
@@ -119,7 +119,7 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
           <Card variant="elevated" className="p-0">
             <details className="group">
-              <summary className="cursor-pointer list-none border-b border-slate-200 px-4 py-3 dark:border-slate-700">
+              <summary className="cursor-pointer list-none border-b border-slate-200 px-4 py-3 dark:border-white/10">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
@@ -129,10 +129,10 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
                       Expand for detailed scoring factors and underlying calculations.
                     </p>
                   </div>
-                  <span className="text-xs font-medium text-brand-700 dark:text-brand-300 group-open:hidden">
+                  <span className="text-xs font-medium text-brand-600 dark:text-piq-accent group-open:hidden">
                     Show Details
                   </span>
-                  <span className="hidden text-xs font-medium text-brand-700 dark:text-brand-300 group-open:inline">
+                  <span className="hidden text-xs font-medium text-brand-600 dark:text-piq-accent group-open:inline">
                     Hide Details
                   </span>
                 </div>

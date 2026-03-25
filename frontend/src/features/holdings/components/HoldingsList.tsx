@@ -1,3 +1,9 @@
+import {
+  TableShell,
+  dataTableRowHoverClass,
+  dataTableTheadClass,
+  dataTableTbodyClass,
+} from "../../../components/common/TableShell";
 import { Button } from "../../../components/ui/Button";
 import type { Holding } from "../types";
 
@@ -37,18 +43,18 @@ export function HoldingsList({
   onDelete,
 }: HoldingsListProps) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white/90 shadow-soft dark:border-slate-700 dark:bg-slate-900/90">
-      <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-        <thead className="bg-slate-100/90 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+    <TableShell>
+      <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-white/10">
+        <thead className={dataTableTheadClass}>
           <tr>
-            <th className="px-4 py-3 text-left font-semibold">Ticker</th>
-            <th className="px-4 py-3 text-right font-semibold">Quantity</th>
-            <th className="px-4 py-3 text-right font-semibold">Average Cost</th>
-            <th className="px-4 py-3 text-right font-semibold">Estimated Market Value</th>
-            <th className="px-4 py-3 text-right font-semibold">Actions</th>
+            <th className="px-4 py-3.5 text-left font-semibold">Ticker</th>
+            <th className="px-4 py-3.5 text-right font-semibold">Quantity</th>
+            <th className="px-4 py-3.5 text-right font-semibold">Average Cost</th>
+            <th className="px-4 py-3.5 text-right font-semibold">Estimated Market Value</th>
+            <th className="px-4 py-3.5 text-right font-semibold">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-200 bg-white/90 dark:divide-slate-800 dark:bg-slate-900/80">
+        <tbody className={dataTableTbodyClass}>
           {holdings.map((holding) => {
             const marketValue =
               holding.current_price === null
@@ -56,20 +62,22 @@ export function HoldingsList({
                 : Number(holding.quantity) * Number(holding.current_price);
 
             return (
-              <tr key={holding.id} className="hover:bg-slate-50/85 dark:hover:bg-slate-800/50">
-                <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{holding.ticker}</td>
-                <td className="px-4 py-3 text-right text-slate-700 dark:text-slate-300">
+              <tr key={holding.id} className={dataTableRowHoverClass}>
+                <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100">
+                  {holding.ticker}
+                </td>
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
                   {formatQuantity(Number(holding.quantity))}
                 </td>
-                <td className="px-4 py-3 text-right text-slate-700 dark:text-slate-300">
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
                   {formatCurrency(Number(holding.average_cost), holding.currency)}
                 </td>
-                <td className="px-4 py-3 text-right text-slate-700 dark:text-slate-300">
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
                   {marketValue === null
                     ? "Price unavailable"
                     : formatCurrency(marketValue, holding.currency)}
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3.5">
                   <div className="flex justify-end gap-2">
                     <Button variant="secondary" onClick={() => onEdit(holding)}>
                       Edit
@@ -88,6 +96,6 @@ export function HoldingsList({
           })}
         </tbody>
       </table>
-    </div>
+    </TableShell>
   );
 }

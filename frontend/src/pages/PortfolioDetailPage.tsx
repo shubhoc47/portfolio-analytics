@@ -7,14 +7,22 @@ import { LoadingState } from "../components/common/LoadingState";
 import { MetricStatGrid } from "../components/common/MetricStatGrid";
 import { SubNavTabs, type SubNavTabItem } from "../components/common/SubNavTabs";
 import { Button } from "../components/ui/Button";
-import { Card } from "../components/ui/Card";
 import { PortfolioAnalyticsSection } from "../features/analytics/components/PortfolioAnalyticsSection";
 import { HoldingsSection } from "../features/holdings/components/HoldingsSection";
 import { PortfolioIntelligenceSection } from "../features/intelligence/components/PortfolioIntelligenceSection";
+import { workspaceNavyCardClass, workspacePageHeroClass } from "../theme/workspaceSurfaces";
 import type { Portfolio } from "../types/portfolio";
 import { formatDate } from "../utils/format";
 
 type PortfolioDetailTab = "overview" | "holdings" | "analytics" | "intelligence";
+
+const heroGhostBtn =
+  "text-slate-200 hover:bg-white/10 hover:text-white dark:text-slate-200 dark:hover:bg-white/10";
+
+const fieldShell = "rounded-xl border border-white/[0.08] bg-black/25 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-black/20";
+const fieldLabel =
+  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-slate-500";
+const fieldValue = "mt-1 text-sm font-medium text-slate-100";
 
 export function PortfolioDetailPage() {
   const { id } = useParams();
@@ -85,47 +93,70 @@ export function PortfolioDetailPage() {
   );
 
   return (
-    <section className="space-y-5">
-      {isLoading ? <LoadingState message="Loading portfolio details..." /> : null}
+    <div className="relative space-y-6 sm:space-y-8">
+      <div
+        className="pointer-events-none absolute -top-4 left-1/2 -z-0 h-48 w-[min(100%,40rem)] -translate-x-1/2 bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.1),transparent_65%),radial-gradient(ellipse_at_80%_30%,rgba(6,182,212,0.05),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.16),transparent_58%)]"
+        aria-hidden
+      />
+
+      {isLoading ? (
+        <div className="relative z-[1]">
+          <LoadingState message="Loading portfolio details..." />
+        </div>
+      ) : null}
       {!isLoading && error ? (
-        <ErrorState message={error} onRetry={() => window.location.reload()} />
+        <div className="relative z-[1]">
+          <ErrorState message={error} onRetry={() => window.location.reload()} />
+        </div>
       ) : null}
 
       {!isLoading && !error && portfolio ? (
-        <div className="space-y-5 sm:space-y-6">
-          <Card
-            variant="elevated"
-            className="bg-[radial-gradient(circle_at_90%_0%,rgba(96,165,250,0.1),transparent_40%),linear-gradient(160deg,#ffffff_0%,#f6f9ff_60%,#eef4ff_100%)] dark:bg-[radial-gradient(circle_at_90%_0%,rgba(59,130,246,0.15),transparent_40%),linear-gradient(160deg,rgba(15,23,42,0.88)_0%,rgba(15,23,42,0.96)_100%)]"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="space-y-1.5">
-                <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[1.7rem]">
+        <div className="relative z-[1] space-y-6 sm:space-y-7">
+          <header className={workspacePageHeroClass}>
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0 space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-piq-accent">
+                  Portfolio
+                </p>
+                <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
                   {portfolio.name}
                 </h1>
-                <p className="max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                <p className="max-w-2xl text-sm leading-relaxed text-slate-300">
                   Explore portfolio structure, risk, benchmark context, and intelligence signals.
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Last updated: {formatDate(portfolio.updated_at)} | Created:{" "}
+                <p className="text-xs text-slate-400">
+                  Last updated: {formatDate(portfolio.updated_at)} · Created{" "}
                   {formatDate(portfolio.created_at)}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <Link to={`/portfolios/${portfolio.id}/edit`}>
-                  <Button variant="secondary">Edit Portfolio</Button>
+              <div className="flex flex-wrap items-center gap-2 lg:shrink-0 lg:pt-1">
+                <Link to={`/portfolios/${portfolio.id}/edit`} className="inline-flex">
+                  <Button
+                    variant="marketingSecondary"
+                    className="border-white/20 bg-white/10 text-slate-100 shadow-none hover:bg-white/[0.14] dark:border-white/20 dark:bg-white/10"
+                  >
+                    Edit Portfolio
+                  </Button>
                 </Link>
-                <Button variant="ghost" onClick={() => setActiveTab("intelligence")}>
+                <Button
+                  variant="ghost"
+                  className={heroGhostBtn}
+                  onClick={() => setActiveTab("intelligence")}
+                >
                   View Intelligence
                 </Button>
-                <Link to="/portfolios">
-                  <Button variant="ghost">Back</Button>
+                <Link to="/portfolios" className="inline-flex">
+                  <Button variant="ghost" className={heroGhostBtn}>
+                    Back
+                  </Button>
                 </Link>
               </div>
             </div>
-          </Card>
+          </header>
 
           <MetricStatGrid
             columns={4}
+            surface="navyPanel"
             items={[
               { label: "Base Currency", value: portfolio.base_currency, tone: "accent" },
               { label: "Owner", value: portfolio.owner_name || "Not set", tone: "default" },
@@ -138,47 +169,44 @@ export function PortfolioDetailPage() {
             ]}
           />
 
-          <SubNavTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+          <SubNavTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onChange={setActiveTab}
+            shell="darkWorkspace"
+          />
 
           {activeTab === "overview" ? (
-            <Card variant="elevated">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Overview</h2>
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            <section className={`${workspaceNavyCardClass} p-6 sm:p-7`}>
+              <h2 className="text-lg font-semibold text-slate-50">Overview</h2>
+              <p className="mt-1 text-sm text-slate-400">
                 Core profile details and governance metadata for this portfolio.
               </p>
-              <dl className="mt-4 grid gap-3 text-sm md:grid-cols-2">
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
-                  <dt className="text-slate-500 dark:text-slate-400">Name</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">
-                    {portfolio.name}
-                  </dd>
+              <dl className="mt-5 grid gap-3 text-sm md:grid-cols-2">
+                <div className={fieldShell}>
+                  <dt className={fieldLabel}>Name</dt>
+                  <dd className={fieldValue}>{portfolio.name}</dd>
                 </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
-                  <dt className="text-slate-500 dark:text-slate-400">Base currency</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">
-                    {portfolio.base_currency}
-                  </dd>
+                <div className={fieldShell}>
+                  <dt className={fieldLabel}>Base currency</dt>
+                  <dd className={fieldValue}>{portfolio.base_currency}</dd>
                 </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
-                  <dt className="text-slate-500 dark:text-slate-400">Owner</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">
-                    {portfolio.owner_name || "Not set"}
-                  </dd>
+                <div className={fieldShell}>
+                  <dt className={fieldLabel}>Owner</dt>
+                  <dd className={fieldValue}>{portfolio.owner_name || "Not set"}</dd>
                 </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65">
-                  <dt className="text-slate-500 dark:text-slate-400">Created</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">
-                    {formatDate(portfolio.created_at)}
-                  </dd>
+                <div className={fieldShell}>
+                  <dt className={fieldLabel}>Created</dt>
+                  <dd className={fieldValue}>{formatDate(portfolio.created_at)}</dd>
                 </div>
-                <div className="rounded-xl border border-slate-200/80 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-900/65 md:col-span-2">
-                  <dt className="text-slate-500 dark:text-slate-400">Description</dt>
-                  <dd className="font-medium text-slate-900 dark:text-slate-100">
+                <div className={`${fieldShell} md:col-span-2`}>
+                  <dt className={fieldLabel}>Description</dt>
+                  <dd className={`${fieldValue} whitespace-pre-wrap`}>
                     {portfolio.description || "No description provided."}
                   </dd>
                 </div>
               </dl>
-              <div className="mt-6">
+              <div className="mt-6 border-t border-white/10 pt-5">
                 <Button
                   variant="danger"
                   loading={isDeleting}
@@ -187,7 +215,7 @@ export function PortfolioDetailPage() {
                   Delete Portfolio
                 </Button>
               </div>
-            </Card>
+            </section>
           ) : null}
 
           {activeTab === "holdings" ? <HoldingsSection portfolioId={portfolio.id} /> : null}
@@ -199,6 +227,6 @@ export function PortfolioDetailPage() {
           ) : null}
         </div>
       ) : null}
-    </section>
+    </div>
   );
 }

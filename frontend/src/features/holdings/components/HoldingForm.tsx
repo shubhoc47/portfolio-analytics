@@ -122,7 +122,7 @@ export function HoldingForm({
       />
 
       {submitError ? (
-        <p className="rounded-xl border border-rose-200/90 bg-rose-50/95 px-3 py-2 text-sm text-rose-700 dark:border-rose-700 dark:bg-rose-950/50 dark:text-rose-200">
+        <p className="rounded-xl border border-piq-loss/25 bg-piq-loss/5 px-3 py-2 text-sm text-rose-800 dark:border-piq-loss/35 dark:bg-piq-loss/10 dark:text-piq-loss">
           {submitError}
         </p>
       ) : null}

@@ -31,7 +31,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
             Allocation by sector using holding cost-basis weights.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3 rounded-lg border border-slate-700/80 bg-slate-900/80 px-3 py-2 text-xs text-slate-300">
+        <div className="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-piq-canvas/80 px-3 py-2 text-xs text-slate-300 dark:bg-piq-canvas/90">
           <p>
             Holdings:{" "}
             <span className="font-semibold text-slate-100">{sectorExposure.total_holdings}</span>
@@ -53,7 +53,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
           return (
             <div
               key={row.sector}
-              className="rounded-xl border border-slate-700/80 bg-slate-900/75 px-4 py-3 shadow-sm"
+              className="rounded-xl border border-white/10 bg-piq-canvas/75 px-4 py-3 shadow-sm dark:bg-piq-canvas/85"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
                 <p className="font-medium text-slate-100">{row.sector}</p>
@@ -66,7 +66,10 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
               </div>
 
               <div className="mt-2 h-2 rounded-full bg-slate-700">
-                <div className="h-2 rounded-full bg-brand-500 transition-all" style={{ width: `${Math.min(100, Math.max(0, visualWidth))}%` }} />
+                <div
+                  className="h-2 rounded-full bg-gradient-primary transition-all"
+                  style={{ width: `${Math.min(100, Math.max(0, visualWidth))}%` }}
+                />
               </div>
               <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
                 <span>#{index + 1} by allocation</span>
@@ -78,7 +81,7 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
       </div>
 
       {sectorExposure.notes.length > 0 ? (
-        <div className="mt-5 rounded-lg border border-slate-700 bg-slate-900 p-4">
+        <div className="mt-5 rounded-lg border border-white/10 bg-piq-canvas/90 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             Notes
           </p>

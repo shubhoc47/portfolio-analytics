@@ -18,14 +18,15 @@ export function FinalCtaSection() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.35 }}
       variants={sectionReveal}
-      className="rounded-2xl border border-slate-200/70 bg-[radial-gradient(circle_at_15%_30%,rgba(125,211,252,0.28),transparent_45%),linear-gradient(100deg,#122344_0%,#182f57_48%,#1a3f63_100%)] p-6 text-white shadow-[0_20px_34px_-22px_rgba(15,23,42,0.8)] dark:border-slate-700/70 dark:bg-[radial-gradient(circle_at_15%_30%,rgba(56,189,248,0.2),transparent_45%),linear-gradient(100deg,#0d1a35_0%,#14264a_48%,#123552_100%)] sm:p-8"
+      className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-piq-card-surface p-6 shadow-card-lift sm:p-8"
     >
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_80%_60%_at_20%_0%,rgba(99,102,241,0.12),transparent_55%)] opacity-90" />
+      <div className="relative flex flex-wrap items-center justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h2 className="text-2xl font-semibold tracking-tight text-piq-text-primary sm:text-[32px] sm:leading-tight">
             Ready for a sharper portfolio workflow?
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-slate-100/95">
+          <p className="mt-2 max-w-2xl text-base leading-[1.6] text-piq-text-muted">
             Move from positions to clear risk and benchmark insight in minutes, with analysis you
             can actually explain.
           </p>

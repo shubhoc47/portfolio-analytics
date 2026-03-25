@@ -6,6 +6,12 @@ import { ErrorState } from "../../../components/common/ErrorState";
 import { MetricStatGrid } from "../../../components/common/MetricStatGrid";
 import { NotesBlock } from "../../../components/common/NotesBlock";
 import { SectionHeader } from "../../../components/common/SectionHeader";
+import {
+  TableShell,
+  dataTableRowHoverClass,
+  dataTableTheadClass,
+  dataTableTbodyClass,
+} from "../../../components/common/TableShell";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type { SentimentAnalyzeResponse } from "../types";
@@ -107,8 +113,8 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
             </div>
           </Card>
 
-          <Card variant="elevated" className="p-0">
-            <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-700">
+          <Card variant="elevated" className="overflow-hidden p-0">
+            <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
               <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
                 Holding Sentiment
               </h4>
@@ -118,36 +124,40 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
                 No holding-level sentiment rows were returned.
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-                  <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
+              <TableShell className="rounded-none rounded-b-2xl border-0 border-t border-slate-200/80 shadow-none dark:border-white/10">
+                <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-white/10">
+                  <thead className={dataTableTheadClass}>
                     <tr>
-                      <th className="px-4 py-3">Ticker</th>
-                      <th className="px-4 py-3">Articles</th>
-                      <th className="px-4 py-3">Positive</th>
-                      <th className="px-4 py-3">Neutral</th>
-                      <th className="px-4 py-3">Negative</th>
-                      <th className="px-4 py-3">Average</th>
-                      <th className="px-4 py-3">Overall</th>
+                      <th className="px-4 py-3.5 font-semibold">Ticker</th>
+                      <th className="px-4 py-3.5 font-semibold">Articles</th>
+                      <th className="px-4 py-3.5 font-semibold">Positive</th>
+                      <th className="px-4 py-3.5 font-semibold">Neutral</th>
+                      <th className="px-4 py-3.5 font-semibold">Negative</th>
+                      <th className="px-4 py-3.5 font-semibold">Average</th>
+                      <th className="px-4 py-3.5 font-semibold">Overall</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200 bg-white/80 dark:divide-slate-800 dark:bg-slate-900/80">
+                  <tbody className={dataTableTbodyClass}>
                     {result.holding_sentiments.map((row) => (
-                      <tr key={row.ticker} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                        <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{row.ticker}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.article_count}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.positive_count}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.neutral_count}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.negative_count}</td>
-                        <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.average_score.toFixed(4)}</td>
-                        <td className="px-4 py-3">
+                      <tr key={row.ticker} className={dataTableRowHoverClass}>
+                        <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100">
+                          {row.ticker}
+                        </td>
+                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{row.article_count}</td>
+                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{row.positive_count}</td>
+                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{row.neutral_count}</td>
+                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{row.negative_count}</td>
+                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
+                          {row.average_score.toFixed(4)}
+                        </td>
+                        <td className="px-4 py-3.5">
                           <SentimentBadge sentiment={row.overall_sentiment} />
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
+              </TableShell>
             )}
           </Card>
 
@@ -161,7 +171,10 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
                   <p className="text-sm text-slate-300">No article-level rows were returned.</p>
                 ) : (
                   result.article_sentiments.map((row) => (
-                    <div key={row.article_id} className="rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 dark:border-slate-700 dark:bg-slate-900/75">
+                    <div
+                      key={row.article_id}
+                      className="rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 dark:border-white/10 dark:bg-piq-canvas/80"
+                    >
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{row.ticker}</span>
                         <SentimentBadge sentiment={row.sentiment_label} />

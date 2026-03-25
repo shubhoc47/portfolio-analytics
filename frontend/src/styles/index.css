@@ -26,13 +26,13 @@ body {
 }
 
 .dark body {
-  @apply bg-slate-950 text-slate-100;
+  @apply bg-piq-canvas text-slate-100;
 }
 
 a {
-  @apply text-brand-700 no-underline transition-colors hover:text-brand-600;
+  @apply text-brand-600 no-underline transition-colors hover:text-brand-500;
 }
 
 .dark a {
-  @apply text-marketing-300 hover:text-marketing-200;
+  @apply text-piq-accent/90 hover:text-piq-accent;
 }

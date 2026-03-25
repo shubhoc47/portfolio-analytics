@@ -7,6 +7,12 @@ import { LoadingState } from "../../../components/common/LoadingState";
 import { MetricStatGrid } from "../../../components/common/MetricStatGrid";
 import { NotesBlock } from "../../../components/common/NotesBlock";
 import { SectionHeader } from "../../../components/common/SectionHeader";
+import {
+  TableShell,
+  dataTableRowHoverClass,
+  dataTableTheadClass,
+  dataTableTbodyClass,
+} from "../../../components/common/TableShell";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type {
@@ -155,42 +161,42 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card variant="elevated" className="p-0">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-              <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                <tr>
-                  <th className="px-4 py-3">Ticker</th>
-                  <th className="px-4 py-3">Provider</th>
-                  <th className="px-4 py-3">Analyst / Firm</th>
-                  <th className="px-4 py-3">Raw</th>
-                  <th className="px-4 py-3">Normalized</th>
-                  <th className="px-4 py-3">As Of</th>
-                  <th className="px-4 py-3">Price Target</th>
+        <TableShell>
+          <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-white/10">
+            <thead className={dataTableTheadClass}>
+              <tr>
+                <th className="px-4 py-3.5 font-semibold">Ticker</th>
+                <th className="px-4 py-3.5 font-semibold">Provider</th>
+                <th className="px-4 py-3.5 font-semibold">Analyst / Firm</th>
+                <th className="px-4 py-3.5 font-semibold">Raw</th>
+                <th className="px-4 py-3.5 font-semibold">Normalized</th>
+                <th className="px-4 py-3.5 font-semibold">As Of</th>
+                <th className="px-4 py-3.5 font-semibold">Price Target</th>
+              </tr>
+            </thead>
+            <tbody className={dataTableTbodyClass}>
+              {ratings.map((rating) => (
+                <tr key={rating.id} className={dataTableRowHoverClass}>
+                  <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100">
+                    {rating.ticker}
+                  </td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{rating.provider_name}</td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
+                    {rating.analyst_name || rating.firm_name}
+                  </td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{rating.raw_rating}</td>
+                  <td className="px-4 py-3.5">
+                    <RatingBadge rating={rating.normalized_rating} />
+                  </td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{rating.as_of_date}</td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
+                    {rating.price_target == null ? "—" : rating.price_target}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white/80 dark:divide-slate-800 dark:bg-slate-900/80">
-                {ratings.map((rating) => (
-                  <tr key={rating.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{rating.ticker}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.provider_name}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                      {rating.analyst_name || rating.firm_name}
-                    </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.raw_rating}</td>
-                    <td className="px-4 py-3">
-                      <RatingBadge rating={rating.normalized_rating} />
-                    </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{rating.as_of_date}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                      {rating.price_target == null ? "—" : rating.price_target}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+              ))}
+            </tbody>
+          </table>
+        </TableShell>
       ) : null}
     </section>
   );

@@ -153,7 +153,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {dailyResult ? (
         <Card variant="elevated" className="p-0">
-          <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-700">
+          <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
               Daily Holding Briefs
             </h4>
@@ -165,7 +165,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
           {dailyResult.briefs.length === 0 ? (
             <div className="px-4 py-5 text-sm text-slate-600 dark:text-slate-300">No daily briefs were returned.</div>
           ) : (
-            <div className="divide-y divide-slate-200 dark:divide-slate-800">
+            <div className="divide-y divide-slate-200 dark:divide-white/10">
               {dailyResult.briefs.map((brief, index) => (
                 <div key={`${brief.ticker}-${index}`} className="px-4 py-4">
                   <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -187,7 +187,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
       {weeklyResult ? (
         <Card variant="elevated" className="p-0">
-          <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-700">
+          <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
               Weekly Holding Summaries
             </h4>
@@ -201,7 +201,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
               No weekly holding summaries were returned.
             </div>
           ) : (
-            <div className="divide-y divide-slate-200 dark:divide-slate-800">
+            <div className="divide-y divide-slate-200 dark:divide-white/10">
               {weeklyResult.weekly_summaries.map((summary, index) => (
                 <div key={`${summary.ticker}-${index}`} className="px-4 py-4">
                   <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">

@@ -4,8 +4,8 @@ interface LoadingStateProps {
 
 export function LoadingState({ message = "Loading..." }: LoadingStateProps) {
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-8 text-center shadow-soft dark:border-slate-700/70 dark:bg-slate-900/80">
-      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-brand-600 dark:border-slate-700 dark:border-t-brand-400" />
+    <div className="rounded-2xl border border-slate-200/80 bg-white/95 p-8 text-center shadow-soft dark:border-white/10 dark:bg-piq-surface/60 dark:shadow-panel">
+      <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-brand-600 dark:border-slate-600 dark:border-t-piq-accent" />
       <p className="text-sm text-slate-600 dark:text-slate-300">{message}</p>
     </div>
   );

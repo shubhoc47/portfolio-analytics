@@ -134,9 +134,9 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
               key={alert.id}
               className={
                 alert.severity === "critical"
-                  ? "border-rose-300/90 bg-rose-50/90 dark:border-rose-700 dark:bg-rose-950/35"
+                  ? "border-piq-loss/35 bg-piq-loss/5 dark:border-piq-loss/40 dark:bg-piq-loss/10"
                   : alert.severity === "high"
-                    ? "border-orange-300/90 bg-orange-50/90 dark:border-orange-700 dark:bg-orange-950/35"
+                    ? "border-orange-300/90 bg-orange-50/90 dark:border-orange-500/35 dark:bg-orange-500/10"
                     : ""
               }
             >
@@ -145,7 +145,7 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
                   {alert.ticker || "Portfolio"}
                 </span>
                 <SeverityBadge severity={alert.severity} />
-                <span className="rounded-full border border-slate-300 bg-slate-100 px-2 py-0.5 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300">
+                <span className="rounded-full border border-slate-300 bg-slate-100 px-2 py-0.5 text-xs text-slate-700 dark:border-white/15 dark:bg-piq-canvas/80 dark:text-slate-300">
                   {alert.source_kind}
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">{formatDate(alert.detected_at)}</span>

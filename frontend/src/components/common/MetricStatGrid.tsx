@@ -8,17 +8,30 @@ interface MetricStatGridProps {
   items: MetricStatItem[];
   columns?: 2 | 3 | 4;
   context?: "default" | "darkSurface";
+  /** Premium navy tiles (same on light/dark app shell) — portfolio workspace */
+  surface?: "default" | "navyPanel";
 }
 
 const toneClasses: Record<NonNullable<MetricStatItem["tone"]>, string> = {
   default:
-    "border-slate-200 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100",
+    "border-slate-200/90 bg-white text-slate-900 dark:border-white/10 dark:bg-piq-surface/70 dark:text-slate-100",
   positive:
-    "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
+    "border-piq-profit/30 bg-piq-profit/5 text-emerald-800 dark:border-piq-profit/35 dark:bg-piq-profit/10 dark:text-piq-profit",
   negative:
-    "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-700 dark:bg-rose-950/50 dark:text-rose-300",
+    "border-piq-loss/30 bg-piq-loss/5 text-rose-800 dark:border-piq-loss/35 dark:bg-piq-loss/10 dark:text-piq-loss",
   accent:
-    "border-brand-200 bg-brand-50 text-brand-800 dark:border-brand-700 dark:bg-brand-950/50 dark:text-brand-300",
+    "border-brand-300/50 bg-brand-50 text-brand-800 dark:border-piq-accent/30 dark:bg-piq-accent/10 dark:text-piq-accent",
+};
+
+/** Same inset panel as overview fields — semantics only via value color, no pastel tile fills */
+const navyPanelTile =
+  "rounded-xl border border-white/[0.08] bg-black/25 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] backdrop-blur-sm dark:border-white/10 dark:bg-black/30";
+
+const navyPanelValue: Record<NonNullable<MetricStatItem["tone"]>, string> = {
+  default: "text-slate-100",
+  accent: "text-piq-accent",
+  positive: "text-piq-profit",
+  negative: "text-piq-loss",
 };
 
 const columnClasses: Record<NonNullable<MetricStatGridProps["columns"]>, string> = {
@@ -27,18 +40,38 @@ const columnClasses: Record<NonNullable<MetricStatGridProps["columns"]>, string>
   4: "sm:grid-cols-2 lg:grid-cols-4",
 };
 
-export function MetricStatGrid({ items, columns = 4, context = "default" }: MetricStatGridProps) {
+const navyLabelClass =
+  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-slate-500";
+
+export function MetricStatGrid({
+  items,
+  columns = 4,
+  context = "default",
+  surface = "default",
+}: MetricStatGridProps) {
   return (
-    <div className={`grid gap-3 ${columnClasses[columns]}`}>
+    <div className={`grid gap-3 sm:gap-4 ${columnClasses[columns]}`}>
       {items.map((item) => {
         const tone = item.tone || "default";
+
+        if (surface === "navyPanel") {
+          return (
+            <div key={`${item.label}-${item.value}`} className={navyPanelTile}>
+              <p className={navyLabelClass}>{item.label}</p>
+              <p className={`mt-1.5 text-lg font-semibold tracking-tight ${navyPanelValue[tone]}`}>
+                {item.value}
+              </p>
+            </div>
+          );
+        }
+
         const baseToneClasses =
           tone === "default" && context === "darkSurface"
-            ? "border-slate-300/20 bg-slate-950/45 text-slate-100 dark:border-slate-700/70 dark:bg-slate-900/70"
+            ? "border-white/10 bg-piq-canvas/85 text-slate-100 dark:bg-piq-canvas/90"
             : toneClasses[tone];
         const labelClasses =
           tone === "default" && context === "darkSurface"
-            ? "text-xs uppercase tracking-wide text-slate-300 dark:text-slate-400"
+            ? "text-xs uppercase tracking-wide text-slate-400"
             : "text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400";
 
         return (

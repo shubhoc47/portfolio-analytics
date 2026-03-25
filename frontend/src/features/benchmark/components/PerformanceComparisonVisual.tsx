@@ -31,7 +31,7 @@ export function PerformanceComparisonVisual({
   const benchmarkPositive = benchmarkReturnPercent >= 0;
 
   return (
-    <div className="rounded-xl border border-slate-700/80 bg-slate-900/80 p-4">
+    <div className="rounded-xl border border-white/10 bg-piq-canvas/80 p-4 dark:bg-piq-canvas/90">
       <h4 className="text-sm font-semibold text-slate-100">Performance Visual</h4>
       <p className="mt-1 text-xs text-slate-300">
         Relative magnitude of portfolio return versus {benchmarkLabel}.
@@ -41,13 +41,13 @@ export function PerformanceComparisonVisual({
         <div>
           <div className="mb-1 flex items-center justify-between text-sm">
             <span className="font-medium text-slate-300">Portfolio Return</span>
-            <span className={portfolioPositive ? "text-emerald-300" : "text-rose-300"}>
+            <span className={portfolioPositive ? "text-piq-profit" : "text-piq-loss"}>
               {formatPercent(portfolioReturnPercent)}
             </span>
           </div>
-          <div className="h-2 rounded-full bg-slate-700">
+          <div className="h-2 rounded-full bg-slate-700 dark:bg-piq-canvas">
             <div
-              className={`h-2 rounded-full ${portfolioPositive ? "bg-emerald-500" : "bg-rose-500"}`}
+              className={`h-2 rounded-full ${portfolioPositive ? "bg-piq-profit" : "bg-piq-loss"}`}
               style={{ width: `${widthByMagnitude(portfolioReturnPercent, maxMagnitude)}%` }}
             />
           </div>
@@ -56,13 +56,13 @@ export function PerformanceComparisonVisual({
         <div>
           <div className="mb-1 flex items-center justify-between text-sm">
             <span className="font-medium text-slate-300">{benchmarkLabel}</span>
-            <span className={benchmarkPositive ? "text-brand-300" : "text-rose-300"}>
+            <span className={benchmarkPositive ? "text-piq-accent" : "text-piq-loss"}>
               {formatPercent(benchmarkReturnPercent)}
             </span>
           </div>
-          <div className="h-2 rounded-full bg-slate-700">
+          <div className="h-2 rounded-full bg-slate-700 dark:bg-piq-canvas">
             <div
-              className={`h-2 rounded-full ${benchmarkPositive ? "bg-brand-500" : "bg-rose-500"}`}
+              className={`h-2 rounded-full ${benchmarkPositive ? "bg-gradient-primary" : "bg-piq-loss"}`}
               style={{ width: `${widthByMagnitude(benchmarkReturnPercent, maxMagnitude)}%` }}
             />
           </div>

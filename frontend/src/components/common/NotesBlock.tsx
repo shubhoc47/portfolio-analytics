@@ -14,8 +14,12 @@ export function NotesBlock({
   }
 
   return (
-    <div className={`rounded-xl border border-slate-200/80 bg-slate-50/85 px-4 py-3 dark:border-slate-700/70 dark:bg-slate-900/70 ${className}`}>
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300">{title}</h4>
+    <div
+      className={`rounded-xl border border-slate-200/80 bg-slate-50/90 px-4 py-3 dark:border-white/10 dark:bg-piq-canvas/80 ${className}`}
+    >
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300">
+        {title}
+      </h4>
       <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-600 dark:text-slate-400">
         {notes.map((note) => (
           <li key={note}>{note}</li>

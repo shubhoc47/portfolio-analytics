@@ -31,8 +31,10 @@ export function TrustSection() {
       className="space-y-5"
     >
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-wide text-marketing-300">Engineering Trust</p>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-100 sm:text-3xl">
+        <p className="text-xs font-semibold uppercase tracking-wide text-brand-600 dark:text-piq-accent">
+          Engineering Trust
+        </p>
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-100">
           Purpose-built architecture for serious portfolio analytics.
         </h2>
       </div>
@@ -49,10 +51,10 @@ export function TrustSection() {
             key={block.label}
             variants={itemReveal}
             whileHover={{ y: -3 }}
-            className="rounded-xl border border-slate-700 bg-slate-900/70 p-5 shadow-soft"
+            className="rounded-xl border border-slate-200/80 bg-white/95 p-5 shadow-soft dark:border-white/10 dark:bg-piq-surface/70 dark:shadow-panel"
           >
-            <p className="text-base font-semibold text-slate-100">{block.label}</p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-300">{block.detail}</p>
+            <p className="text-base font-semibold text-slate-900 dark:text-slate-100">{block.label}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{block.detail}</p>
           </motion.article>
         ))}
       </motion.div>

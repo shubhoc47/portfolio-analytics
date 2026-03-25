@@ -25,6 +25,9 @@ const features = [
   },
 ];
 
+const featureCardClass =
+  "rounded-2xl border border-white/[0.06] bg-piq-card-surface p-5 shadow-card-lift transition-colors duration-300 hover:border-white/15";
+
 export function FeatureHighlights() {
   return (
     <motion.section
@@ -33,13 +36,11 @@ export function FeatureHighlights() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
       variants={sectionReveal}
-      className="scroll-mt-24 space-y-5 rounded-2xl border border-slate-200/60 bg-[linear-gradient(180deg,rgba(238,246,255,0.44),rgba(224,236,254,0.3))] p-5 shadow-[0_14px_28px_-24px_rgba(15,23,42,0.65)] dark:border-slate-700/70 dark:bg-[linear-gradient(180deg,rgba(12,22,41,0.74),rgba(11,20,38,0.45))] sm:p-6"
+      className="scroll-mt-24 space-y-5 border-t border-white/[0.06] pt-16 sm:pt-20"
     >
       <div className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-700 dark:text-cyan-300">
-          Capabilities
-        </p>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-piq-accent">Capabilities</p>
+        <h2 className="text-2xl font-semibold tracking-tight text-piq-text-primary sm:text-[32px] sm:leading-tight">
           Core analytics for high-conviction decisions.
         </h2>
       </div>
@@ -57,10 +58,10 @@ export function FeatureHighlights() {
             id={feature.id}
             variants={itemReveal}
             whileHover={{ y: -4 }}
-            className="scroll-mt-24 rounded-xl border border-slate-200/80 bg-white/70 p-5 shadow-[0_16px_26px_-22px_rgba(15,23,42,0.65)] transition dark:border-slate-700/70 dark:bg-slate-900/70"
+            className={`scroll-mt-24 ${featureCardClass}`}
           >
-            <h3 className="text-base font-semibold text-slate-900 dark:text-white">{feature.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{feature.description}</p>
+            <h3 className="text-base font-semibold text-piq-text-primary">{feature.title}</h3>
+            <p className="mt-2 text-base leading-[1.6] text-piq-text-muted">{feature.description}</p>
           </motion.article>
         ))}
       </motion.div>

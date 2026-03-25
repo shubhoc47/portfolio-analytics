@@ -7,6 +7,12 @@ import { LoadingState } from "../../../components/common/LoadingState";
 import { MetricStatGrid } from "../../../components/common/MetricStatGrid";
 import { NotesBlock } from "../../../components/common/NotesBlock";
 import { SectionHeader } from "../../../components/common/SectionHeader";
+import {
+  TableShell,
+  dataTableRowHoverClass,
+  dataTableTheadClass,
+  dataTableTbodyClass,
+} from "../../../components/common/TableShell";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import type { NewsRefreshResponse, PortfolioNewsListResponse } from "../types";
@@ -123,42 +129,44 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       ) : null}
 
       {!isLoading && !error && articles.length > 0 ? (
-        <Card variant="elevated" className="p-0">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-700">
-              <thead className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950 dark:text-slate-400">
-                <tr>
-                  <th className="px-4 py-3">Ticker</th>
-                  <th className="px-4 py-3">Title</th>
-                  <th className="px-4 py-3">Source</th>
-                  <th className="px-4 py-3">Published</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white/80 dark:divide-slate-800 dark:bg-slate-900/80">
-                {articles.map((article) => (
-                  <tr key={article.id} className="align-top hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-slate-100">{article.ticker}</td>
-                    <td className="px-4 py-3">
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-medium text-brand-700 hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200"
-                      >
+        <TableShell>
+          <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-white/10">
+            <thead className={dataTableTheadClass}>
+              <tr>
+                <th className="px-4 py-3.5 font-semibold">Ticker</th>
+                <th className="px-4 py-3.5 font-semibold">Title</th>
+                <th className="px-4 py-3.5 font-semibold">Source</th>
+                <th className="px-4 py-3.5 font-semibold">Published</th>
+              </tr>
+            </thead>
+            <tbody className={dataTableTbodyClass}>
+              {articles.map((article) => (
+                <tr key={article.id} className={`align-top ${dataTableRowHoverClass}`}>
+                  <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100">
+                    {article.ticker}
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-brand-600 hover:text-brand-500 dark:text-piq-accent/90 dark:hover:text-piq-accent"
+                    >
                         {article.title}
                       </a>
                       <p className="mt-1 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
                         {article.summary || article.content || "No summary available."}
                       </p>
                     </td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{article.source}</td>
-                    <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{formatDate(article.published_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">{article.source}</td>
+                  <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
+                    {formatDate(article.published_at)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableShell>
       ) : null}
     </section>
   );

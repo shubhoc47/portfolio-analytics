@@ -27,7 +27,7 @@ export function ScoreBreakdownCard({
         {items.map((item) => (
           <div
             key={item.label}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5"
+            className="rounded-lg border border-white/10 bg-piq-canvas/80 px-3 py-2.5 dark:bg-piq-canvas/90"
           >
             <dt className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
               {item.label}
@@ -38,7 +38,7 @@ export function ScoreBreakdownCard({
       </dl>
 
       {notes.length > 0 ? (
-        <div className="mt-5 rounded-lg border border-slate-700 bg-slate-900 p-4">
+        <div className="mt-5 rounded-lg border border-white/10 bg-piq-canvas/80 p-4 dark:bg-piq-canvas/90">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Notes</p>
           <ul className="mt-2 space-y-1 text-sm leading-relaxed text-slate-300">
             {notes.map((note) => (

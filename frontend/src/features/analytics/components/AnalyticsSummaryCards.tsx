@@ -17,28 +17,28 @@ function formatScore(value: number): string {
 
 function scoreTone(value: number): string {
   if (value >= 75) {
-    return "text-emerald-300";
+    return "text-piq-profit";
   }
   if (value >= 50) {
-    return "text-brand-300";
+    return "text-piq-accent";
   }
   if (value >= 30) {
     return "text-amber-300";
   }
-  return "text-rose-300";
+  return "text-piq-loss";
 }
 
 function scoreBandColor(value: number): string {
   if (value >= 75) {
-    return "bg-emerald-500";
+    return "bg-piq-profit";
   }
   if (value >= 50) {
-    return "bg-brand-500";
+    return "bg-piq-accent";
   }
   if (value >= 30) {
     return "bg-amber-500";
   }
-  return "bg-rose-500";
+  return "bg-piq-loss";
 }
 
 interface ScoreCardProps {
@@ -61,7 +61,7 @@ function ScoreCard({
   const normalizedVisual = Math.max(0, Math.min(100, scoreVisualValue ?? score));
   return (
     <Card variant="darkSurface" className="relative overflow-hidden p-0">
-      <div className="h-1.5 w-full bg-slate-800/90">
+      <div className="h-1.5 w-full bg-slate-800/90 dark:bg-piq-canvas/90">
         <div className={`h-1.5 ${scoreBandColor(normalizedVisual)}`} style={{ width: `${normalizedVisual}%` }} />
       </div>
       <div className="p-5">
@@ -89,7 +89,7 @@ export function AnalyticsSummaryCards({
         title="Diversification Score"
         score={diversification.score}
         badgeText={diversification.label}
-        badgeClassName="border border-emerald-700 bg-emerald-950/50 text-emerald-300"
+        badgeClassName="border border-piq-profit/40 bg-piq-profit/10 text-piq-profit"
         subtitle="Higher is better. Reflects sector breadth and concentration balance."
       />
 
@@ -110,7 +110,7 @@ export function AnalyticsSummaryCards({
         title="Health Score"
         score={health.score}
         badgeText={health.label}
-        badgeClassName="border border-brand-700 bg-brand-950/50 text-brand-300"
+        badgeClassName="border border-marketing-500/40 bg-marketing-500/10 text-marketing-300"
         subtitle="Higher is healthier. Combines diversification strength and inverse risk."
       />
     </div>
