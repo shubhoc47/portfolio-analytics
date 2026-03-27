@@ -48,7 +48,7 @@ export function BenchmarkSection({ portfolioId }: BenchmarkSectionProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Benchmark Comparison"
           description="Compare this portfolio against the S&P 500 benchmark."

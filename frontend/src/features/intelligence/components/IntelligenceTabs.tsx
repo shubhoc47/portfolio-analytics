@@ -20,6 +20,7 @@ export function IntelligenceTabs({ tabs, activeTab, onChange }: IntelligenceTabs
       activeTab={activeTab}
       onChange={onChange}
       ariaLabel="Intelligence navigation"
+      shell="darkWorkspace"
     />
   );
 }

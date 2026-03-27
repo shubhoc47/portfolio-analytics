@@ -18,11 +18,11 @@ export function SectionHeader({
       className={`flex flex-wrap items-end justify-between gap-3 ${compact ? "" : "mb-4 sm:mb-5"}`}
     >
       <div>
-        <h2 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100 sm:text-[1.18rem]">
+        <h2 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-piq-text-primary sm:text-[1.18rem]">
           {title}
         </h2>
         {description ? (
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-piq-text-muted sm:text-base sm:leading-[1.6]">
             {description}
           </p>
         ) : null}

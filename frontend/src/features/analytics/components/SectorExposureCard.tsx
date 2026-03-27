@@ -23,22 +23,22 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
   );
 
   return (
-    <Card variant="darkSurface">
+    <Card variant="workspace">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h3 className="text-lg font-semibold text-slate-100">Sector Exposure</h3>
-          <p className="mt-1 text-sm text-slate-300">
+          <h3 className="text-lg font-semibold text-piq-text-primary">Sector Exposure</h3>
+          <p className="mt-1 text-sm text-piq-text-muted">
             Allocation by sector using holding cost-basis weights.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3 rounded-lg border border-white/10 bg-piq-canvas/80 px-3 py-2 text-xs text-slate-300 dark:bg-piq-canvas/90">
+        <div className="grid grid-cols-2 gap-3 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs text-piq-text-muted backdrop-blur-sm">
           <p>
             Holdings:{" "}
-            <span className="font-semibold text-slate-100">{sectorExposure.total_holdings}</span>
+            <span className="font-semibold text-piq-text-primary">{sectorExposure.total_holdings}</span>
           </p>
           <p>
             Value basis:{" "}
-            <span className="font-semibold text-slate-100">
+            <span className="font-semibold text-piq-text-primary">
               {formatCurrency(sectorExposure.total_value_basis)}
             </span>
           </p>
@@ -53,25 +53,25 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
           return (
             <div
               key={row.sector}
-              className="rounded-xl border border-white/10 bg-piq-canvas/75 px-4 py-3 shadow-sm dark:bg-piq-canvas/85"
+              className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 backdrop-blur-sm"
             >
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
-                <p className="font-medium text-slate-100">{row.sector}</p>
-                <div className="flex items-center gap-3 text-slate-300">
-                  <span className="font-semibold text-slate-100">
+                <p className="font-medium text-piq-text-primary">{row.sector}</p>
+                <div className="flex items-center gap-3 text-piq-text-muted">
+                  <span className="font-semibold text-piq-text-primary">
                     {formatPercent(row.weight_percent)}
                   </span>
                   <span>{row.holding_count} holdings</span>
                 </div>
               </div>
 
-              <div className="mt-2 h-2 rounded-full bg-slate-700">
+              <div className="mt-2 h-2 rounded-full bg-slate-800/80">
                 <div
                   className="h-2 rounded-full bg-gradient-primary transition-all"
                   style={{ width: `${Math.min(100, Math.max(0, visualWidth))}%` }}
                 />
               </div>
-              <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
+              <div className="mt-2 flex items-center justify-between text-xs text-piq-text-muted">
                 <span>#{index + 1} by allocation</span>
                 <span>{formatPercent(row.weight_percent)} of portfolio</span>
               </div>
@@ -81,11 +81,11 @@ export function SectorExposureCard({ sectorExposure }: SectorExposureCardProps) 
       </div>
 
       {sectorExposure.notes.length > 0 ? (
-        <div className="mt-5 rounded-lg border border-white/10 bg-piq-canvas/90 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+        <div className="mt-5 rounded-lg border border-white/[0.08] bg-white/[0.04] p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-piq-text-muted">
             Notes
           </p>
-          <ul className="mt-2 space-y-1 text-sm leading-relaxed text-slate-300">
+          <ul className="mt-2 space-y-1 text-sm leading-relaxed text-piq-text-muted">
             {sectorExposure.notes.map((note) => (
               <li key={note}>- {note}</li>
             ))}

@@ -82,7 +82,7 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Ratings"
           description="Refresh and review normalized analyst rating signals."
@@ -101,7 +101,7 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card variant="darkSurface">
+        <Card variant="workspace">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
@@ -122,7 +122,7 @@ export function RatingsPanel({ portfolioId }: RatingsPanelProps) {
       ) : null}
 
       {!isLoading && !error && ratings.length > 0 ? (
-        <Card variant="darkSurface">
+        <Card variant="workspace">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Normalized Rating Mix
           </h4>

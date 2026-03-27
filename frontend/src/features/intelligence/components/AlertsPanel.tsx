@@ -71,7 +71,7 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Alerts"
           description="Refresh and monitor active alert signals for this portfolio."
@@ -90,7 +90,7 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card variant="darkSurface">
+        <Card variant="workspace">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>
@@ -130,7 +130,7 @@ export function AlertsPanel({ portfolioId }: AlertsPanelProps) {
         <div className="space-y-3">
           {alerts.map((alert) => (
             <Card
-              variant="elevated"
+              variant="workspace"
               key={alert.id}
               className={
                 alert.severity === "critical"

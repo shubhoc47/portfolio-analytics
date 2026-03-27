@@ -23,12 +23,12 @@ const toneClasses: Record<NonNullable<MetricStatItem["tone"]>, string> = {
     "border-brand-300/50 bg-brand-50 text-brand-800 dark:border-piq-accent/30 dark:bg-piq-accent/10 dark:text-piq-accent",
 };
 
-/** Same inset panel as overview fields — semantics only via value color, no pastel tile fills */
+/** Portfolio workspace tiles — aligned with landing-style meta fields */
 const navyPanelTile =
-  "rounded-xl border border-white/[0.08] bg-black/25 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] backdrop-blur-sm dark:border-white/10 dark:bg-black/30";
+  "rounded-xl border border-white/[0.06] bg-white/[0.04] p-4 backdrop-blur-sm";
 
 const navyPanelValue: Record<NonNullable<MetricStatItem["tone"]>, string> = {
-  default: "text-slate-100",
+  default: "text-piq-text-primary",
   accent: "text-piq-accent",
   positive: "text-piq-profit",
   negative: "text-piq-loss",
@@ -41,7 +41,7 @@ const columnClasses: Record<NonNullable<MetricStatGridProps["columns"]>, string>
 };
 
 const navyLabelClass =
-  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-slate-500";
+  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-piq-text-muted";
 
 export function MetricStatGrid({
   items,

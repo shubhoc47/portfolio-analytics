@@ -58,7 +58,7 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Analytics"
           description="Understand diversification, risk, and health at a glance."
@@ -75,9 +75,9 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
         <div className="space-y-4">
           <LoadingState message="Calculating analytics..." />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60" />
-            <div className="h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60" />
-            <div className="hidden h-40 animate-pulse rounded-2xl border border-slate-200/80 bg-white/80 dark:border-white/10 dark:bg-piq-surface/60 xl:block" />
+            <div className="h-40 animate-pulse rounded-2xl border border-white/10 bg-white/5 dark:border-white/10 dark:bg-white/5" />
+            <div className="h-40 animate-pulse rounded-2xl border border-white/10 bg-white/5 dark:border-white/10 dark:bg-white/5" />
+            <div className="hidden h-40 animate-pulse rounded-2xl border border-white/10 bg-white/5 dark:border-white/10 dark:bg-white/5 xl:block" />
           </div>
         </div>
       ) : null}
@@ -117,15 +117,15 @@ export function PortfolioAnalyticsSection({ portfolioId }: PortfolioAnalyticsSec
 
           <BenchmarkSection portfolioId={portfolioId} />
 
-          <Card variant="elevated" className="p-0">
+          <Card variant="workspace" className="p-0">
             <details className="group">
               <summary className="cursor-pointer list-none border-b border-slate-200 px-4 py-3 dark:border-white/10">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
+                    <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-piq-text-primary">
                       Advanced Breakdown
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-piq-text-muted">
                       Expand for detailed scoring factors and underlying calculations.
                     </p>
                   </div>

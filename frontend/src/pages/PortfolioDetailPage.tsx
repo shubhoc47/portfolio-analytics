@@ -17,12 +17,13 @@ import { formatDate } from "../utils/format";
 type PortfolioDetailTab = "overview" | "holdings" | "analytics" | "intelligence";
 
 const heroGhostBtn =
-  "text-slate-200 hover:bg-white/10 hover:text-white dark:text-slate-200 dark:hover:bg-white/10";
+  "text-piq-text-muted hover:bg-white/10 hover:text-piq-text-primary";
 
-const fieldShell = "rounded-xl border border-white/[0.08] bg-black/25 px-4 py-3 backdrop-blur-sm dark:border-white/10 dark:bg-black/20";
+const fieldShell =
+  "rounded-xl border border-white/[0.06] bg-white/[0.04] px-4 py-3 backdrop-blur-sm";
 const fieldLabel =
-  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-slate-500";
-const fieldValue = "mt-1 text-sm font-medium text-slate-100";
+  "text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-piq-text-muted";
+const fieldValue = "mt-1 text-sm font-medium text-piq-text-primary";
 
 export function PortfolioDetailPage() {
   const { id } = useParams();
@@ -94,11 +95,6 @@ export function PortfolioDetailPage() {
 
   return (
     <div className="relative space-y-6 sm:space-y-8">
-      <div
-        className="pointer-events-none absolute -top-4 left-1/2 -z-0 h-48 w-[min(100%,40rem)] -translate-x-1/2 bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.1),transparent_65%),radial-gradient(ellipse_at_80%_30%,rgba(6,182,212,0.05),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.16),transparent_58%)]"
-        aria-hidden
-      />
-
       {isLoading ? (
         <div className="relative z-[1]">
           <LoadingState message="Loading portfolio details..." />
@@ -113,28 +109,25 @@ export function PortfolioDetailPage() {
       {!isLoading && !error && portfolio ? (
         <div className="relative z-[1] space-y-6 sm:space-y-7">
           <header className={workspacePageHeroClass}>
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="relative z-[1] flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0 space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-piq-accent">
                   Portfolio
                 </p>
-                <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                <h1 className="text-2xl font-semibold tracking-tight text-piq-text-primary sm:text-[32px] sm:leading-tight">
                   {portfolio.name}
                 </h1>
-                <p className="max-w-2xl text-sm leading-relaxed text-slate-300">
+                <p className="max-w-2xl text-base leading-[1.6] text-piq-text-muted">
                   Explore portfolio structure, risk, benchmark context, and intelligence signals.
                 </p>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-piq-text-muted">
                   Last updated: {formatDate(portfolio.updated_at)} · Created{" "}
                   {formatDate(portfolio.created_at)}
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-2 lg:shrink-0 lg:pt-1">
+              <div className="relative z-[1] flex flex-wrap items-center gap-2 lg:shrink-0 lg:pt-1">
                 <Link to={`/portfolios/${portfolio.id}/edit`} className="inline-flex">
-                  <Button
-                    variant="marketingSecondary"
-                    className="border-white/20 bg-white/10 text-slate-100 shadow-none hover:bg-white/[0.14] dark:border-white/20 dark:bg-white/10"
-                  >
+                  <Button variant="marketingSecondary" className="px-5 py-2.5">
                     Edit Portfolio
                   </Button>
                 </Link>
@@ -178,8 +171,9 @@ export function PortfolioDetailPage() {
 
           {activeTab === "overview" ? (
             <section className={`${workspaceNavyCardClass} p-6 sm:p-7`}>
-              <h2 className="text-lg font-semibold text-slate-50">Overview</h2>
-              <p className="mt-1 text-sm text-slate-400">
+              <div className="relative z-[1]">
+              <h2 className="text-lg font-semibold text-piq-text-primary">Overview</h2>
+              <p className="mt-1 text-base leading-[1.6] text-piq-text-muted">
                 Core profile details and governance metadata for this portfolio.
               </p>
               <dl className="mt-5 grid gap-3 text-sm md:grid-cols-2">
@@ -206,7 +200,7 @@ export function PortfolioDetailPage() {
                   </dd>
                 </div>
               </dl>
-              <div className="mt-6 border-t border-white/10 pt-5">
+              <div className="mt-6 border-t border-white/[0.06] pt-5">
                 <Button
                   variant="danger"
                   loading={isDeleting}
@@ -214,6 +208,7 @@ export function PortfolioDetailPage() {
                 >
                   Delete Portfolio
                 </Button>
+              </div>
               </div>
             </section>
           ) : null}

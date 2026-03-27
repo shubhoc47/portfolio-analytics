@@ -131,7 +131,7 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
   };
 
   return (
-    <Card variant="elevated" className="space-y-4">
+    <Card variant="workspace" className="space-y-4">
       <SectionHeader
         title="Holdings"
         description="Track positions and manage holdings with focused actions."
@@ -148,14 +148,14 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
       />
 
       {actionMessage ? (
-        <p className="rounded-xl border border-piq-profit/30 bg-piq-profit/5 px-3 py-2 text-sm text-emerald-800 dark:border-piq-profit/35 dark:bg-piq-profit/10 dark:text-piq-profit">
+        <p className="rounded-xl border border-piq-profit/35 bg-piq-profit/10 px-3 py-2 text-sm text-piq-profit">
           {actionMessage}
         </p>
       ) : null}
 
       {isCreateOpen ? (
-        <div className="rounded-xl border border-slate-200/80 bg-slate-50/90 p-4 dark:border-white/10 dark:bg-piq-canvas/80">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">
+        <div className="rounded-xl border border-white/15 bg-white/[0.04] p-4 backdrop-blur-sm">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-piq-accent">
             Add Holding
           </h3>
           <HoldingForm
@@ -198,8 +198,8 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
       ) : null}
 
       {editingHolding ? (
-        <div className="rounded-xl border border-slate-200/80 bg-slate-50/90 p-4 dark:border-white/10 dark:bg-piq-canvas/80">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-slate-600 dark:text-slate-300">
+        <div className="rounded-xl border border-white/15 bg-white/[0.04] p-4 backdrop-blur-sm">
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-piq-accent">
             Edit Holding: {editingHolding.ticker}
           </h3>
           <HoldingForm

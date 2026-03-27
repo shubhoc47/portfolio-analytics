@@ -90,7 +90,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Summaries"
           description="Generate daily briefs, weekly rollups, and portfolio-wide summary narratives."
@@ -108,7 +108,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
         />
       ) : null}
 
-      <Card variant="elevated">
+      <Card variant="workspace">
         <div className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
             <Input
@@ -152,7 +152,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
       </Card>
 
       {dailyResult ? (
-        <Card variant="elevated" className="p-0">
+        <Card variant="workspace" className="p-0">
           <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
               Daily Holding Briefs
@@ -186,7 +186,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
       ) : null}
 
       {weeklyResult ? (
-        <Card variant="elevated" className="p-0">
+        <Card variant="workspace" className="p-0">
           <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
               Weekly Holding Summaries
@@ -222,7 +222,7 @@ export function SummariesPanel({ portfolioId }: SummariesPanelProps) {
       ) : null}
 
       {portfolioResult ? (
-        <Card variant="elevated">
+        <Card variant="workspace">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
             Portfolio Summary
           </h4>

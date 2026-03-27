@@ -66,7 +66,7 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="News"
           description="Refresh and review locally stored portfolio news articles."
@@ -85,7 +85,7 @@ export function NewsPanel({ portfolioId }: NewsPanelProps) {
       </Card>
 
       {lastRefresh ? (
-        <Card variant="darkSurface">
+        <Card variant="workspace">
           <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
             Last Refresh Result
           </h4>

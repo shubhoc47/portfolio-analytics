@@ -44,7 +44,7 @@ export function HoldingsList({
 }: HoldingsListProps) {
   return (
     <TableShell>
-      <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-white/10">
+      <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-white/10 dark:text-piq-text-primary">
         <thead className={dataTableTheadClass}>
           <tr>
             <th className="px-4 py-3.5 text-left font-semibold">Ticker</th>
@@ -63,16 +63,16 @@ export function HoldingsList({
 
             return (
               <tr key={holding.id} className={dataTableRowHoverClass}>
-                <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-slate-100">
+                <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-piq-text-primary">
                   {holding.ticker}
                 </td>
-                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {formatQuantity(Number(holding.quantity))}
                 </td>
-                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {formatCurrency(Number(holding.average_cost), holding.currency)}
                 </td>
-                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-slate-300">
+                <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {marketValue === null
                     ? "Price unavailable"
                     : formatCurrency(marketValue, holding.currency)}

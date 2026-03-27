@@ -44,7 +44,7 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
 
   return (
     <section className="space-y-4">
-      <Card variant="elevated">
+      <Card variant="workspace">
         <SectionHeader
           title="Sentiment"
           description="Analyze local news and review portfolio and holding-level sentiment signals."
@@ -79,7 +79,7 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
 
       {!error && result && portfolioSummary ? (
         <div className="space-y-4">
-          <Card variant="darkSurface">
+          <Card variant="workspace">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-200">
               Portfolio Sentiment
             </h4>
@@ -113,7 +113,7 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
             </div>
           </Card>
 
-          <Card variant="elevated" className="overflow-hidden p-0">
+          <Card variant="workspace" className="overflow-hidden p-0">
             <div className="border-b border-slate-200 px-4 py-3 dark:border-white/10">
               <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
                 Holding Sentiment
@@ -161,7 +161,7 @@ export function SentimentPanel({ portfolioId }: SentimentPanelProps) {
             )}
           </Card>
 
-          <Card variant="elevated">
+          <Card variant="workspace">
             <details className="group">
               <summary className="cursor-pointer text-sm font-semibold text-slate-900 dark:text-slate-100">
                 Show Article-Level Sentiment ({result.article_sentiments.length})

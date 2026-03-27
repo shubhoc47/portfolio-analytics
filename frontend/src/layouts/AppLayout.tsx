@@ -32,20 +32,25 @@ const linkBrandDefault =
 const linkBrandLanding =
   "text-lg font-semibold tracking-tight text-piq-text-primary transition-colors hover:text-piq-accent";
 
+/** Landing + portfolio workspace: same gradient shell and dark UI tokens as marketing home */
+function isWorkspaceShellPath(pathname: string) {
+  return pathname === "/" || pathname.startsWith("/portfolios");
+}
+
 export function AppLayout({ children }: AppLayoutProps) {
   const { pathname } = useLocation();
-  const isLanding = pathname === "/";
+  const workspaceShell = isWorkspaceShellPath(pathname);
 
-  const shellClass = isLanding ? shellLanding : shellDefault;
-  const headerClass = isLanding ? headerLanding : headerDefault;
-  const navBase = isLanding ? navLinkLanding : navLinkBase;
-  const linkBrand = isLanding ? linkBrandLanding : linkBrandDefault;
+  const shellClass = workspaceShell ? shellLanding : shellDefault;
+  const headerClass = workspaceShell ? headerLanding : headerDefault;
+  const navBase = workspaceShell ? navLinkLanding : navLinkBase;
+  const linkBrand = workspaceShell ? linkBrandLanding : linkBrandDefault;
 
-  const mainContent = isLanding ? <div className="dark">{children}</div> : children;
+  const mainContent = workspaceShell ? <div className="dark">{children}</div> : children;
 
   return (
     <div className={shellClass}>
-      {isLanding ? (
+      {workspaceShell ? (
         <>
           <div
             className="pointer-events-none absolute inset-x-0 top-0 h-[min(70vh,520px)] bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(99,102,241,0.18),transparent_55%)]"

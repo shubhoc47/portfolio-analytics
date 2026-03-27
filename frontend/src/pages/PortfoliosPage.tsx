@@ -8,7 +8,6 @@ import { LoadingState } from "../components/common/LoadingState";
 import { Button } from "../components/ui/Button";
 import { usePortfolios } from "../features/portfolios/hooks/usePortfolios";
 import { PortfolioCard } from "../features/portfolios/components/PortfolioCard";
-import { workspacePageHeroClass } from "../theme/workspaceSurfaces";
 
 export function PortfoliosPage() {
   const { portfolios, isLoading, error, reload } = usePortfolios();
@@ -26,34 +25,29 @@ export function PortfoliosPage() {
   };
 
   return (
-    <div className="relative space-y-6 sm:space-y-8">
-      <div
-        className="pointer-events-none absolute -top-4 left-1/2 -z-0 h-56 w-[min(100%,42rem)] -translate-x-1/2 bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.12),transparent_65%),radial-gradient(ellipse_at_80%_20%,rgba(6,182,212,0.06),transparent_50%)] dark:bg-[radial-gradient(ellipse_at_50%_0%,rgba(99,102,241,0.18),transparent_60%),radial-gradient(ellipse_at_20%_10%,rgba(6,182,212,0.08),transparent_48%)]"
-        aria-hidden
-      />
-
-      <header className={`${workspacePageHeroClass} relative z-[1]`}>
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-          <div className="space-y-2 sm:space-y-2.5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-piq-accent">
-              Workspace
-            </p>
-            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl sm:leading-tight">
-              Portfolios
-            </h1>
-            <p className="max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-[0.9375rem]">
-              Manage portfolio entities, review ownership metadata, and open each portfolio workspace.
-            </p>
-          </div>
-          <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
-            <Link to="/portfolios/new" className="inline-flex w-full sm:w-auto">
-              <Button
-                variant="marketingPrimary"
-                className="w-full justify-center px-5 py-2.5 shadow-[0_14px_28px_-14px_rgba(99,102,241,0.65)] sm:w-auto"
-              >
-                Create Portfolio
-              </Button>
-            </Link>
+    <div className="relative space-y-10 sm:space-y-12">
+      <header className="relative z-[1] space-y-6">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-piq-accent">Workspace</p>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+            <div className="mt-1 max-w-2xl space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight text-piq-text-primary sm:text-[32px] sm:leading-tight">
+                Portfolios
+              </h1>
+              <p className="text-base leading-[1.6] text-piq-text-muted">
+                Manage portfolio entities, review ownership metadata, and open each portfolio workspace.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
+              <Link to="/portfolios/new" className="inline-flex w-full sm:w-auto">
+                <Button
+                  variant="marketingPrimary"
+                  className="w-full justify-center px-5 py-2.5 shadow-[0_14px_28px_-12px_rgba(99,102,241,0.55)] sm:w-auto"
+                >
+                  Create Portfolio
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -104,13 +98,9 @@ export function PortfoliosPage() {
       ) : null}
 
       {!isLoading && !error && portfolios.length > 0 ? (
-        <div className="relative z-[1] grid gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
+        <div className="relative z-[1] grid gap-6 sm:grid-cols-2 sm:gap-7 xl:grid-cols-3 xl:gap-8">
           {portfolios.map((portfolio) => (
-            <PortfolioCard
-              key={portfolio.id}
-              portfolio={portfolio}
-              onDelete={handleDelete}
-            />
+            <PortfolioCard key={portfolio.id} portfolio={portfolio} onDelete={handleDelete} />
           ))}
         </div>
       ) : null}
