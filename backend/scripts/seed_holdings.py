@@ -1,6 +1,10 @@
 """
 Seed sample holdings for local development.
 
+Note: For a full wipe + canonical demo data, use `scripts/reseed_demo_data.py` or
+`POST /api/v1/dev/reseed`. This script matches legacy portfolio names from
+`seed_portfolios.py`, not the API seed dataset.
+
 Usage:
     cd backend
     python scripts/seed_holdings.py

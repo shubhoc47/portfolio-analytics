@@ -264,20 +264,43 @@ alembic upgrade head --sql
 
 ## Seed Sample Data (Local Development)
 
-To insert starter portfolios for UI testing:
+### Canonical demo data (recommended)
+
+The API and scripts use **`app/data/demo_seed_data.py`**: five portfolios with 10–15 holdings each (sectors, ETFs vs equities, cost basis and mock prices).
+
+**Full reset and reseed** (deletes **all** portfolios and related rows, then inserts fresh demo data):
+
+- **CLI** (no server required):
+
+```bash
+cd backend
+python scripts/reseed_demo_data.py
+```
+
+- **HTTP** (with the API running):
+
+`POST /api/v1/dev/reseed`
+
+**Insert only when the DB has no portfolios** (first-time empty DB):
+
+`POST /api/v1/dev/seed`
+
+If any portfolio already exists, `/dev/seed` returns a skip message; use `/dev/reseed` or `reseed_demo_data.py` for a full reset. On a totally empty database, `reseed_demo_data.py` is also safe (counts are zero, then inserts the five portfolios).
+
+**Safety**
+
+- `seed` and `reseed` are **disabled** when `APP_ENV=production`.
+- Reseed removes portfolio rows and CASCADE-dependent data (`holding`, `alert`, `ai_summary`, `market_snapshot`, etc.). It also deletes `news_article` rows still linked to a holding and `analyst_rating` / `job_run` rows tied to holdings or portfolios so nothing stale remains.
+- **`benchmark_data` is not deleted** (not scoped to a portfolio; keeps benchmark charts useful).
+
+### Legacy idempotent scripts
+
+Older standalone scripts use a **different** portfolio name set than the canonical demo data:
 
 ```bash
 cd backend
 python scripts/seed_portfolios.py
-```
-
-This seeder is idempotent by portfolio name, so running it multiple times will not duplicate the same sample records.
-
-To insert starter holdings for the sample portfolios:
-
-```bash
-cd backend
 python scripts/seed_holdings.py
 ```
 
-This seeder is idempotent by (`portfolio_id`, `ticker`) and will skip existing sample holdings.
+`seed_portfolios.py` is idempotent by portfolio name; `seed_holdings.py` by (`portfolio_id`, `ticker`). Prefer `reseed_demo_data.py` for a clean, repeatable demo dataset aligned with the API.

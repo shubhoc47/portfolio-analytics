@@ -9,7 +9,7 @@ Important:
 from fastapi import APIRouter
 
 from app.api.deps import SeedServiceDep
-from app.schemas.seed import SeedResultRead
+from app.schemas.seed import ReseedResultRead, SeedResultRead
 
 router = APIRouter()
 
@@ -18,4 +18,10 @@ router = APIRouter()
 async def seed_demo_data(service: SeedServiceDep) -> SeedResultRead:
     """Create demo portfolios and holdings for local testing."""
     return await service.seed_demo_data()
+
+
+@router.post("/reseed", response_model=ReseedResultRead)
+async def reseed_development_demo(service: SeedServiceDep) -> ReseedResultRead:
+    """Clear all portfolios and related demo rows, then insert fresh canonical demo data."""
+    return await service.reseed_demo_data()
 

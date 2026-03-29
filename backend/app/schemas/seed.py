@@ -12,3 +12,15 @@ class SeedResultRead(BaseModel):
     portfolios_created: int
     holdings_created: int
 
+
+class ReseedResultRead(BaseModel):
+    """Response after clearing portfolio-domain rows and inserting fresh demo data."""
+
+    message: str
+    portfolios_removed: int
+    holdings_removed: int
+    news_articles_removed: int
+    analyst_ratings_removed: int
+    job_runs_removed: int
+    portfolios_created: int
+    holdings_created: int

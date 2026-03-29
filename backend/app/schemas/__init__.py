@@ -33,7 +33,7 @@ from .ratings import (
     PortfolioRatingsListResponse,
     RatingsRefreshResponse,
 )
-from .seed import SeedResultRead
+from .seed import ReseedResultRead, SeedResultRead
 
 __all__ = [
     "PortfolioCreate",
@@ -66,4 +66,5 @@ __all__ = [
     "WeeklyHoldingSummariesResponse",
     "PortfolioSummaryResponse",
     "SeedResultRead",
+    "ReseedResultRead",
 ]

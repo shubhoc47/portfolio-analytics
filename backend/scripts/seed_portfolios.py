@@ -1,6 +1,10 @@
 """
 Seed sample portfolios for local development.
 
+Note: For a full wipe + canonical demo data (5 portfolios, 10–15 holdings each), use
+`scripts/reseed_demo_data.py` or `POST /api/v1/dev/reseed` instead. This script uses
+a separate, legacy sample list and only inserts missing portfolio names.
+
 Usage:
     cd backend
     python scripts/seed_portfolios.py
