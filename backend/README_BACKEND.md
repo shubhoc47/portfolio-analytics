@@ -266,7 +266,7 @@ alembic upgrade head --sql
 
 ### Canonical demo data (recommended)
 
-The API and scripts use **`app/data/demo_seed_data.py`**: five portfolios with 10–15 holdings each (sectors, ETFs vs equities, cost basis and mock prices).
+The API and scripts use **`app/data/demo_seed_data.py`**: three US-focused demo portfolios (US tech growth stocks, US dividend stocks, and five defensive US-listed ETFs) with 5–12 equity positions on the first two and five ETF positions on the third (sectors, ETFs vs equities, cost basis and mock prices).
 
 **Full reset and reseed** (deletes **all** portfolios and related rows, then inserts fresh demo data):
 
@@ -285,7 +285,7 @@ python scripts/reseed_demo_data.py
 
 `POST /api/v1/dev/seed`
 
-If any portfolio already exists, `/dev/seed` returns a skip message; use `/dev/reseed` or `reseed_demo_data.py` for a full reset. On a totally empty database, `reseed_demo_data.py` is also safe (counts are zero, then inserts the five portfolios).
+If any portfolio already exists, `/dev/seed` returns a skip message; use `/dev/reseed` or `reseed_demo_data.py` for a full reset. On a totally empty database, `reseed_demo_data.py` is also safe (counts are zero, then inserts the three portfolios).
 
 **Safety**
 

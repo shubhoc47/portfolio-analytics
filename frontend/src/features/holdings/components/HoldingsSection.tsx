@@ -12,6 +12,7 @@ import { LoadingState } from "../../../components/common/LoadingState";
 import { SectionHeader } from "../../../components/common/SectionHeader";
 import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
+import { Modal } from "../../../components/ui/Modal";
 import type { Holding, HoldingUpdateInput } from "../types";
 import { HoldingForm, type HoldingFormSubmitPayload } from "./HoldingForm";
 import { HoldingsList } from "./HoldingsList";
@@ -79,6 +80,11 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
     setEditingHolding(holding);
     setActionMessage(null);
   };
+
+  const handleCloseEditModal = useCallback(() => {
+    setEditingHolding(null);
+    setUpdateError(null);
+  }, []);
 
   const handleUpdate = async (payload: HoldingFormSubmitPayload) => {
     if (!editingHolding) {
@@ -197,12 +203,14 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
         />
       ) : null}
 
-      {editingHolding ? (
-        <div className="rounded-xl border border-white/15 bg-white/[0.04] p-4 backdrop-blur-sm">
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-piq-accent">
-            Edit Holding: {editingHolding.ticker}
-          </h3>
+      <Modal
+        open={editingHolding !== null}
+        onClose={handleCloseEditModal}
+        title={editingHolding ? `Edit Holding: ${editingHolding.ticker}` : "Edit Holding"}
+      >
+        {editingHolding ? (
           <HoldingForm
+            key={editingHolding.id}
             initialValues={{
               ticker: editingHolding.ticker,
               quantity: String(editingHolding.quantity),
@@ -212,10 +220,10 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
             isSubmitting={isUpdating}
             submitError={updateError}
             onSubmit={handleUpdate}
-            onCancel={() => setEditingHolding(null)}
+            onCancel={handleCloseEditModal}
           />
-        </div>
-      ) : null}
+        ) : null}
+      </Modal>
     </Card>
   );
 }
