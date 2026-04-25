@@ -121,8 +121,12 @@ export function PortfolioDetailPage() {
                   Explore portfolio structure, risk, benchmark context, and intelligence signals.
                 </p>
                 <p className="text-xs text-piq-text-muted">
-                  Last updated: {formatDate(portfolio.updated_at)} · Created{" "}
+                  Portfolio last edited: {formatDate(portfolio.updated_at)} · Created{" "}
                   {formatDate(portfolio.created_at)}
+                </p>
+                <p className="text-xs text-piq-text-muted/80">
+                  Market values on the Holdings tab use live prices after &quot;Refresh prices&quot;; they
+                  are not tied to the portfolio edited time above.
                 </p>
               </div>
               <div className="relative z-[1] flex flex-wrap items-center gap-2 lg:shrink-0 lg:pt-1">

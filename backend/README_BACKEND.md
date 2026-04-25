@@ -72,6 +72,55 @@ Notes:
 - Holding return formula is: `((quantity * current_price) - (quantity * average_cost)) / (quantity * average_cost) * 100`.
 - If a holding has no stored/current mock price, service falls back to `average_cost` (neutral return) and reports this in notes.
 
+## Market data (Finnhub quotes)
+
+Endpoints under `/api/v1/market-data`:
+
+- `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — for that portfolio’s distinct tickers, resolves quotes (Finnhub **or** short-lived **in-memory cache**), updates `Holding.current_price` on success.
+- `POST /api/v1/market-data/refresh-all-prices` — one **global** distinct ticker list across **all** holdings; each ticker is resolved at most once per request (cache hits do not call Finnhub); updates every matching holding row.
+- `GET /api/v1/market-data/quote/{ticker}` — one live quote (no DB write). Uses the same cache when enabled. Returns `503` if `FINNHUB_API_KEY` is unset.
+
+Configuration (see `.env.example`):
+
+- `FINNHUB_API_KEY` — optional in local dev; server-only.
+- `MARKET_DATA_CACHE_TTL_SECONDS` — default `300`; set to `0` to disable in-memory caching (every resolution calls Finnhub).
+
+Response fields (single-portfolio refresh):
+
+- `quote_source` on each successful quote: `finnhub` | `cache` | `mock` (mock only if a mock provider is wired in tests).
+- `cache_hit_count` / `provider_call_count` — how many tickers were served from cache vs how many times the underlying provider was invoked.
+
+In-memory cache (important):
+
+- Lives **in the API process**; cleared on **restart**; **not** shared across multiple Uvicorn/Gunicorn workers or hosts.
+- Failed quotes are **not** cached.
+- Suitable for **development / single-instance demos**. Production should move to Redis or a DB-backed cache if you scale out.
+
+Behavior:
+
+- If the API key is missing, portfolio refresh returns `200` with `skipped_count` and a note; refresh-all returns zeros and a note; no Finnhub calls.
+- After a **real** Finnhub (or provider) call, a short delay runs before the next provider call (cache hits skip that delay).
+- HTTP `429` / network errors are per-ticker; one failure does not abort the whole refresh.
+- Invalid or zero Finnhub field `c` is treated as a failed quote for that ticker only.
+
+Analytics vs benchmark:
+
+- **Benchmark** comparison uses `Holding.current_price` when set, otherwise mock prices, then `average_cost`.
+- **Analytics** sector weights today use **cost basis** (`quantity * average_cost`); refreshing live prices improves benchmark returns and stored holdings, not those analytics formulas.
+
+Limitations: Finnhub free tier enforces low request rates; quote data can be delayed; outside market hours `c` is often `0`, so those tickers are skipped until a valid price is returned. This path is suitable for learning and demos, not a production market-data stack.
+
+### Swagger manual test
+
+1. Set `FINNHUB_API_KEY` in `backend/.env`, restart `uvicorn`.
+2. `POST /api/v1/dev/seed` (development only) or ensure portfolios have holdings (including the same ticker in two portfolios if you want to test deduplication).
+3. `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — check `updated_quotes`, `quote_source`, `cache_hit_count`, `provider_call_count`, `failures`.
+4. Repeat step 3 for a **second** portfolio that shares a ticker — second call should show **cache hits** for that ticker if within `MARKET_DATA_CACHE_TTL_SECONDS`.
+5. `POST /api/v1/market-data/refresh-all-prices` — all portfolios updated; each unique ticker should incur at most one provider call (rest cache hits) until TTL expires.
+6. Call refresh-all again **immediately** — expect `provider_call_count: 0` and `cache_hit_count` equal to the number of distinct tickers (if all succeeded on the first run).
+7. Optional: `GET /api/v1/market-data/quote/AAPL` — `current_price`, `quote_source`.
+8. `GET /api/v1/benchmark/portfolios/{portfolio_id}/compare` — `price_source` = `holding_current_price` where applicable.
+
 ## News Ingestion API (Part 11A)
 
 Portfolio-aware news ingestion endpoints are available under `/api/v1/news`:
@@ -207,9 +256,11 @@ Key settings:
 - `APP_ENV` – environment name (e.g. `development`, `production`).
 - `DEBUG` – enables/disables debug mode in FastAPI.
 - `API_V1_PREFIX` – prefix for versioned API routes (default `/api/v1`).
-- `ALLOWED_ORIGINS` – CORS origins (comma-separated or JSON list).
+- `ALLOWED_ORIGINS` – CORS origins (comma-separated or JSON list). Defaults include `http://localhost:5173` (Vite) so the React app can call the API; if you override this in `.env`, keep your frontend origin in the list or the browser will show a generic “cannot reach backend” error on `fetch`.
 - `LOG_LEVEL` – logging level (e.g. `DEBUG`, `INFO`).
 - `DATABASE_URL` – PostgreSQL connection string (async SQLAlchemy).
+- `FINNHUB_API_KEY` – optional; enables live `/quote` fetches for market-data refresh endpoints.
+- `MARKET_DATA_CACHE_TTL_SECONDS` – in-memory quote cache TTL (`0` disables); not shared across workers.
 
 ## Database Migrations
 

@@ -132,6 +132,25 @@
 - [x] Add ratings listing endpoint `GET /api/v1/ratings/portfolios/{portfolio_id}`
 - [x] Handle ratings edge cases (portfolio not found, empty holdings, empty provider results, repeated refresh)
 
+## Part 12: Finnhub market prices
+
+- [x] Add optional `FINNHUB_API_KEY` to settings and `.env.example`
+- [x] Add `market_data` provider package (`base`, `finnhub`, `mock`) with async `get_quote` and structured per-ticker results
+- [x] Add `MarketDataService.refresh_portfolio_prices` (dedupe tickers, sequential calls, DB updates, summary response)
+- [x] Add `HoldingRepository.apply_current_prices_for_portfolio`
+- [x] Add `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` and `GET /api/v1/market-data/quote/{ticker}`
+- [x] Wire router and `MarketDataServiceDep` in `deps.py`
+- [x] Add tests with dependency overrides; document Swagger flow in `README_BACKEND.md`
+
+## Part 12B: Quote cache and refresh-all
+
+- [x] Add in-memory `QuoteCache` with configurable `MARKET_DATA_CACHE_TTL_SECONDS` (`0` disables)
+- [x] Wire cache singleton in `deps.py`; single-portfolio refresh, refresh-all, and GET quote use cache
+- [x] Extend refresh responses with `quote_source`, `cache_hit_count`, `provider_call_count`
+- [x] Add `HoldingRepository.list_all` and `apply_current_prices_globally`
+- [x] Add `POST /api/v1/market-data/refresh-all-prices` and `MarketDataService.refresh_all_prices`
+- [x] Tests and README / `.env.example` updates (cache limitations documented)
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

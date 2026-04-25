@@ -6,6 +6,7 @@ import {
   listHoldingsByPortfolio,
   updateHolding,
 } from "../../../api/holdings";
+import { refreshPortfolioPrices } from "../../../api/marketData";
 import { EmptyState } from "../../../components/common/EmptyState";
 import { ErrorState } from "../../../components/common/ErrorState";
 import { LoadingState } from "../../../components/common/LoadingState";
@@ -14,8 +15,25 @@ import { Button } from "../../../components/ui/Button";
 import { Card } from "../../../components/ui/Card";
 import { Modal } from "../../../components/ui/Modal";
 import type { Holding, HoldingUpdateInput } from "../types";
+import { formatDate } from "../../../utils/format";
 import { HoldingForm, type HoldingFormSubmitPayload } from "./HoldingForm";
 import { HoldingsList } from "./HoldingsList";
+
+function latestQuoteFetchedAt(fetchedAtIso: string[]): string | null {
+  if (!fetchedAtIso.length) {
+    return null;
+  }
+  let best = fetchedAtIso[0];
+  let bestMs = new Date(best).getTime();
+  for (const iso of fetchedAtIso.slice(1)) {
+    const ms = new Date(iso).getTime();
+    if (!Number.isNaN(ms) && ms > bestMs) {
+      best = iso;
+      bestMs = ms;
+    }
+  }
+  return Number.isNaN(bestMs) ? null : best;
+}
 
 interface HoldingsSectionProps {
   portfolioId: number;
@@ -37,9 +55,13 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
   const [deletingHoldingId, setDeletingHoldingId] = useState<number | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isRefreshingPrices, setIsRefreshingPrices] = useState(false);
 
-  const loadHoldings = useCallback(async () => {
-    setIsLoading(true);
+  const loadHoldings = useCallback(async (options?: { silent?: boolean }) => {
+    const silent = options?.silent === true;
+    if (!silent) {
+      setIsLoading(true);
+    }
     setError(null);
     try {
       const data = await listHoldingsByPortfolio(portfolioId);
@@ -48,7 +70,9 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
       const message = err instanceof Error ? err.message : "Failed to load holdings.";
       setError(message);
     } finally {
-      setIsLoading(false);
+      if (!silent) {
+        setIsLoading(false);
+      }
     }
   }, [portfolioId]);
 
@@ -114,6 +138,47 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
     }
   };
 
+  const handleRefreshPrices = async () => {
+    setIsRefreshingPrices(true);
+    setActionMessage(null);
+    setError(null);
+    try {
+      const result = await refreshPortfolioPrices(portfolioId);
+      const noteText = result.notes?.length ? result.notes.join(" ") : "";
+      if (result.skipped_count > 0 && noteText) {
+        setActionMessage(noteText);
+      } else if (result.updated_count > 0) {
+        const failHint =
+          result.failed_count > 0
+            ? ` ${result.failed_count} ticker(s) could not be updated.`
+            : "";
+        const latestIso = latestQuoteFetchedAt(
+          result.updated_quotes.map((q) => q.fetched_at),
+        );
+        const asOf =
+          latestIso !== null
+            ? ` Finnhub quote time: ${formatDate(latestIso)}.`
+            : "";
+        setActionMessage(
+          `Live prices updated for ${result.updated_count} holding(s).${failHint}${asOf}`,
+        );
+      } else if (result.failed_count > 0) {
+        setActionMessage(
+          `No prices saved. ${result.failed_count} ticker(s) failed — check failures in API or Finnhub.`,
+        );
+      } else {
+        setActionMessage(noteText || "Holdings reloaded.");
+      }
+      await loadHoldings({ silent: true });
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to refresh live prices.";
+      setError(message);
+    } finally {
+      setIsRefreshingPrices(false);
+    }
+  };
+
   const handleDelete = async (holding: Holding) => {
     const shouldDelete = window.confirm(
       `Delete holding "${holding.ticker}"? This action cannot be undone.`,
@@ -140,11 +205,15 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
     <Card variant="workspace" className="space-y-4">
       <SectionHeader
         title="Holdings"
-        description="Track positions and manage holdings with focused actions."
+        description="Refresh prices fetches live quotes (Finnhub) and reloads this table. Estimated market value uses quantity × current price when a price is stored."
         actions={
           <>
-            <Button variant="ghost" onClick={() => void loadHoldings()}>
-              Refresh
+            <Button
+              variant="ghost"
+              loading={isRefreshingPrices}
+              onClick={() => void handleRefreshPrices()}
+            >
+              Refresh prices
             </Button>
             <Button variant="secondary" onClick={() => setIsCreateOpen((prev) => !prev)}>
               {isCreateOpen ? "Close Add Form" : "Add Holding"}

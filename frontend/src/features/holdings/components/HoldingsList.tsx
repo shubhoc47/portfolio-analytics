@@ -50,6 +50,12 @@ export function HoldingsList({
             <th className="px-4 py-3.5 text-left font-semibold">Ticker</th>
             <th className="px-4 py-3.5 text-right font-semibold">Quantity</th>
             <th className="px-4 py-3.5 text-right font-semibold">Average Cost</th>
+            <th
+              className="px-4 py-3.5 text-right font-semibold"
+              title="Per share from Finnhub after Refresh prices, when available"
+            >
+              Current price
+            </th>
             <th className="px-4 py-3.5 text-right font-semibold">Estimated Market Value</th>
             <th className="px-4 py-3.5 text-right font-semibold">Actions</th>
           </tr>
@@ -71,6 +77,20 @@ export function HoldingsList({
                 </td>
                 <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {formatCurrency(Number(holding.average_cost), holding.currency)}
+                </td>
+                <td
+                  className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted"
+                  title={
+                    holding.current_price === null
+                      ? "Run Refresh prices (with Finnhub configured) to load live price per share"
+                      : undefined
+                  }
+                >
+                  {holding.current_price === null ? (
+                    <span className="text-piq-text-muted/70">—</span>
+                  ) : (
+                    formatCurrency(Number(holding.current_price), holding.currency)
+                  )}
                 </td>
                 <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {marketValue === null

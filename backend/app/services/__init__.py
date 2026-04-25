@@ -10,6 +10,7 @@ from .ratings_service import RatingsService
 from .seed_service import SeedService
 from .sentiment_service import SentimentService
 from .summary_service import SummaryService
+from .market_data_service import MarketDataService
 
 __all__ = [
     "PortfolioService",
@@ -22,4 +23,5 @@ __all__ = [
     "RatingsService",
     "SentimentService",
     "SummaryService",
+    "MarketDataService",
 ]

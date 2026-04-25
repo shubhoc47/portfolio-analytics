@@ -9,6 +9,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import Settings, get_settings
 from app.db.session import get_db
 from app.providers.alert.base import AlertDetector
 from app.providers.alert.rule_based import RuleBasedAlertDetector
@@ -24,8 +25,11 @@ from app.services.alert_service import AlertService
 from app.services.analytics_service import AnalyticsService
 from app.providers.benchmark.base import BenchmarkProvider
 from app.providers.benchmark.mock import MockBenchmarkProvider
+from app.providers.market_data.finnhub import FinnhubMarketDataProvider
 from app.services.benchmark_service import BenchmarkService
 from app.services.holding_service import HoldingService
+from app.services.market_data_service import MarketDataService
+from app.services.quote_cache import QuoteCache
 from app.services.news_service import NewsService
 from app.services.portfolio_service import PortfolioService
 from app.services.ratings_service import RatingsService
@@ -35,6 +39,8 @@ from app.services.summary_service import SummaryService
 
 
 DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
+
+SettingsDep = Annotated[Settings, Depends(get_settings)]
 
 
 async def get_portfolio_service(db: DBSessionDep) -> PortfolioService:
@@ -181,4 +187,38 @@ async def get_alert_service(
 
 
 AlertServiceDep = Annotated[AlertService, Depends(get_alert_service)]
+
+
+def get_market_data_provider(settings: SettingsDep) -> FinnhubMarketDataProvider:
+    """Finnhub-backed quote client (works with optional empty key; service skips HTTP when unset)."""
+    return FinnhubMarketDataProvider(api_key=settings.FINNHUB_API_KEY)
+
+
+MarketDataProviderDep = Annotated[FinnhubMarketDataProvider, Depends(get_market_data_provider)]
+
+_quote_cache_singleton: QuoteCache | None = None
+
+
+def get_quote_cache(settings: SettingsDep) -> QuoteCache:
+    """One QuoteCache per process (TTL fixed at first request in this process)."""
+    global _quote_cache_singleton
+    if _quote_cache_singleton is None:
+        _quote_cache_singleton = QuoteCache(ttl_seconds=float(settings.MARKET_DATA_CACHE_TTL_SECONDS))
+    return _quote_cache_singleton
+
+
+QuoteCacheDep = Annotated[QuoteCache, Depends(get_quote_cache)]
+
+
+async def get_market_data_service(
+    db: DBSessionDep,
+    settings: SettingsDep,
+    market_data_provider: MarketDataProviderDep,
+    quote_cache: QuoteCacheDep,
+) -> MarketDataService:
+    """Dependency that provides market data refresh and quote lookups."""
+    return MarketDataService(db, market_data_provider, settings, quote_cache)
+
+
+MarketDataServiceDep = Annotated[MarketDataService, Depends(get_market_data_service)]
 

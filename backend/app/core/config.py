@@ -32,7 +32,12 @@ class Settings(BaseSettings):
     # Configure as JSON list in .env:
     # ALLOWED_ORIGINS='["http://localhost:3000","http://localhost:5173","http://localhost:8000"]'
     ALLOWED_ORIGINS: List[str] = Field(
-        default_factory=lambda: ["http://localhost:3000", "http://localhost:8000"],
+        default_factory=lambda: [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:8000",
+        ],
         description="List of allowed CORS origins",
     )
 
@@ -44,6 +49,18 @@ class Settings(BaseSettings):
     DATABASE_URL: str = Field(
         default="postgresql+asyncpg://postgres:postgres@localhost:5432/portfolioiq",
         description="Database connection URL (async SQLAlchemy)",
+    )
+
+    # Finnhub (optional — live quotes; benchmark uses Holding.current_price when set)
+    FINNHUB_API_KEY: str | None = Field(
+        default=None,
+        description="Finnhub API token for /quote (optional in local dev)",
+    )
+
+    MARKET_DATA_CACHE_TTL_SECONDS: int = Field(
+        default=300,
+        ge=0,
+        description="In-memory quote cache TTL in seconds; 0 disables caching",
     )
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
