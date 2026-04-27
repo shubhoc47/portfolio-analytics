@@ -28,6 +28,18 @@ class Settings(BaseSettings):
     # API
     API_V1_PREFIX: str = Field(default="/api/v1", description="Base prefix for v1 API routes")
 
+    # Authentication
+    SECRET_KEY: str = Field(
+        default="change-me-in-production",
+        description="Secret key used to sign JWT access tokens",
+    )
+    ALGORITHM: str = Field(default="HS256", description="JWT signing algorithm")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+        default=60,
+        ge=1,
+        description="Access token lifetime in minutes",
+    )
+
     # CORS
     # Configure as JSON list in .env:
     # ALLOWED_ORIGINS='["http://localhost:3000","http://localhost:5173","http://localhost:8000"]'

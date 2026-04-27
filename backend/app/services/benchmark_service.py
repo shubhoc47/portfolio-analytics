@@ -30,8 +30,8 @@ class BenchmarkService:
         self.portfolio_repository = PortfolioRepository(db)
         self.holding_repository = HoldingRepository(db)
 
-    async def compare_portfolio(self, portfolio_id: int) -> BenchmarkComparisonRead:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def compare_portfolio(self, portfolio_id: int, user_id: int) -> BenchmarkComparisonRead:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

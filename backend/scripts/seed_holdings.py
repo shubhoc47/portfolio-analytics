@@ -22,6 +22,7 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 from app.db.session import AsyncSessionLocal
 from app.models.holding import Holding
 from app.models.portfolio import Portfolio
+from app.repositories.user import UserRepository
 
 
 SAMPLE_HOLDINGS_BY_PORTFOLIO = {
@@ -115,8 +116,14 @@ async def seed_holdings() -> None:
     """Insert sample holdings if they do not already exist."""
 
     async with AsyncSessionLocal() as db:
+        user_repository = UserRepository(db)
+        user = await user_repository.get_by_email("demo@portfolioiq.local")
+        if user is None:
+            print("Missing demo user. Run scripts/seed_portfolios.py first.")
+            return
+
         portfolio_rows = (
-            await db.execute(select(Portfolio.id, Portfolio.name))
+            await db.execute(select(Portfolio.id, Portfolio.name).where(Portfolio.user_id == user.id))
         ).all()
         portfolio_map = {name: portfolio_id for portfolio_id, name in portfolio_rows}
 

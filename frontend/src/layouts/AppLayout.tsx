@@ -1,5 +1,8 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
+
+import { useAuth } from "../auth/AuthProvider";
+import { Button } from "../components/ui/Button";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -34,11 +37,18 @@ const linkBrandLanding =
 
 /** Landing + portfolio workspace: same gradient shell and dark UI tokens as marketing home */
 function isWorkspaceShellPath(pathname: string) {
-  return pathname === "/" || pathname.startsWith("/portfolios");
+  return (
+    pathname === "/" ||
+    pathname.startsWith("/portfolios") ||
+    pathname === "/login" ||
+    pathname === "/signup"
+  );
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout, user } = useAuth();
   const workspaceShell = isWorkspaceShellPath(pathname);
 
   const shellClass = workspaceShell ? shellLanding : shellDefault;
@@ -47,6 +57,11 @@ export function AppLayout({ children }: AppLayoutProps) {
   const linkBrand = workspaceShell ? linkBrandLanding : linkBrandDefault;
 
   const mainContent = workspaceShell ? <div className="dark">{children}</div> : children;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className={shellClass}>
@@ -84,6 +99,28 @@ export function AppLayout({ children }: AppLayoutProps) {
                 Portfolios
               </NavLink>
             </nav>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="hidden max-w-[180px] truncate text-sm text-piq-text-muted sm:inline">
+                  {user?.email}
+                </span>
+                <Button variant="marketingSecondary" className="px-3 py-1.5" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link to="/login" className={navBase}>
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="rounded-lg border border-piq-accent/35 bg-gradient-primary px-3 py-1.5 text-sm font-medium text-white shadow-soft hover:opacity-95"
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </header>

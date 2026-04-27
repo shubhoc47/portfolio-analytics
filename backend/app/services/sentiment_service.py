@@ -40,8 +40,8 @@ class SentimentService:
         self.news_repository = NewsRepository(db)
         self.sentiment_repository = SentimentRepository(db)
 
-    async def analyze_portfolio_sentiment(self, portfolio_id: int) -> SentimentAnalyzeResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def analyze_portfolio_sentiment(self, portfolio_id: int, user_id: int) -> SentimentAnalyzeResponse:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

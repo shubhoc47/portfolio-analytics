@@ -1,3 +1,5 @@
+import { getStoredToken } from "../auth/authStorage";
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:8000";
 
@@ -49,10 +51,12 @@ export async function apiRequest<T>(
 
   let response: Response;
   try {
+    const token = getStoredToken();
     response = await fetch(`${API_BASE_URL}${path}`, {
       ...rest,
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
       body: jsonBody === undefined ? undefined : JSON.stringify(jsonBody),

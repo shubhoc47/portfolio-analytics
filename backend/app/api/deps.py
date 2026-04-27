@@ -6,11 +6,14 @@ Endpoints should import dependencies from here to keep imports consistent and si
 
 from typing import Annotated
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError, jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import Settings, get_settings
 from app.db.session import get_db
+from app.models.user import User
 from app.providers.alert.base import AlertDetector
 from app.providers.alert.rule_based import RuleBasedAlertDetector
 from app.providers.news.base import NewsProvider
@@ -23,6 +26,7 @@ from app.providers.summary.base import SummaryProvider
 from app.providers.summary.template import TemplateSummaryProvider
 from app.services.alert_service import AlertService
 from app.services.analytics_service import AnalyticsService
+from app.services.auth_service import AuthService
 from app.providers.benchmark.base import BenchmarkProvider
 from app.providers.benchmark.mock import MockBenchmarkProvider
 from app.providers.market_data.finnhub import FinnhubMarketDataProvider
@@ -36,11 +40,67 @@ from app.services.ratings_service import RatingsService
 from app.services.seed_service import SeedService
 from app.services.sentiment_service import SentimentService
 from app.services.summary_service import SummaryService
+from app.schemas.auth import TokenPayload
 
 
 DBSessionDep = Annotated[AsyncSession, Depends(get_db)]
 
 SettingsDep = Annotated[Settings, Depends(get_settings)]
+
+bearer_scheme = HTTPBearer(auto_error=False)
+
+
+async def get_auth_service(db: DBSessionDep) -> AuthService:
+    """Dependency that provides an auth service instance per request."""
+    return AuthService(db)
+
+
+AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
+
+
+def _unauthorized_exception() -> HTTPException:
+    return HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+async def get_current_user(
+    settings: SettingsDep,
+    auth_service: AuthServiceDep,
+    credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)],
+) -> User:
+    """Decode the bearer token and return the active authenticated user."""
+    if credentials is None:
+        raise _unauthorized_exception()
+
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+        )
+        token_payload = TokenPayload(**payload)
+    except JWTError as exc:
+        raise _unauthorized_exception() from exc
+
+    if token_payload.sub is None:
+        raise _unauthorized_exception()
+
+    try:
+        user_id = int(token_payload.sub)
+    except ValueError as exc:
+        raise _unauthorized_exception() from exc
+
+    user = await auth_service.get_user_by_id(user_id)
+    if user is None or not user.is_active:
+        raise _unauthorized_exception()
+
+    return user
+
+
+CurrentUserDep = Annotated[User, Depends(get_current_user)]
 
 
 async def get_portfolio_service(db: DBSessionDep) -> PortfolioService:

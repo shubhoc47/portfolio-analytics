@@ -20,10 +20,10 @@ class PortfolioService:
         self.db = db
         self.repository = PortfolioRepository(db)
 
-    async def create_portfolio(self, payload: PortfolioCreate) -> Portfolio:
-        await self._ensure_name_is_unique(payload.name)
+    async def create_portfolio(self, payload: PortfolioCreate, user_id: int) -> Portfolio:
+        await self._ensure_name_is_unique(payload.name, user_id)
         try:
-            portfolio = await self.repository.create(payload)
+            portfolio = await self.repository.create(payload, user_id=user_id)
             await self.db.commit()
             return portfolio
         except IntegrityError as exc:
@@ -36,11 +36,11 @@ class PortfolioService:
             await self.db.rollback()
             raise
 
-    async def list_portfolios(self) -> list[Portfolio]:
-        return await self.repository.list_all()
+    async def list_portfolios(self, user_id: int) -> list[Portfolio]:
+        return await self.repository.list_for_user(user_id)
 
-    async def get_portfolio(self, portfolio_id: int) -> Portfolio:
-        portfolio = await self.repository.get_by_id(portfolio_id)
+    async def get_portfolio(self, portfolio_id: int, user_id: int) -> Portfolio:
+        portfolio = await self.repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -48,10 +48,10 @@ class PortfolioService:
             )
         return portfolio
 
-    async def update_portfolio(self, portfolio_id: int, payload: PortfolioUpdate) -> Portfolio:
-        portfolio = await self.get_portfolio(portfolio_id)
+    async def update_portfolio(self, portfolio_id: int, payload: PortfolioUpdate, user_id: int) -> Portfolio:
+        portfolio = await self.get_portfolio(portfolio_id, user_id)
         if payload.name is not None:
-            await self._ensure_name_is_unique_for_other_portfolio(payload.name, portfolio_id)
+            await self._ensure_name_is_unique_for_other_portfolio(payload.name, user_id, portfolio_id)
         try:
             updated = await self.repository.update(portfolio, payload)
             await self.db.commit()
@@ -66,8 +66,8 @@ class PortfolioService:
             await self.db.rollback()
             raise
 
-    async def delete_portfolio(self, portfolio_id: int) -> None:
-        portfolio = await self.get_portfolio(portfolio_id)
+    async def delete_portfolio(self, portfolio_id: int, user_id: int) -> None:
+        portfolio = await self.get_portfolio(portfolio_id, user_id)
         try:
             await self.repository.delete(portfolio)
             await self.db.commit()
@@ -75,9 +75,9 @@ class PortfolioService:
             await self.db.rollback()
             raise
 
-    async def _ensure_name_is_unique(self, portfolio_name: str) -> None:
+    async def _ensure_name_is_unique(self, portfolio_name: str, user_id: int) -> None:
         normalized_name = self._normalize_portfolio_name(portfolio_name)
-        existing = await self.repository.get_by_normalized_name(normalized_name)
+        existing = await self.repository.get_by_normalized_name_for_user(normalized_name, user_id)
         if existing is not None:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
@@ -87,11 +87,13 @@ class PortfolioService:
     async def _ensure_name_is_unique_for_other_portfolio(
         self,
         portfolio_name: str,
+        user_id: int,
         portfolio_id: int,
     ) -> None:
         normalized_name = self._normalize_portfolio_name(portfolio_name)
-        existing = await self.repository.get_by_normalized_name_excluding_id(
+        existing = await self.repository.get_by_normalized_name_for_user_excluding_id(
             normalized_name,
+            user_id,
             portfolio_id,
         )
         if existing is not None:

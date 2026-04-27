@@ -48,26 +48,26 @@ class AnalyticsService:
         self.portfolio_repository = PortfolioRepository(db)
         self.holding_repository = HoldingRepository(db)
 
-    async def get_sector_exposure(self, portfolio_id: int) -> SectorExposureRead:
-        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id)
+    async def get_sector_exposure(self, portfolio_id: int, user_id: int) -> SectorExposureRead:
+        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id, user_id)
         return self._compute_sector_exposure(portfolio, holdings)
 
-    async def get_diversification_score(self, portfolio_id: int) -> DiversificationScoreRead:
-        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id)
+    async def get_diversification_score(self, portfolio_id: int, user_id: int) -> DiversificationScoreRead:
+        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id, user_id)
         return self._compute_diversification_score(portfolio, holdings)
 
-    async def get_risk_score(self, portfolio_id: int) -> RiskScoreRead:
-        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id)
+    async def get_risk_score(self, portfolio_id: int, user_id: int) -> RiskScoreRead:
+        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id, user_id)
         return self._compute_risk_score(portfolio, holdings)
 
-    async def get_health_score(self, portfolio_id: int) -> HealthScoreRead:
-        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id)
+    async def get_health_score(self, portfolio_id: int, user_id: int) -> HealthScoreRead:
+        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id, user_id)
         diversification = self._compute_diversification_score(portfolio, holdings)
         risk = self._compute_risk_score(portfolio, holdings)
         return self._compute_health_score(portfolio, holdings, diversification, risk)
 
-    async def get_summary(self, portfolio_id: int) -> AnalyticsSummaryRead:
-        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id)
+    async def get_summary(self, portfolio_id: int, user_id: int) -> AnalyticsSummaryRead:
+        portfolio, holdings = await self._load_portfolio_and_holdings(portfolio_id, user_id)
         sector_exposure = self._compute_sector_exposure(portfolio, holdings)
         diversification = self._compute_diversification_score(portfolio, holdings)
         risk = self._compute_risk_score(portfolio, holdings)
@@ -85,8 +85,9 @@ class AnalyticsService:
     async def _load_portfolio_and_holdings(
         self,
         portfolio_id: int,
+        user_id: int,
     ) -> tuple[Portfolio, list[Holding]]:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

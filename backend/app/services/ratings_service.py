@@ -48,8 +48,8 @@ class RatingsService:
         self.holding_repository = HoldingRepository(db)
         self.ratings_repository = RatingsRepository(db)
 
-    async def refresh_portfolio_ratings(self, portfolio_id: int) -> RatingsRefreshResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def refresh_portfolio_ratings(self, portfolio_id: int, user_id: int) -> RatingsRefreshResponse:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -163,10 +163,11 @@ class RatingsService:
     async def list_portfolio_ratings(
         self,
         portfolio_id: int,
+        user_id: int,
         *,
         limit: int,
     ) -> PortfolioRatingsListResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

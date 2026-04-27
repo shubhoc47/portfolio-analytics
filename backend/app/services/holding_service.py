@@ -22,8 +22,8 @@ class HoldingService:
         self.holding_repository = HoldingRepository(db)
         self.portfolio_repository = PortfolioRepository(db)
 
-    async def create_holding(self, portfolio_id: int, payload: HoldingCreate) -> Holding:
-        await self._ensure_portfolio_exists(portfolio_id)
+    async def create_holding(self, portfolio_id: int, payload: HoldingCreate, user_id: int) -> Holding:
+        await self._ensure_portfolio_belongs_to_user(portfolio_id, user_id)
         try:
             holding = await self.holding_repository.create(portfolio_id, payload)
             await self.db.commit()
@@ -41,21 +41,22 @@ class HoldingService:
             await self.db.rollback()
             raise
 
-    async def list_holdings_by_portfolio(self, portfolio_id: int) -> list[Holding]:
-        await self._ensure_portfolio_exists(portfolio_id)
+    async def list_holdings_by_portfolio(self, portfolio_id: int, user_id: int) -> list[Holding]:
+        await self._ensure_portfolio_belongs_to_user(portfolio_id, user_id)
         return await self.holding_repository.list_by_portfolio(portfolio_id)
 
-    async def get_holding(self, holding_id: int) -> Holding:
+    async def get_holding(self, holding_id: int, user_id: int) -> Holding:
         holding = await self.holding_repository.get_by_id(holding_id)
         if holding is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Holding with id {holding_id} not found",
             )
+        await self._ensure_portfolio_belongs_to_user(holding.portfolio_id, user_id)
         return holding
 
-    async def update_holding(self, holding_id: int, payload: HoldingUpdate) -> Holding:
-        holding = await self.get_holding(holding_id)
+    async def update_holding(self, holding_id: int, payload: HoldingUpdate, user_id: int) -> Holding:
+        holding = await self.get_holding(holding_id, user_id)
         try:
             updated = await self.holding_repository.update(holding, payload)
             await self.db.commit()
@@ -73,8 +74,8 @@ class HoldingService:
             await self.db.rollback()
             raise
 
-    async def delete_holding(self, holding_id: int) -> None:
-        holding = await self.get_holding(holding_id)
+    async def delete_holding(self, holding_id: int, user_id: int) -> None:
+        holding = await self.get_holding(holding_id, user_id)
         try:
             await self.holding_repository.delete(holding)
             await self.db.commit()
@@ -82,8 +83,8 @@ class HoldingService:
             await self.db.rollback()
             raise
 
-    async def _ensure_portfolio_exists(self, portfolio_id: int) -> None:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def _ensure_portfolio_belongs_to_user(self, portfolio_id: int, user_id: int) -> None:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

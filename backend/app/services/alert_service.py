@@ -37,8 +37,8 @@ class AlertService:
         self.sentiment_repository = SentimentRepository(db)
         self.alert_repository = AlertRepository(db)
 
-    async def refresh_portfolio_alerts(self, portfolio_id: int) -> AlertRefreshResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def refresh_portfolio_alerts(self, portfolio_id: int, user_id: int) -> AlertRefreshResponse:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -154,9 +154,10 @@ class AlertService:
     async def list_portfolio_active_alerts(
         self,
         portfolio_id: int,
+        user_id: int,
         limit: int,
     ) -> PortfolioAlertsListResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

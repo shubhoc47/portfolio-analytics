@@ -74,7 +74,7 @@ def test_refresh_prices_with_service_override(client):
         assert data["updated_count"] == 2
         assert data["failed_count"] == 0
         assert len(data["updated_quotes"]) == 2
-        mock_service.refresh_portfolio_prices.assert_awaited_once_with(1)
+        mock_service.refresh_portfolio_prices.assert_awaited_once_with(1, 42)
     finally:
         app.dependency_overrides.pop(deps.get_market_data_service, None)
 
@@ -135,7 +135,7 @@ def test_refresh_all_prices_with_service_override(client):
         assert data["updated_holdings_count"] == 4
         assert data["provider_call_count"] == 2
         assert data["cache_hit_count"] == 0
-        mock_service.refresh_all_prices.assert_awaited_once()
+        mock_service.refresh_all_prices.assert_awaited_once_with(42)
     finally:
         app.dependency_overrides.pop(deps.get_market_data_service, None)
 

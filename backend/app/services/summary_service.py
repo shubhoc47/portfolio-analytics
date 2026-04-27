@@ -55,10 +55,11 @@ class SummaryService:
     async def generate_daily_briefs(
         self,
         portfolio_id: int,
+        user_id: int,
         summary_date: date | None,
     ) -> DailyBriefsResponse:
         day = summary_date or self._today_utc()
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -172,12 +173,13 @@ class SummaryService:
     async def generate_weekly_holding_summaries(
         self,
         portfolio_id: int,
+        user_id: int,
         window_end_date: date | None,
     ) -> WeeklyHoldingSummariesResponse:
         window_end = window_end_date or self._today_utc()
         window_start = window_end - timedelta(days=6)
 
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -288,12 +290,13 @@ class SummaryService:
     async def generate_portfolio_summary(
         self,
         portfolio_id: int,
+        user_id: int,
         anchor_date: date | None,
     ) -> PortfolioSummaryResponse:
         anchor = anchor_date or self._today_utc()
         window_start = anchor - timedelta(days=6)
 
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

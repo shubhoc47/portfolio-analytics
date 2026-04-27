@@ -151,6 +151,16 @@
 - [x] Add `POST /api/v1/market-data/refresh-all-prices` and `MarketDataService.refresh_all_prices`
 - [x] Tests and README / `.env.example` updates (cache limitations documented)
 
+## Part 13: Authentication and User Ownership
+
+- [x] Add local user model, schemas, repository, service, and JWT/password security helpers
+- [x] Add signup, login, and current-user auth endpoints
+- [x] Add `CurrentUserDep` and protect portfolio-scoped backend routes
+- [x] Add `portfolio.user_id` ownership and per-user portfolio name uniqueness
+- [x] Scope portfolio, holding, analytics, benchmark, news, sentiment, summaries, alerts, ratings, and market-data flows to the authenticated user
+- [x] Add Alembic migration for users and portfolio ownership, including legacy portfolio backfill
+- [x] Add frontend signup, signin, logout, protected routes, and bearer-token API requests
+
 ## Frontend Part 1: Portfolio UI (React + TS + Vite + Tailwind)
 
 - [x] Create frontend app scaffold with Vite + TypeScript

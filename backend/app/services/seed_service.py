@@ -104,12 +104,12 @@ class SeedService:
             "job_runs_removed": jobs_n,
         }
 
-    async def _insert_demo_portfolios_and_holdings(self) -> tuple[int, int]:
+    async def _insert_demo_portfolios_and_holdings(self, user_id: int) -> tuple[int, int]:
         portfolios_created = 0
         holdings_created = 0
         for item in DEMO_PORTFOLIOS:
             portfolio_payload = PortfolioCreate(**item["portfolio"])
-            portfolio = await self.portfolio_repository.create(portfolio_payload)
+            portfolio = await self.portfolio_repository.create(portfolio_payload, user_id=user_id)
             portfolios_created += 1
             base_currency = portfolio.base_currency
 
@@ -131,7 +131,7 @@ class SeedService:
 
         return portfolios_created, holdings_created
 
-    async def seed_demo_data(self) -> SeedResultRead:
+    async def seed_demo_data(self, user_id: int) -> SeedResultRead:
         """
         Populate demo portfolios and holdings when the database has no portfolios.
 
@@ -142,10 +142,10 @@ class SeedService:
 
         self._reject_production()
 
-        if await self._count_portfolios() > 0:
+        if await self.portfolio_repository.list_for_user(user_id):
             return SeedResultRead(
                 message=(
-                    "Seed skipped: portfolios already exist. "
+                    "Seed skipped: this user already has portfolios. "
                     "Use POST /api/v1/dev/reseed or scripts/reseed_demo_data.py for a full reset."
                 ),
                 portfolios_created=0,
@@ -153,7 +153,7 @@ class SeedService:
             )
 
         try:
-            portfolios_created, holdings_created = await self._insert_demo_portfolios_and_holdings()
+            portfolios_created, holdings_created = await self._insert_demo_portfolios_and_holdings(user_id)
             await self.db.commit()
         except Exception:
             await self.db.rollback()
@@ -165,7 +165,7 @@ class SeedService:
             holdings_created=holdings_created,
         )
 
-    async def reseed_demo_data(self) -> ReseedResultRead:
+    async def reseed_demo_data(self, user_id: int) -> ReseedResultRead:
         """
         Clear all portfolio-domain data, then insert canonical demo portfolios and holdings.
 
@@ -176,7 +176,7 @@ class SeedService:
 
         try:
             removed = await self._clear_portfolio_domain_data()
-            portfolios_created, holdings_created = await self._insert_demo_portfolios_and_holdings()
+            portfolios_created, holdings_created = await self._insert_demo_portfolios_and_holdings(user_id)
             await self.db.commit()
         except Exception:
             await self.db.rollback()

@@ -16,6 +16,34 @@ uvicorn app.main:app --reload
 - Docs: http://localhost:8000/docs
 - Health: http://localhost:8000/health
 
+## Authentication and User Ownership
+
+PortfolioIQ uses local email/password authentication with JWT bearer access tokens.
+
+Auth endpoints:
+
+- `POST /api/v1/auth/signup` - create a user account
+- `POST /api/v1/auth/login` - return `{ "access_token": "...", "token_type": "bearer" }`
+- `GET /api/v1/auth/me` - return the current authenticated user
+
+JWT configuration (see `.env.example`):
+
+- `SECRET_KEY` - signing secret for access tokens; use a strong generated value outside local demos.
+- `ALGORITHM` - default `HS256`.
+- `ACCESS_TOKEN_EXPIRE_MINUTES` - default `60`.
+
+All portfolio, holding, analytics, benchmark, news, sentiment, summary, alert, ratings, market-data, and dev seed endpoints now require `Authorization: Bearer <token>`. Portfolio rows include `user_id`, and API queries only return or mutate portfolios owned by the authenticated user. Accessing another user's `portfolio_id` or `holding_id` returns `404` to avoid leaking resource existence.
+
+### Swagger auth flow
+
+1. Open http://localhost:8000/docs.
+2. Run `POST /api/v1/auth/signup` with an email and password.
+3. Run `POST /api/v1/auth/login` with the same credentials.
+4. Copy the returned `access_token`.
+5. Click **Authorize** in Swagger and enter `Bearer <access_token>`.
+6. Create and list portfolios; only that user's portfolios are visible.
+7. Remove the authorization value and retry `GET /api/v1/portfolios`; it should return `401`.
+
 ## Portfolio CRUD API (Part 6)
 
 Versioned portfolio endpoints are available under `/api/v1/portfolios`:
@@ -77,7 +105,7 @@ Notes:
 Endpoints under `/api/v1/market-data`:
 
 - `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — for that portfolio’s distinct tickers, resolves quotes (Finnhub **or** short-lived **in-memory cache**), updates `Holding.current_price` on success.
-- `POST /api/v1/market-data/refresh-all-prices` — one **global** distinct ticker list across **all** holdings; each ticker is resolved at most once per request (cache hits do not call Finnhub); updates every matching holding row.
+- `POST /api/v1/market-data/refresh-all-prices` — one distinct ticker list across the authenticated user’s holdings; each ticker is resolved at most once per request (cache hits do not call Finnhub); updates every matching holding row owned by that user.
 - `GET /api/v1/market-data/quote/{ticker}` — one live quote (no DB write). Uses the same cache when enabled. Returns `503` if `FINNHUB_API_KEY` is unset.
 
 Configuration (see `.env.example`):
@@ -113,10 +141,11 @@ Limitations: Finnhub free tier enforces low request rates; quote data can be del
 ### Swagger manual test
 
 1. Set `FINNHUB_API_KEY` in `backend/.env`, restart `uvicorn`.
-2. `POST /api/v1/dev/seed` (development only) or ensure portfolios have holdings (including the same ticker in two portfolios if you want to test deduplication).
-3. `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — check `updated_quotes`, `quote_source`, `cache_hit_count`, `provider_call_count`, `failures`.
-4. Repeat step 3 for a **second** portfolio that shares a ticker — second call should show **cache hits** for that ticker if within `MARKET_DATA_CACHE_TTL_SECONDS`.
-5. `POST /api/v1/market-data/refresh-all-prices` — all portfolios updated; each unique ticker should incur at most one provider call (rest cache hits) until TTL expires.
+2. Sign up and log in through `/api/v1/auth`, then authorize Swagger with `Bearer <access_token>`.
+3. `POST /api/v1/dev/seed` (development only) or ensure your portfolios have holdings (including the same ticker in two portfolios if you want to test deduplication).
+4. `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — check `updated_quotes`, `quote_source`, `cache_hit_count`, `provider_call_count`, `failures`.
+5. Repeat step 4 for a **second** portfolio that shares a ticker — second call should show **cache hits** for that ticker if within `MARKET_DATA_CACHE_TTL_SECONDS`.
+6. `POST /api/v1/market-data/refresh-all-prices` — your portfolios are updated; each unique ticker should incur at most one provider call (rest cache hits) until TTL expires.
 6. Call refresh-all again **immediately** — expect `provider_call_count: 0` and `cache_hit_count` equal to the number of distinct tickers (if all succeeded on the first run).
 7. Optional: `GET /api/v1/market-data/quote/AAPL` — `current_price`, `quote_source`.
 8. `GET /api/v1/benchmark/portfolios/{portfolio_id}/compare` — `price_source` = `holding_current_price` where applicable.
@@ -259,12 +288,17 @@ Key settings:
 - `ALLOWED_ORIGINS` – CORS origins (comma-separated or JSON list). Defaults include `http://localhost:5173` (Vite) so the React app can call the API; if you override this in `.env`, keep your frontend origin in the list or the browser will show a generic “cannot reach backend” error on `fetch`.
 - `LOG_LEVEL` – logging level (e.g. `DEBUG`, `INFO`).
 - `DATABASE_URL` – PostgreSQL connection string (async SQLAlchemy).
+- `SECRET_KEY` – JWT signing secret for auth.
+- `ALGORITHM` – JWT signing algorithm, default `HS256`.
+- `ACCESS_TOKEN_EXPIRE_MINUTES` – access token lifetime in minutes.
 - `FINNHUB_API_KEY` – optional; enables live `/quote` fetches for market-data refresh endpoints.
 - `MARKET_DATA_CACHE_TTL_SECONDS` – in-memory quote cache TTL (`0` disables); not shared across workers.
 
 ## Database Migrations
 
 Migrations are managed using **Alembic**. Migration files live in `alembic/versions/`.
+
+Auth migration `008` creates `users`, adds `portfolio.user_id`, replaces global portfolio-name uniqueness with per-user uniqueness, and backfills existing portfolios to `legacy@portfolioiq.local` with temporary password `PortfolioIQ123!`. For a clean local development database, it is also safe to reset the database, run `alembic upgrade head`, sign up a new user, and reseed demo data under that user.
 
 ### Prerequisites
 

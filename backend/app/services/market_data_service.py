@@ -88,10 +88,10 @@ class MarketDataService:
             )
         return result, "finnhub", False, not cache_hit
 
-    async def refresh_portfolio_prices(self, portfolio_id: int) -> PortfolioPriceRefreshResponse:
+    async def refresh_portfolio_prices(self, portfolio_id: int, user_id: int) -> PortfolioPriceRefreshResponse:
         from app.providers.market_data.base import QuoteFetchResult
 
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -201,8 +201,8 @@ class MarketDataService:
             provider_call_count=provider_call_count,
         )
 
-    async def refresh_all_prices(self) -> RefreshAllPricesResponse:
-        holdings = await self.holding_repository.list_all()
+    async def refresh_all_prices(self, user_id: int) -> RefreshAllPricesResponse:
+        holdings = await self.holding_repository.list_all_for_user(user_id)
 
         if not holdings:
             return RefreshAllPricesResponse(
@@ -231,7 +231,7 @@ class MarketDataService:
                 failed_count=0,
                 failures=[],
                 notes=[
-                    "FINNHUB_API_KEY is not set; skipped live quote requests for all portfolios."
+                    "FINNHUB_API_KEY is not set; skipped live quote requests for your portfolios."
                 ],
             )
 
@@ -271,7 +271,7 @@ class MarketDataService:
         if ticker_to_price:
             try:
                 updated_holdings_count = (
-                    await self.holding_repository.apply_current_prices_globally(ticker_to_price)
+                    await self.holding_repository.apply_current_prices_for_user(user_id, ticker_to_price)
                 )
                 await self.db.commit()
             except Exception:

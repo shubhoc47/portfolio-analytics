@@ -10,6 +10,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.holding import Holding
+from app.models.portfolio import Portfolio
 from app.schemas.holding import HoldingCreate, HoldingUpdate
 
 
@@ -33,6 +34,16 @@ class HoldingRepository:
 
     async def list_all(self) -> list[Holding]:
         stmt = select(Holding).order_by(Holding.portfolio_id.asc(), Holding.id.asc())
+        result = await self.db.execute(stmt)
+        return list(result.scalars().all())
+
+    async def list_all_for_user(self, user_id: int) -> list[Holding]:
+        stmt = (
+            select(Holding)
+            .join(Portfolio, Holding.portfolio_id == Portfolio.id)
+            .where(Portfolio.user_id == user_id)
+            .order_by(Holding.portfolio_id.asc(), Holding.id.asc())
+        )
         result = await self.db.execute(stmt)
         return list(result.scalars().all())
 
@@ -84,6 +95,28 @@ class HoldingRepository:
             return 0
 
         holdings = await self.list_all()
+        updated = 0
+        for holding in holdings:
+            key = holding.ticker.strip().upper()
+            if key in ticker_upper_to_price:
+                holding.current_price = ticker_upper_to_price[key]
+                updated += 1
+        await self.db.flush()
+        return updated
+
+    async def apply_current_prices_for_user(
+        self,
+        user_id: int,
+        ticker_upper_to_price: dict[str, Decimal],
+    ) -> int:
+        """
+        Set current_price for holdings owned by a user whose uppercase ticker is in the map.
+        Returns number of rows updated.
+        """
+        if not ticker_upper_to_price:
+            return 0
+
+        holdings = await self.list_all_for_user(user_id)
         updated = 0
         for holding in holdings:
             key = holding.ticker.strip().upper()

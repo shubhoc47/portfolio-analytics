@@ -34,8 +34,8 @@ class NewsService:
         self.holding_repository = HoldingRepository(db)
         self.news_repository = NewsRepository(db)
 
-    async def refresh_portfolio_news(self, portfolio_id: int) -> NewsRefreshResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+    async def refresh_portfolio_news(self, portfolio_id: int, user_id: int) -> NewsRefreshResponse:
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -148,10 +148,11 @@ class NewsService:
     async def list_portfolio_news(
         self,
         portfolio_id: int,
+        user_id: int,
         *,
         limit: int = 100,
     ) -> PortfolioNewsListResponse:
-        portfolio = await self.portfolio_repository.get_by_id(portfolio_id)
+        portfolio = await self.portfolio_repository.get_by_id_for_user(portfolio_id, user_id)
         if portfolio is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

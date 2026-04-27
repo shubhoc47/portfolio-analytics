@@ -6,7 +6,7 @@ Represents a single investment portfolio.
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, Index, String, func, text
+from sqlalchemy import DateTime, ForeignKey, Index, String, func, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -15,11 +15,12 @@ from app.db.base import Base
 class Portfolio(Base):
     __tablename__ = "portfolio"
     __table_args__ = (
-        # Enforce case-insensitive uniqueness for portfolio names.
-        Index("uq_portfolio_name_normalized", text("lower(btrim(name))"), unique=True),
+        # Enforce case-insensitive uniqueness for portfolio names per user.
+        Index("uq_portfolio_user_name_normalized", "user_id", text("lower(btrim(name))"), unique=True),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     description: Mapped[str | None] = mapped_column(String(1000), nullable=True)
     base_currency: Mapped[str] = mapped_column(String(10), nullable=False, default="USD")
@@ -32,6 +33,7 @@ class Portfolio(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
     )
 
+    user: Mapped["User"] = relationship(back_populates="portfolios")
     holdings: Mapped[list["Holding"]] = relationship(
         back_populates="portfolio",
         cascade="all, delete-orphan",

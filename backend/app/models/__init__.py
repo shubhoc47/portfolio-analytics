@@ -6,6 +6,7 @@ by importing `app.models`.
 """
 
 from .portfolio import Portfolio
+from .user import User
 from .holding import Holding
 from .market_snapshot import MarketSnapshot
 from .news_article import NewsArticle
@@ -18,6 +19,7 @@ from .job_run import JobRun
 
 __all__ = [
     "Portfolio",
+    "User",
     "Holding",
     "MarketSnapshot",
     "NewsArticle",

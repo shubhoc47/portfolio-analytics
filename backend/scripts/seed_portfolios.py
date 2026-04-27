@@ -18,8 +18,11 @@ from sqlalchemy import select
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
+from app.core.security import hash_password
 from app.db.session import AsyncSessionLocal
 from app.models.portfolio import Portfolio
+from app.repositories.user import UserRepository
+from app.schemas.auth import UserCreate
 
 
 SAMPLE_PORTFOLIOS = [
@@ -48,13 +51,25 @@ async def seed_portfolios() -> None:
     """Insert sample portfolios if they do not already exist."""
 
     async with AsyncSessionLocal() as db:
+        user_repository = UserRepository(db)
+        user = await user_repository.get_by_email("demo@portfolioiq.local")
+        if user is None:
+            user = await user_repository.create(
+                payload=UserCreate(
+                    email="demo@portfolioiq.local",
+                    password="PortfolioIQ123!",
+                    full_name="PortfolioIQ Demo User",
+                ),
+                hashed_password=hash_password("PortfolioIQ123!"),
+            )
+
         existing_names = (
-            await db.execute(select(Portfolio.name))
+            await db.execute(select(Portfolio.name).where(Portfolio.user_id == user.id))
         ).scalars().all()
         existing_name_set = {name.lower() for name in existing_names}
 
         to_insert = [
-            Portfolio(**portfolio)
+            Portfolio(user_id=user.id, **portfolio)
             for portfolio in SAMPLE_PORTFOLIOS
             if portfolio["name"].lower() not in existing_name_set
         ]
