@@ -121,6 +121,8 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
 
     const updatePayload: HoldingUpdateInput = {
       ticker: payload.ticker,
+      company_name: payload.company_name,
+      sector: payload.sector,
       quantity: payload.quantity,
       average_cost: payload.average_cost,
     };
@@ -282,6 +284,8 @@ export function HoldingsSection({ portfolioId }: HoldingsSectionProps) {
             key={editingHolding.id}
             initialValues={{
               ticker: editingHolding.ticker,
+              company_name: editingHolding.company_name,
+              sector: editingHolding.sector || "",
               quantity: String(editingHolding.quantity),
               average_cost: String(editingHolding.average_cost),
             }}

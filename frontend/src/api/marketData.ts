@@ -39,6 +39,14 @@ export interface RefreshAllPricesResponse {
   notes: string[];
 }
 
+export interface SymbolSearchResult {
+  symbol: string;
+  description: string;
+  display_symbol: string;
+  type: string;
+  provider: string;
+}
+
 /** Ask backend to fetch Finnhub quotes and persist Holding.current_price. */
 export function refreshPortfolioPrices(
   portfolioId: number,
@@ -53,4 +61,12 @@ export function refreshAllPortfolioPrices(): Promise<RefreshAllPricesResponse> {
   return apiRequest<RefreshAllPricesResponse>(`${MARKET_DATA_BASE}/refresh-all-prices`, {
     method: "POST",
   });
+}
+
+export function searchSymbols(query: string): Promise<SymbolSearchResult[]> {
+  const params = new URLSearchParams({ query });
+  return apiRequest<SymbolSearchResult[]>(
+    `${MARKET_DATA_BASE}/search?${params.toString()}`,
+    { method: "GET" },
+  );
 }

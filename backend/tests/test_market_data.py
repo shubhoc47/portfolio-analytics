@@ -13,6 +13,7 @@ from app.schemas.market_data import (
     PortfolioPriceRefreshResponse,
     PriceRefreshQuoteRead,
     RefreshAllPricesResponse,
+    SymbolSearchResultRead,
 )
 
 
@@ -26,6 +27,57 @@ def test_quote_without_api_key_returns_503(client, monkeypatch):
         assert "not configured" in response.json()["detail"].lower()
     finally:
         get_settings.cache_clear()
+
+
+def test_symbol_search_without_api_key_returns_503(client, monkeypatch):
+    monkeypatch.setenv("FINNHUB_API_KEY", "")
+    get_settings.cache_clear()
+    try:
+        response = client.get("/api/v1/market-data/search?query=apple")
+        assert response.status_code == 503
+        assert "not configured" in response.json()["detail"].lower()
+    finally:
+        get_settings.cache_clear()
+
+
+def test_symbol_search_rejects_short_query(client):
+    response = client.get("/api/v1/market-data/search?query=a")
+    assert response.status_code == 422
+
+
+def test_symbol_search_with_service_override(client):
+    results = [
+        SymbolSearchResultRead(
+            symbol="AAPL",
+            description="Apple Inc",
+            display_symbol="AAPL",
+            type="Common Stock",
+            provider="finnhub",
+        )
+    ]
+    mock_service = MagicMock()
+    mock_service.search_symbols = AsyncMock(return_value=results)
+
+    async def override_market_data_service():
+        return mock_service
+
+    app.dependency_overrides[deps.get_market_data_service] = override_market_data_service
+    try:
+        response = client.get("/api/v1/market-data/search?query=apple")
+        assert response.status_code == 200
+        data = response.json()
+        assert data == [
+            {
+                "symbol": "AAPL",
+                "description": "Apple Inc",
+                "display_symbol": "AAPL",
+                "type": "Common Stock",
+                "provider": "finnhub",
+            }
+        ]
+        mock_service.search_symbols.assert_awaited_once_with("apple")
+    finally:
+        app.dependency_overrides.pop(deps.get_market_data_service, None)
 
 
 def test_refresh_prices_with_service_override(client):

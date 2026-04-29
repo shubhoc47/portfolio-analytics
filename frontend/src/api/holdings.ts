@@ -2,6 +2,7 @@ import { apiRequest } from "./client";
 import type {
   Holding,
   HoldingCreateInput,
+  HoldingSectorSuggestion,
   HoldingUpdateInput,
 } from "../features/holdings/types";
 
@@ -31,6 +32,14 @@ export function getHolding(holdingId: number): Promise<Holding> {
   return apiRequest<Holding>(`${HOLDINGS_BASE_PATH}/${holdingId}`, {
     method: "GET",
   });
+}
+
+export function getHoldingSectorSuggestion(ticker: string): Promise<HoldingSectorSuggestion> {
+  const params = new URLSearchParams({ ticker });
+  return apiRequest<HoldingSectorSuggestion>(
+    `${HOLDINGS_BASE_PATH}/sector-suggestions?${params.toString()}`,
+    { method: "GET" },
+  );
 }
 
 export function updateHolding(

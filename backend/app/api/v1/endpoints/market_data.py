@@ -4,13 +4,14 @@ Market data endpoints (live quote refresh).
 
 from typing import Annotated
 
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, Path, Query
 
 from app.api.deps import CurrentUserDep, MarketDataServiceDep
 from app.schemas.market_data import (
     MarketQuoteRead,
     PortfolioPriceRefreshResponse,
     RefreshAllPricesResponse,
+    SymbolSearchResultRead,
 )
 
 router = APIRouter()
@@ -46,3 +47,14 @@ async def get_live_quote(
 ) -> MarketQuoteRead:
     """Return a single live quote (backend only; does not persist to holdings)."""
     return await service.get_quote_for_ticker(ticker)
+
+
+@router.get("/search", response_model=list[SymbolSearchResultRead])
+async def search_symbols(
+    query: Annotated[str, Query(min_length=2, max_length=100)],
+    service: MarketDataServiceDep,
+    current_user: CurrentUserDep,
+) -> list[SymbolSearchResultRead]:
+    """Search ticker/company suggestions through the backend market-data provider."""
+    _ = current_user
+    return await service.search_symbols(query)

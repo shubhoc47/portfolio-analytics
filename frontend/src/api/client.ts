@@ -3,6 +3,14 @@ import { getStoredToken } from "../auth/authStorage";
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:8000";
 
+export const AUTH_SESSION_EXPIRED_EVENT = "portfolioiq:auth-session-expired";
+
+export interface AuthSessionExpiredEventDetail {
+  status: number;
+  detail: string;
+  path: string;
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly detail: string;
@@ -20,6 +28,17 @@ interface RequestOptions extends RequestInit {
 
 interface ValidationDetail {
   msg?: string;
+}
+
+export function subscribeToAuthSessionExpired(
+  listener: (detail: AuthSessionExpiredEventDetail) => void,
+): () => void {
+  const handleSessionExpired = (event: Event) => {
+    listener((event as CustomEvent<AuthSessionExpiredEventDetail>).detail);
+  };
+
+  window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
+  return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
 }
 
 function extractErrorMessage(payload: unknown): string {
@@ -43,6 +62,18 @@ function extractErrorMessage(payload: unknown): string {
   return "Something went wrong. Please try again.";
 }
 
+function isAuthEndpoint(path: string): boolean {
+  return path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/signup");
+}
+
+function notifyAuthSessionExpired(detail: AuthSessionExpiredEventDetail): void {
+  window.dispatchEvent(
+    new CustomEvent<AuthSessionExpiredEventDetail>(AUTH_SESSION_EXPIRED_EVENT, {
+      detail,
+    }),
+  );
+}
+
 export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {},
@@ -50,8 +81,8 @@ export async function apiRequest<T>(
   const { jsonBody, headers, ...rest } = options;
 
   let response: Response;
+  const token = getStoredToken();
   try {
-    const token = getStoredToken();
     response = await fetch(`${API_BASE_URL}${path}`, {
       ...rest,
       headers: {
@@ -75,7 +106,12 @@ export async function apiRequest<T>(
   const json = (await response.json().catch(() => null)) as unknown;
 
   if (!response.ok) {
-    throw new ApiError(response.status, extractErrorMessage(json));
+    const detail = extractErrorMessage(json);
+    if (response.status === 401 && token && !isAuthEndpoint(path)) {
+      notifyAuthSessionExpired({ status: response.status, detail, path });
+    }
+
+    throw new ApiError(response.status, detail);
   }
 
   return json as T;

@@ -120,9 +120,15 @@ class AnalyticsService:
         for holding in holdings:
             sector_name, used_fallback = self._resolve_sector_name(holding)
             if used_fallback:
-                notes.append(
-                    f"Used fallback sector mapping for ticker {holding.ticker}."
-                )
+                if sector_name == "Unknown":
+                    notes.append(
+                        f"Sector metadata unavailable for ticker {holding.ticker}; "
+                        "set a sector on the holding."
+                    )
+                else:
+                    notes.append(
+                        f"Used fallback sector mapping for ticker {holding.ticker}."
+                    )
 
             holding_value = self._holding_value_basis(holding)
             sector_values[sector_name] += holding_value

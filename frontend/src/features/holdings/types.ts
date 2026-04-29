@@ -16,13 +16,23 @@ export interface Holding {
 
 export interface HoldingCreateInput {
   ticker: string;
+  company_name?: string | null;
   quantity: number;
   average_cost: number;
+  sector: string;
   asset_type?: string;
 }
 
 export interface HoldingUpdateInput {
   ticker?: string;
+  company_name?: string | null;
   quantity?: number;
   average_cost?: number;
+  sector?: string;
+}
+
+export interface HoldingSectorSuggestion {
+  ticker: string;
+  suggested_sector: string | null;
+  source: "existing_holdings" | "none";
 }

@@ -4,10 +4,15 @@ Holdings CRUD endpoints.
 
 from typing import Annotated
 
-from fastapi import APIRouter, Path, Response, status
+from fastapi import APIRouter, Path, Query, Response, status
 
 from app.api.deps import CurrentUserDep, HoldingServiceDep
-from app.schemas.holding import HoldingCreate, HoldingRead, HoldingUpdate
+from app.schemas.holding import (
+    HoldingCreate,
+    HoldingRead,
+    HoldingSectorSuggestionRead,
+    HoldingUpdate,
+)
 
 router = APIRouter()
 
@@ -35,6 +40,17 @@ async def list_holdings_by_portfolio(
 ) -> list[HoldingRead]:
     """List holdings for a single portfolio."""
     return await service.list_holdings_by_portfolio(portfolio_id, current_user.id)
+
+
+@router.get("/holdings/sector-suggestions", response_model=HoldingSectorSuggestionRead)
+async def suggest_holding_sector(
+    ticker: Annotated[str, Query(min_length=1, max_length=32)],
+    service: HoldingServiceDep,
+    current_user: CurrentUserDep,
+) -> HoldingSectorSuggestionRead:
+    """Suggest a sector from existing holdings with the same ticker."""
+    _ = current_user
+    return await service.suggest_sector_for_ticker(ticker)
 
 
 @router.get("/holdings/{holding_id}", response_model=HoldingRead)

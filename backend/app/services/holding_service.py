@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.holding import Holding
 from app.repositories.holding import HoldingRepository
 from app.repositories.portfolio import PortfolioRepository
-from app.schemas.holding import HoldingCreate, HoldingUpdate
+from app.schemas.holding import HoldingCreate, HoldingSectorSuggestionRead, HoldingUpdate
 
 
 class HoldingService:
@@ -44,6 +44,15 @@ class HoldingService:
     async def list_holdings_by_portfolio(self, portfolio_id: int, user_id: int) -> list[Holding]:
         await self._ensure_portfolio_belongs_to_user(portfolio_id, user_id)
         return await self.holding_repository.list_by_portfolio(portfolio_id)
+
+    async def suggest_sector_for_ticker(self, ticker: str) -> HoldingSectorSuggestionRead:
+        ticker_upper = ticker.strip().upper()
+        suggested_sector = await self.holding_repository.suggest_sector_for_ticker(ticker_upper)
+        return HoldingSectorSuggestionRead(
+            ticker=ticker_upper,
+            suggested_sector=suggested_sector,
+            source="existing_holdings" if suggested_sector else "none",
+        )
 
     async def get_holding(self, holding_id: int, user_id: int) -> Holding:
         holding = await self.holding_repository.get_by_id(holding_id)

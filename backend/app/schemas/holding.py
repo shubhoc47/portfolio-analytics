@@ -101,3 +101,10 @@ class HoldingRead(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+
+class HoldingSectorSuggestionRead(BaseModel):
+    """Suggested sector for a ticker based on existing holdings."""
+
+    ticker: str
+    suggested_sector: str | None
+    source: str

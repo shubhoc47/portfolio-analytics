@@ -64,3 +64,13 @@ class MarketQuoteRead(BaseModel):
     provider: str
     quote_source: QuoteSource
     fetched_at: datetime
+
+
+class SymbolSearchResultRead(BaseModel):
+    """One normalized result from GET .../market-data/search."""
+
+    symbol: str
+    description: str
+    display_symbol: str
+    type: str
+    provider: str

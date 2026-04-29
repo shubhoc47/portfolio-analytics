@@ -8,6 +8,7 @@ import { Input } from "../components/ui/Input";
 
 interface AuthLocationState {
   from?: { pathname?: string };
+  reason?: "session-expired";
 }
 
 export function LoginPage() {
@@ -18,13 +19,18 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const locationState = location.state as AuthLocationState | null;
+  const sessionMessage =
+    locationState?.reason === "session-expired"
+      ? "Your session expired. Please sign in again."
+      : null;
 
   if (isAuthenticated) {
     return <Navigate to="/portfolios" replace />;
   }
 
   const redirectTo =
-    (location.state as AuthLocationState | null)?.from?.pathname || "/portfolios";
+    locationState?.from?.pathname || "/portfolios";
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -95,6 +101,12 @@ export function LoginPage() {
             {error ? (
               <div className="rounded-xl border border-piq-loss/30 bg-piq-loss/10 px-4 py-3 text-sm text-red-100">
                 {error}
+              </div>
+            ) : null}
+
+            {!error && sessionMessage ? (
+              <div className="rounded-xl border border-piq-accent/30 bg-piq-accent/10 px-4 py-3 text-sm text-piq-text-primary">
+                {sessionMessage}
               </div>
             ) : null}
 

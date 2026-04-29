@@ -48,6 +48,7 @@ export function HoldingsList({
         <thead className={dataTableTheadClass}>
           <tr>
             <th className="px-4 py-3.5 text-left font-semibold">Ticker</th>
+            <th className="px-4 py-3.5 text-left font-semibold">Sector</th>
             <th className="px-4 py-3.5 text-right font-semibold">Quantity</th>
             <th className="px-4 py-3.5 text-right font-semibold">Average Cost</th>
             <th
@@ -71,6 +72,9 @@ export function HoldingsList({
               <tr key={holding.id} className={dataTableRowHoverClass}>
                 <td className="px-4 py-3.5 font-semibold text-slate-900 dark:text-piq-text-primary">
                   {holding.ticker}
+                </td>
+                <td className="px-4 py-3.5 text-slate-700 dark:text-piq-text-muted">
+                  {holding.sector || "Unassigned"}
                 </td>
                 <td className="px-4 py-3.5 text-right text-slate-700 dark:text-piq-text-muted">
                   {formatQuantity(Number(holding.quantity))}

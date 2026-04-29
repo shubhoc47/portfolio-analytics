@@ -107,10 +107,11 @@ Endpoints under `/api/v1/market-data`:
 - `POST /api/v1/market-data/portfolios/{portfolio_id}/refresh-prices` — for that portfolio’s distinct tickers, resolves quotes (Finnhub **or** short-lived **in-memory cache**), updates `Holding.current_price` on success.
 - `POST /api/v1/market-data/refresh-all-prices` — one distinct ticker list across the authenticated user’s holdings; each ticker is resolved at most once per request (cache hits do not call Finnhub); updates every matching holding row owned by that user.
 - `GET /api/v1/market-data/quote/{ticker}` — one live quote (no DB write). Uses the same cache when enabled. Returns `503` if `FINNHUB_API_KEY` is unset.
+- `GET /api/v1/market-data/search?query=apple` — authenticated ticker/company search for holding autocomplete. Calls Finnhub from the backend only, returns normalized top suggestions, and returns `503` if `FINNHUB_API_KEY` is unset.
 
 Configuration (see `.env.example`):
 
-- `FINNHUB_API_KEY` — optional in local dev; server-only.
+- `FINNHUB_API_KEY` — optional in local dev; server-only. Used for live quote refresh, single quotes, and symbol search autocomplete.
 - `MARKET_DATA_CACHE_TTL_SECONDS` — default `300`; set to `0` to disable in-memory caching (every resolution calls Finnhub).
 
 Response fields (single-portfolio refresh):
@@ -127,6 +128,7 @@ In-memory cache (important):
 Behavior:
 
 - If the API key is missing, portfolio refresh returns `200` with `skipped_count` and a note; refresh-all returns zeros and a note; no Finnhub calls.
+- If the API key is missing, single quote and symbol search endpoints return `503` so the frontend can show a clear unavailable state.
 - After a **real** Finnhub (or provider) call, a short delay runs before the next provider call (cache hits skip that delay).
 - HTTP `429` / network errors are per-ticker; one failure does not abort the whole refresh.
 - Invalid or zero Finnhub field `c` is treated as a failed quote for that ticker only.
@@ -136,7 +138,7 @@ Analytics vs benchmark:
 - **Benchmark** comparison uses `Holding.current_price` when set, otherwise mock prices, then `average_cost`.
 - **Analytics** sector weights today use **cost basis** (`quantity * average_cost`); refreshing live prices improves benchmark returns and stored holdings, not those analytics formulas.
 
-Limitations: Finnhub free tier enforces low request rates; quote data can be delayed; outside market hours `c` is often `0`, so those tickers are skipped until a valid price is returned. This path is suitable for learning and demos, not a production market-data stack.
+Limitations: Finnhub free tier enforces low request rates; quote/search data can be delayed or incomplete; outside market hours `c` is often `0`, so those tickers are skipped until a valid price is returned. Symbol search ranking prefers common stocks and ETFs, but Finnhub can still return unusual instruments depending on the query. This path is suitable for learning and demos, not a production market-data stack.
 
 ### Swagger manual test
 

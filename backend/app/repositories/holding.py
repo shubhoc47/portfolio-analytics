@@ -6,7 +6,7 @@ Contains only data-access logic for holding entities.
 
 from decimal import Decimal
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.holding import Holding
@@ -51,6 +51,29 @@ class HoldingRepository:
         stmt = select(Holding).where(Holding.id == holding_id)
         result = await self.db.execute(stmt)
         return result.scalar_one_or_none()
+
+    async def suggest_sector_for_ticker(self, ticker: str) -> str | None:
+        ticker_upper = ticker.strip().upper()
+        if not ticker_upper:
+            return None
+
+        sector = func.trim(Holding.sector)
+        stmt = (
+            select(sector.label("sector"), func.count().label("sector_count"))
+            .where(
+                func.upper(func.trim(Holding.ticker)) == ticker_upper,
+                Holding.sector.is_not(None),
+                sector != "",
+            )
+            .group_by(sector)
+            .order_by(func.count().desc(), sector.asc())
+            .limit(1)
+        )
+        result = await self.db.execute(stmt)
+        row = result.first()
+        if row is None:
+            return None
+        return str(row.sector)
 
     async def update(self, holding: Holding, payload: HoldingUpdate) -> Holding:
         for field_name, field_value in payload.model_dump(exclude_unset=True).items():

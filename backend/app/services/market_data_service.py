@@ -22,11 +22,13 @@ from app.schemas.market_data import (
     PriceRefreshFailureRead,
     PriceRefreshQuoteRead,
     RefreshAllPricesResponse,
+    SymbolSearchResultRead,
 )
 from app.services.quote_cache import QuoteCache
 
 # Light throttle between Finnhub calls (free tier) after a real provider request.
 _QUOTE_DELAY_SEC = 0.2
+_SYMBOL_SEARCH_LIMIT = 10
 
 QuoteSource = Literal["finnhub", "cache", "mock"]
 
@@ -319,6 +321,45 @@ class MarketDataService:
             fetched_at=q.fetched_at,
         )
 
+    async def search_symbols(self, query: str) -> list[SymbolSearchResultRead]:
+        q = query.strip()
+        if len(q) < 2:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Search query must be at least 2 characters.",
+            )
+
+        if not (self.settings.FINNHUB_API_KEY and self.settings.FINNHUB_API_KEY.strip()):
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Finnhub API key is not configured.",
+            )
+
+        result_set = await self.market_provider.search_symbols(q)
+        if not result_set.ok:
+            failure_reason = result_set.failure_reason or "Symbol search is not available."
+            status_code = (
+                status.HTTP_429_TOO_MANY_REQUESTS
+                if "429" in failure_reason or "rate limit" in failure_reason.lower()
+                else status.HTTP_502_BAD_GATEWAY
+            )
+            raise HTTPException(status_code=status_code, detail=failure_reason)
+
+        ranked = sorted(
+            result_set.results or [],
+            key=lambda result: self._symbol_search_rank(result.type),
+        )
+        return [
+            SymbolSearchResultRead(
+                symbol=result.symbol,
+                description=result.description,
+                display_symbol=result.display_symbol,
+                type=result.type,
+                provider=result.provider,
+            )
+            for result in ranked[:_SYMBOL_SEARCH_LIMIT]
+        ]
+
     @staticmethod
     def _dedupe_tickers(holdings: list[Holding]) -> list[str]:
         seen: set[str] = set()
@@ -330,3 +371,12 @@ class MarketDataService:
             seen.add(sym)
             ordered.append(sym)
         return sorted(ordered)
+
+    @staticmethod
+    def _symbol_search_rank(result_type: str) -> int:
+        normalized = result_type.strip().lower()
+        if normalized in {"common stock", "stock", "equity", "adr"}:
+            return 0
+        if normalized in {"etf", "exchange traded fund"}:
+            return 1
+        return 2
